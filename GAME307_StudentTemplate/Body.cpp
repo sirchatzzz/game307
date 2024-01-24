@@ -58,6 +58,7 @@ void Body::ApplyForce( Vec3 force_ ) {
 
 void Body::Update( float deltaTime ){
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
+    accel.print();
     vel = vel + accel * deltaTime;
     // Update orientation
     orientation += rotation * deltaTime;
@@ -72,9 +73,9 @@ void Body::Update( float deltaTime ){
     // Clip to maxrotation, if needed
     if (rotation > maxRotation) rotation = maxRotation;
 
-    // Could introduce dampening, of velocity and/or rotation, to simulate friction
-    //vel -= 0.05 * vel;
-    //rotation -= 0.05 * rotation;
+    // gradual deceleration
+    vel -= 0.05 * vel;
+    rotation -= 0.05 * rotation;
 
 }
 

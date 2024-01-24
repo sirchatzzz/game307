@@ -21,6 +21,7 @@ bool PlayerBody::OnCreate()
         std::cerr << "Can't create the texture" << std::endl;
         return false;
     }
+    maxAcceleration = 15.0f;
     return true;
 }
 
@@ -64,39 +65,21 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
     {
         switch ( event.key.keysym.scancode )
         {
-            // This section demonstrates using velocity for player movement
-            //
-            // Need to always normalize speed, otherwise having two keys down
-            // results in velocity magnitude being sqrt(2) x maxSpeed.
-            // However, this is being done in Update()
             case SDL_SCANCODE_W:
-                vel.y = maxSpeed * 1.0f;
-                break;
-            case SDL_SCANCODE_A:
-                vel.x = maxSpeed * -1.0f;
+                isAccelerating = true;
+                accel.y += maxAcceleration * 1.0f;
                 break;
             case SDL_SCANCODE_S:
-                vel.y = maxSpeed * -1.0f;
+                isAccelerating = true;
+                accel.y += maxAcceleration * -1.0f;
+                break;
+            case SDL_SCANCODE_A:
+                isAccelerating = true;
+                accel.x += maxAcceleration * -1.0f;
                 break;
             case SDL_SCANCODE_D:
-                vel.x = maxSpeed * 1.0f;
-                break;
-
-            // This section is for seeing how to use acceleration rather than velocity
-            // for player movement.
-            // Note: look at Update() to see that velocity is clipped, since
-            // continuous acceleration means continually increasing velocity.
-            case SDL_SCANCODE_DOWN:
-                accel.y = maxAcceleration * -1.0f;
-                break;
-            case SDL_SCANCODE_UP:
-                accel.y = maxAcceleration * 1.0f;
-                break;
-            case SDL_SCANCODE_LEFT:
-                accel.x = maxAcceleration * -1.0f;
-                break;
-            case SDL_SCANCODE_RIGHT:
-                accel.x = maxAcceleration * 1.0f;
+                isAccelerating = true;
+                accel.x += maxAcceleration * 1.0f;
                 break;
             default:
                 break;
@@ -109,39 +92,20 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
     {
         switch ( event.key.keysym.scancode )
         {
-            // This section demonstrates using velocity for player movement
-            //
-            // Need to always normalize velocity, otherwise if player
-            // releases one of two pressed keys, then speed remains at sqrt(0.5) of maxSpeed
+            case SDL_SCANCODE_S:
+                isAccelerating = false;
+                accel.y = 0.0;
+                break;
             case SDL_SCANCODE_W:
-                vel.y = 0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
+                isAccelerating = false;
+                accel.y = 0.0;
                 break;
             case SDL_SCANCODE_A:
-                vel.x = -0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            case SDL_SCANCODE_S:
-                vel.y = -0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            case SDL_SCANCODE_D:
-                vel.x = 0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            
-            // This section is for seeing how to use acceleration rather than velocity
-            // for player movement.
-            case SDL_SCANCODE_DOWN:
-                accel.y = 0.0;
-                break;
-            case SDL_SCANCODE_UP:
-                accel.y = 0.0;
-                break;
-            case SDL_SCANCODE_LEFT:
+                isAccelerating = false;
                 accel.x = 0.0;
                 break;
-            case SDL_SCANCODE_RIGHT:
+            case SDL_SCANCODE_D:
+                isAccelerating = false;
                 accel.x = 0.0;
                 break;
             default:
@@ -161,7 +125,7 @@ void PlayerBody::Update( float deltaTime )
     float height, width;
     height = game->getSceneHeight();
     width = game->getSceneWidth();
-    
+
     if (pos.x < radius)
     {
         pos.x = radius;
