@@ -58,7 +58,6 @@ void Body::ApplyForce( Vec3 force_ ) {
 
 void Body::Update( float deltaTime ){
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
-    accel.print();
     vel = vel + accel * deltaTime;
     // Update orientation
     orientation += rotation * deltaTime;

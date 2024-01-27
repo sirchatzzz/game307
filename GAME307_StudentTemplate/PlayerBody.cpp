@@ -55,6 +55,7 @@ void PlayerBody::Render( float scale )
 
     SDL_RenderCopyEx( renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE );
+
 }
 
 void PlayerBody::HandleEvents( const SDL_Event& event )
