@@ -37,6 +37,11 @@ public:
     {}
 
 	void Update( float deltaTime, SteeringOutput *steering );
+
+	void setVel(Vec3 vel_) { vel = vel_; }
+	void setPos(Vec3 pos_) { pos = pos_; }
+	void setAccel(Vec3 accel_) { accel = accel_; }
+
 };
 
 #endif

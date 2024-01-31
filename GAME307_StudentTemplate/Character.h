@@ -13,7 +13,8 @@ class Character
 private:
 	class KinematicBody* body;
 	class Scene* scene;
-
+	float speed;
+	Vec3 target;
 public:
 	Character()
 	{
@@ -32,7 +33,11 @@ public:
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
 	void render(float scale = 1.0f);
+	void setSpeed(float speed_) { speed = speed_; }
+	void setTarget(Vec3 target_);
 
+	void steerTo(Vec3 target_, float speed_, SteeringOutput* steering_);
+	bool checkIfNearTarget();
 };
 
 #endif

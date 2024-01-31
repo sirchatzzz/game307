@@ -58,7 +58,8 @@ void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
 	// Calculate and apply any steering for npc's
-	//blinky->Update(deltaTime);
+	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->Update(deltaTime);
 
 	// Update player
 	game->getPlayer()->Update(deltaTime);
@@ -69,7 +70,7 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render any npc's
-	//blinky->render(0.15f);
+	blinky->render(0.15f);
 
 	// render the player
 	game->RenderPlayer(0.10f);
