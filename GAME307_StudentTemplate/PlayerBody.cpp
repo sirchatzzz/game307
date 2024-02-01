@@ -60,7 +60,7 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
 {
     // if key pressed, set velocity or acceleration
 
-    if( event.type == SDL_KEYDOWN && event.key.repeat == 0 )
+    if( event.type == SDL_KEYDOWN && (event.key.repeat == 1 || event.key.repeat == 0))
     {
         switch ( event.key.keysym.scancode )
         {
@@ -70,16 +70,16 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
             // results in velocity magnitude being sqrt(2) x maxSpeed.
             // However, this is being done in Update()
             case SDL_SCANCODE_W:
-                vel.y = maxSpeed * 1.0f;
+                speed += 0.1;
                 break;
             case SDL_SCANCODE_A:
-                vel.x = maxSpeed * -1.0f;
+                orientation -= 0.1;
                 break;
             case SDL_SCANCODE_S:
-                vel.y = maxSpeed * -1.0f;
+                speed -= 0.1;
                 break;
             case SDL_SCANCODE_D:
-                vel.x = maxSpeed * 1.0f;
+                orientation += 0.1;
                 break;
 
             // This section is for seeing how to use acceleration rather than velocity
@@ -103,51 +103,56 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
         }
     }
 
+
+
     // if key is released, stop applying movement
 
-    if( event.type == SDL_KEYUP && event.key.repeat == 0 )
-    {
-        switch ( event.key.keysym.scancode )
-        {
-            // This section demonstrates using velocity for player movement
-            //
-            // Need to always normalize velocity, otherwise if player
-            // releases one of two pressed keys, then speed remains at sqrt(0.5) of maxSpeed
-            case SDL_SCANCODE_W:
-                vel.y = 0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            case SDL_SCANCODE_A:
-                vel.x = -0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            case SDL_SCANCODE_S:
-                vel.y = -0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            case SDL_SCANCODE_D:
-                vel.x = 0.0f;
-                if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
-                break;
-            
-            // This section is for seeing how to use acceleration rather than velocity
-            // for player movement.
-            case SDL_SCANCODE_DOWN:
-                accel.y = 0.0;
-                break;
-            case SDL_SCANCODE_UP:
-                accel.y = 0.0;
-                break;
-            case SDL_SCANCODE_LEFT:
-                accel.x = 0.0;
-                break;
-            case SDL_SCANCODE_RIGHT:
-                accel.x = 0.0;
-                break;
-            default:
-                break;
-        }
-    }
+  //  if( event.type == SDL_KEYUP && event.key.repeat == 0 )
+  //  {
+  //      switch ( event.key.keysym.scancode )
+  //      {
+  //          // This section demonstrates using velocity for player movement
+  //          //
+  //          // Need to always normalize velocity, otherwise if player
+  //          // releases one of two pressed keys, then speed remains at sqrt(0.5) of maxSpeed
+  //          case SDL_SCANCODE_W:
+  //              vel.y = 0.0f;
+  //              if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
+  //              break;
+  //          case SDL_SCANCODE_A:
+  //              //vel.x = -0.0f;
+  //              //if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
+  //              orientation += 0.1;
+
+  //              break;
+  //          case SDL_SCANCODE_S:
+  //              vel.y = -0.0f;
+  //              if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;
+  //              break;
+  //          case SDL_SCANCODE_D:
+  ///*              vel.x = 0.0f;
+  //              if (VMath::mag( vel ) > VERY_SMALL) vel = VMath::normalize( vel ) * maxSpeed;*/
+  //              orientation -= 0.1;
+  //              break;
+  //          
+  //          // This section is for seeing how to use acceleration rather than velocity
+  //          // for player movement.
+  //          case SDL_SCANCODE_DOWN:
+  //              accel.y = 0.0;
+  //              break;
+  //          case SDL_SCANCODE_UP:
+  //              accel.y = 0.0;
+  //              break;
+  //          case SDL_SCANCODE_LEFT:
+  //              accel.x = 0.0;
+  //              break;
+  //          case SDL_SCANCODE_RIGHT:
+  //              accel.x = 0.0;
+  //              break;
+  //          default:
+  //              break;
+  //      }
+  //  }
 }
 
 void PlayerBody::Update( float deltaTime )
@@ -182,6 +187,13 @@ void PlayerBody::Update( float deltaTime )
         pos.y = height - radius;
         vel.y = 0.0f;
     }
+
+    if (speed < 0) speed = 0;
+    // Velocity is based on the orientation of the player, player will be moving at all times since they are moving on water
+    if (speed == 0) speed = 0.1;
+    vel = Vec3(cos(orientation) * speed, -sin(orientation) * speed, 0);
+
+
 }
 
 void PlayerBody::resetToOrigin()

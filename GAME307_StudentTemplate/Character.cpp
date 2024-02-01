@@ -1,9 +1,9 @@
 #include "Character.h"
+#include "Arrive.h"
 
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
-	speed = 0;
 	// Configure and instantiate the body to use for the demo
 	if (!body)
 	{
@@ -57,24 +57,22 @@ bool Character::setTextureWith(string file)
 
 void Character::Update(float deltaTime)
 {
-	// create a new overall steering output
 	SteeringOutput* steering;
-	steering = new SteeringOutput(Vec3(0.0f, 0.0f, 0.0f), 0);
+	steering = new SteeringOutput();
 
-	steerTo(target, speed, steering);
+	Vec3 distance = target - body->getPos();
+	if (!checkIfNearTarget())
+	{
+
+		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+		float slowRadius = targetRadius + 5;
+
+		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+		steering = arrive.getSteering(target, this);
+	}
+
 	body->Update(deltaTime, steering);
-	// set the target for steering; target is used by the steerTo... functions
-	// (often the target is the Player)
-
-	// using the target, calculate and set values in the overall steering output
-
-	// apply the steering to the equations of motion
-
-
-	// clean up memory
-	// (delete only those objects created in this function)
-
-
+	
 	delete steering;
 }
 
@@ -117,43 +115,13 @@ void Character::setTarget(Vec3 target_)
 
 }
 
-void Character::steerTo(Vec3 target_, float speed_, SteeringOutput* steering_)
-{
-	if (!checkIfNearTarget())
-	{
-		setSpeed(2);
-
-		Vec3 distance = target_ - body->getPos();
-		distance.x *= speed_;
-		distance.y *= speed_;
-		distance.z *= speed_;
-
-		steering_->linear = distance;
-
-
-	}
-	else
-	{
-
-		body->setVel(Vec3(0.0f, 0.0f, 0.0f));
-		body->setAccel(Vec3(0.0f, 0.0f, 0.0f));
-
-
-	}
-}
-
 bool Character::checkIfNearTarget()
 {
 
 	Vec3 distance = target - body->getPos();
-
-	if (distance.x < 0) distance.x *= -1;
-	if (distance.y < 0) distance.y *= -1;
-	if (distance.z < 0) distance.z *= -1;
-
 	bool nearTarget;
 
-	if (distance.x < 3 && distance.y < 3 && distance.z < 3) nearTarget = true;
+	if (abs(distance.x) < 3 && abs(distance.y) < 3 && abs(distance.z) < 3) nearTarget = true;
 	else nearTarget = false;
 
 

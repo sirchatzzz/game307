@@ -48,7 +48,7 @@ bool Scene1::OnCreate() {
 	{
 		return false;
 	}
-
+	blinky->getBody()->setPos(Vec3(-4, -4, 0));
 	// end of character set ups
 
 	return true;

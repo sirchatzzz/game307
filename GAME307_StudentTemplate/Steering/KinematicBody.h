@@ -41,7 +41,7 @@ public:
 	void setVel(Vec3 vel_) { vel = vel_; }
 	void setPos(Vec3 pos_) { pos = pos_; }
 	void setAccel(Vec3 accel_) { accel = accel_; }
-
+	void setOrientation(float orientation_) { orientation = orientation_; }
 };
 
 #endif

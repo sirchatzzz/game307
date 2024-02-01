@@ -23,7 +23,7 @@ protected:
     float maxRotation;
     float maxAngular;
     float radius;           // for getting near walls
-
+    float speed;
 	Vec3 imageSizeWorldCoords;
     SDL_Surface* image;
     SDL_Texture* texture;
@@ -73,6 +73,7 @@ public:
 	// Added this as public to deal with my demo 
 	// so that mouse position can be copied into a Body.
     virtual void setPos( Vec3 pos );
+    void setSpeed(float speed_) { speed = speed_; }
 };
 
 #endif /* BODY_H */
