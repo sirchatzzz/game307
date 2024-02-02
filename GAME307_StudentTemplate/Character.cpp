@@ -67,7 +67,7 @@ void Character::Update(float deltaTime)
 		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
 		float slowRadius = targetRadius + 5;
 
-		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
 		steering = arrive.getSteering(target, this);
 	}
 

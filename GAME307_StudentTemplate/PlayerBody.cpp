@@ -60,47 +60,50 @@ void PlayerBody::HandleEvents( const SDL_Event& event )
 {
     // if key pressed, set velocity or acceleration
 
-    if( event.type == SDL_KEYDOWN && (event.key.repeat == 1 || event.key.repeat == 0))
+    switch(event.type)
     {
-        switch ( event.key.keysym.scancode )
-        {
+        case SDL_KEYDOWN:
             // This section demonstrates using velocity for player movement
             //
             // Need to always normalize speed, otherwise having two keys down
             // results in velocity magnitude being sqrt(2) x maxSpeed.
             // However, this is being done in Update()
-            case SDL_SCANCODE_W:
+            if (event.key.keysym.sym == SDLK_w)
+            {
                 speed += 0.1;
-                break;
-            case SDL_SCANCODE_A:
+            }
+            if (event.key.keysym.sym == SDLK_a)
+            {
                 orientation -= 0.1;
-                break;
-            case SDL_SCANCODE_S:
+            }
+            if (event.key.keysym.sym == SDLK_s)
+            {
                 speed -= 0.1;
-                break;
-            case SDL_SCANCODE_D:
+            }
+            if (event.key.keysym.sym == SDLK_d)
+            {
                 orientation += 0.1;
-                break;
+            }
 
             // This section is for seeing how to use acceleration rather than velocity
             // for player movement.
             // Note: look at Update() to see that velocity is clipped, since
             // continuous acceleration means continually increasing velocity.
-            case SDL_SCANCODE_DOWN:
-                accel.y = maxAcceleration * -1.0f;
-                break;
-            case SDL_SCANCODE_UP:
-                accel.y = maxAcceleration * 1.0f;
-                break;
-            case SDL_SCANCODE_LEFT:
-                accel.x = maxAcceleration * -1.0f;
-                break;
-            case SDL_SCANCODE_RIGHT:
-                accel.x = maxAcceleration * 1.0f;
-                break;
-            default:
-                break;
-        }
+            //case SDL_SCANCODE_DOWN:
+            //    accel.y = maxAcceleration * -1.0f;
+            //    break;
+            //case SDL_SCANCODE_UP:
+            //    accel.y = maxAcceleration * 1.0f;
+            //    break;
+            //case SDL_SCANCODE_LEFT:
+            //    accel.x = maxAcceleration * -1.0f;
+            //    break;
+            //case SDL_SCANCODE_RIGHT:
+            //    accel.x = maxAcceleration * 1.0f;
+            //    break;
+            //default:
+            //    break;
+            break;
     }
 
 
