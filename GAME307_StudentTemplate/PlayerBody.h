@@ -16,6 +16,7 @@ class PlayerBody : public Body
 {
 protected:
     class GameManager* game;
+    bool isAccelerating;
 
 public:
     PlayerBody() : Body{}
@@ -50,6 +51,7 @@ public:
         , maxAngular_
     }
         , game{ game_ }
+        , isAccelerating(false)
     {}
     
     // use the base class versions of getters

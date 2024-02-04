@@ -50,6 +50,7 @@ public:
     virtual Vec3 getAccel() { return accel; }
     virtual float getMass() { return mass; }
     virtual float getOrientation() { return orientation; }
+    virtual void SetOrientation(float orient_) { orientation = orient_; }
     virtual float getRotation() { return rotation; }
     virtual float getAngular() { return angular; }
     virtual float getMaxSpeed() { return maxSpeed; }
