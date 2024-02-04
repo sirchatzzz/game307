@@ -35,16 +35,16 @@ bool Scene1::OnCreate() {
 	texture = SDL_CreateTextureFromSurface(renderer, image);
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
-
+	game->getPlayer()->SetMaxSpeed(20);
 
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setTextureWith("Blinky.png") )
+	if (!blinky->OnCreate(this) || !blinky->setTextureWith("Blinky.png"))
 	{
 		return false;
 	}
-
+	blinky->getBody()->setPos(Vec3(-4, -4, 0));
 	// end of character set ups
 
 	return true;
@@ -53,12 +53,11 @@ bool Scene1::OnCreate() {
 void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
+	// Calculate and apply any steering for npc's
+	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->Update(deltaTime);
 
-	if (game->getPlayer()->getAccel().x > 0.0) game->getPlayer()->SetOrientation(-1.56f);
-	if (game->getPlayer()->getAccel().x < 0.0) game->getPlayer()->SetOrientation(1.56f);
-	if (game->getPlayer()->getAccel().y < 0.0) game->getPlayer()->SetOrientation(0.0f);
-	if (game->getPlayer()->getAccel().y > 0.0) game->getPlayer()->SetOrientation(-3.15f);
-
+	// Update player
 	game->getPlayer()->Update(deltaTime);
 }
 
@@ -67,7 +66,7 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render any npc's
-	//blinky->render(0.15f);
+	blinky->render(0.15f);
 
 	// render the player
 	game->RenderPlayer(0.10f);

@@ -54,6 +54,7 @@ public:
     virtual float getRotation() { return rotation; }
     virtual float getAngular() { return angular; }
     virtual float getMaxSpeed() { return maxSpeed; }
+    void SetMaxSpeed(float maxSpeed_) { maxSpeed = maxSpeed_; }
     virtual float getMaxAcceleration() { return maxAcceleration; }
     virtual float getMaxRotation() { return maxRotation; }
     virtual float getMaxAngular() { return maxAngular; }

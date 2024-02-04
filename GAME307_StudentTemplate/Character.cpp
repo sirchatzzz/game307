@@ -57,23 +57,32 @@ bool Character::setTextureWith(string file)
 
 void Character::Update(float deltaTime)
 {
+	//Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
 
+	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
+	//Check to see if AI is near target
 	if (!checkIfNearTarget())
 	{
-
+		//Set the radius of the target
 		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+		//Set the slow radius so the AI will begin to slow down once it enters this radius
 		float slowRadius = targetRadius + 5;
-
+		//Create an Arrive steering behaviour and set the parameters
 		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
+		//Call arrive function that sets this steering behaviour to the one created in the function
 		steering = arrive.getSteering(target, this);
+
 	}
 
+
+	//Update AI
 	body->Update(deltaTime, steering);
-	
+	//Delete steering behaviour when finished
 	delete steering;
+
 }
 
 void Character::HandleEvents(const SDL_Event& event)
@@ -107,16 +116,18 @@ void Character::render(float scale)
 		orientation, nullptr, SDL_FLIP_NONE);
 }
 
+///Setter for target
 void Character::setTarget(Vec3 target_)
 {
-
 	target = target_;
-
-
 }
 
+
+///Basic function to check if the AI is near its target
 bool Character::checkIfNearTarget()
 {
+
+
 
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
@@ -127,7 +138,5 @@ bool Character::checkIfNearTarget()
 
 
 	return nearTarget;
-
-
 
 }
