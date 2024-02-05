@@ -47,7 +47,11 @@ bool Scene1::OnCreate() {
 	islandTexture[3] = SDL_CreateTextureFromSurface(renderer, islandImage[3]);
 	islandTexture[4] = SDL_CreateTextureFromSurface(renderer, islandImage[4]);
 
-	islandRect[0] = { 0, 0, 150, 150};
+	islandRect[0] = { 550, 250, 250, 300};
+	islandRect[1] = { 400, 50, 150, 150};
+	islandRect[2] = { 700, 0, 200, 250};
+	islandRect[3] = { 100, 200, 200, 200};
+	islandRect[4] = { 350, 400, 150, 150};
 
 	game->getPlayer()->setImage(playerImage);
 	game->getPlayer()->setTexture(playerTexture);
@@ -85,12 +89,18 @@ void Scene1::Render() {
 	// render any npc's
 	//blinky->render(0.15f);
 
-	// render the player
-	game->RenderPlayer(0.10f);
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
+
 	// render the islands
-	SDL_RenderCopy(renderer, islandTexture[0], &islandRect[0], nullptr);
+	SDL_RenderCopy(renderer, islandTexture[0], nullptr, &islandRect[0]);
+	SDL_RenderCopy(renderer, islandTexture[1], nullptr, &islandRect[1]);
+	SDL_RenderCopy(renderer, islandTexture[2], nullptr, &islandRect[2]);
+	SDL_RenderCopy(renderer, islandTexture[3], nullptr, &islandRect[3]);
+	SDL_RenderCopy(renderer, islandTexture[4], nullptr, &islandRect[4]);
+
+	// render the player
+	game->RenderPlayer(0.05f);
 
 	SDL_RenderPresent(renderer);
 }
