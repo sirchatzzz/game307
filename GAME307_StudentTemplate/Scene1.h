@@ -16,8 +16,14 @@ private:
 	SDL_Renderer* renderer;
 	Matrix4 projectionMatrix;
     Matrix4 inverseProjection;
-	SDL_Surface* image;
-	SDL_Texture* texture;
+	SDL_Surface* playerImage;
+	SDL_Texture* playerTexture;
+	SDL_Surface* waterBackground;
+	SDL_Texture* waterTexture;
+	// islands
+	SDL_Surface* islandImage[5];
+	SDL_Texture* islandTexture[5];
+	SDL_Rect islandRect[5];
 
 	Character* blinky;
 
