@@ -38,20 +38,22 @@ bool Scene1::OnCreate() {
 	islandImage[2] = IMG_Load("assets/island3.png");
 	islandImage[3] = IMG_Load("assets/island4.png");
 	islandImage[4] = IMG_Load("assets/island5.png");
+	islandImage[5] = IMG_Load("assets/island6.png");
 
 	playerTexture = SDL_CreateTextureFromSurface(renderer, playerImage);
 	waterTexture = SDL_CreateTextureFromSurface(renderer, waterBackground);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		islandTexture[i] = SDL_CreateTextureFromSurface(renderer, islandImage[i]);
 	}
 
-	islandRect[0] = { 550, 250, 250, 300};
-	islandRect[1] = { 400, 50, 150, 150};
-	islandRect[2] = { 700, 0, 200, 250};
-	islandRect[3] = { 100, 200, 200, 200};
-	islandRect[4] = { 350, 400, 150, 150};
+	islandRect[0] = { 550, 250, 250, 300 };
+	islandRect[1] = { 400, 50, 150, 150 };
+	islandRect[2] = { 700, 0, 200, 250 };
+	islandRect[3] = { 100, 200, 200, 200 };
+	islandRect[4] = { 350, 400, 150, 150 };
+	islandRect[5] = { 100, 25, 150, 150 };
 
 	game->getPlayer()->setImage(playerImage);
 	game->getPlayer()->setTexture(playerTexture);
@@ -93,7 +95,7 @@ void Scene1::Render() {
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
 	// render the islands
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}

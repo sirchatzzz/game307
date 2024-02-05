@@ -21,9 +21,9 @@ private:
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
 	// islands
-	SDL_Surface* islandImage[5];
-	SDL_Texture* islandTexture[5];
-	SDL_Rect islandRect[5];
+	SDL_Surface* islandImage[6];
+	SDL_Texture* islandTexture[6];
+	SDL_Rect islandRect[6];
 
 	Character* blinky;
 
