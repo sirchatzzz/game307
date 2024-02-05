@@ -33,6 +33,14 @@ bool Scene1::OnCreate() {
 
 	playerImage = IMG_Load("assets/playerBoat.png");
 	waterBackground = IMG_Load("assets/water.png");
+
+	for (int i = 0; i < 6; i++)
+	{
+		islandImage.push_back(nullptr);
+		islandTexture.push_back(nullptr);
+		islandRect.push_back(SDL_Rect());
+	}
+
 	islandImage[0] = IMG_Load("assets/island1.png");
 	islandImage[1] = IMG_Load("assets/island2.png");
 	islandImage[2] = IMG_Load("assets/island3.png");
@@ -43,7 +51,7 @@ bool Scene1::OnCreate() {
 	playerTexture = SDL_CreateTextureFromSurface(renderer, playerImage);
 	waterTexture = SDL_CreateTextureFromSurface(renderer, waterBackground);
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < islandTexture.size(); i++)
 	{
 		islandTexture[i] = SDL_CreateTextureFromSurface(renderer, islandImage[i]);
 	}
@@ -95,7 +103,7 @@ void Scene1::Render() {
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
 	// render the islands
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < islandTexture.size(); i++)
 	{
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}

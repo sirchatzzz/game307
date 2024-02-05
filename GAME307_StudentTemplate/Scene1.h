@@ -4,6 +4,7 @@
 #include <MMath.h>
 #include <VMath.h>
 #include "Scene.h"
+#include <vector>
 #include "Character.h"
 
 
@@ -21,9 +22,9 @@ private:
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
 	// islands
-	SDL_Surface* islandImage[6];
-	SDL_Texture* islandTexture[6];
-	SDL_Rect islandRect[6];
+	std::vector<SDL_Surface*> islandImage;
+	std::vector<SDL_Texture*> islandTexture;
+	std::vector<SDL_Rect> islandRect;
 
 	Character* blinky;
 
