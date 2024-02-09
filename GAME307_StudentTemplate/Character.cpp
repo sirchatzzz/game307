@@ -63,9 +63,14 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
+	body->setOrientation(std::atan2(distance.x, distance.y) * 170 / M_PI / 50);
 	//Check to see if AI is near target
 	if (!checkIfNearTarget())
 	{
+
+		
+
+		std::cout << body->getOrientation() << std::endl;
 		//Set the radius of the target
 		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
 		//Set the slow radius so the AI will begin to slow down once it enters this radius
@@ -82,6 +87,16 @@ void Character::Update(float deltaTime)
 	body->Update(deltaTime, steering);
 	//Delete steering behaviour when finished
 	delete steering;
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -131,6 +146,7 @@ bool Character::checkIfNearTarget()
 
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
+
 
 	if (abs(distance.x) < 3 && abs(distance.y) < 3 && abs(distance.z) < 3) nearTarget = true;
 	else nearTarget = false;
