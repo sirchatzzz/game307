@@ -31,9 +31,6 @@ public:
 	Collider2D();
 	Collider2D(float x_, float y_, float w_, float h_);
 
-
-
-
 	/// <summary>
 	/// Set the position of the collider.
 	/// </summary>
