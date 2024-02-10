@@ -65,12 +65,12 @@ bool Scene1::OnCreate() {
 
 	game->getPlayer()->setImage(playerImage);
 	game->getPlayer()->setTexture(playerTexture);
-
+	game->getPlayer()->SetMaxSpeed(20);
 
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setTextureWith("assets/enemyBoat1.png") )
+	if (!blinky->OnCreate(this) || !blinky->setTextureWith("Blinky.png") )
 	{
 		return false;
 	}
@@ -99,7 +99,7 @@ void Scene1::Render() {
 
 	// render any npc's
 
-	blinky->render(0.25f);
+
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
@@ -111,7 +111,7 @@ void Scene1::Render() {
 
 	// render the player
 	game->RenderPlayer(0.05f);
-
+	blinky->render(0.1f);
 	SDL_RenderPresent(renderer);
 
 }
