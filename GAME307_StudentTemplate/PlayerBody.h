@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "Body.h"
 #include "GameManager.h"
+#include "Collider2D.h"
 
 class PlayerBody : public Body
 {
@@ -54,6 +55,8 @@ public:
         , isAccelerating(false)
     {}
     
+    Collider2D collider;
+
     // use the base class versions of getters
 
     bool OnCreate();

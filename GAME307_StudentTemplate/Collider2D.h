@@ -6,6 +6,9 @@
 * Description:		This class is to add a 2D collider box around the actor or objects in the scenes.
 */
 #include "Vector.h"
+#include <SDL_rect.h>
+#include <SDL_render.h>
+
 using namespace MATH;
 
 class Collider2D
@@ -65,6 +68,11 @@ public:
 	/// <param name="otherObject"></param>
 	/// <returns></returns>
 	bool CollisionCheckWithDebugMessages(Collider2D otherObject);
+
+	/// <summary>
+	/// Renders a visual of the collider
+	/// </summary>
+	void RenderCollider(SDL_Renderer* m_window_renderer);
 
 };
 

@@ -21,6 +21,9 @@ bool PlayerBody::OnCreate()
         std::cerr << "Can't create the texture" << std::endl;
         return false;
     }
+
+    collider.SetColliderActive(true);
+
     return true;
 }
 
@@ -54,6 +57,11 @@ void PlayerBody::Render(float scale)
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
+    
+    collider.SetColliderBounds(w, h);
+    collider.SetColliderPosition(screenCoords.x-(w/2), screenCoords.y-(h/2));
+    collider.RenderCollider(renderer);
+
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)
@@ -126,7 +134,6 @@ void PlayerBody::Update(float deltaTime)
     if (speed > maxSpeed) speed = maxSpeed;
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
-
 
 }
 

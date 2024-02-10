@@ -7,6 +7,7 @@
 
 #include "Collider2D.h"
 
+
 Collider2D::Collider2D(): x(0.0), y(0.0), w(0.0), h(0.0), isActive(false) {}
 
 Collider2D::Collider2D(float x_, float y_, float w_, float h_)
@@ -184,4 +185,20 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 	//if all else fails, not overlapping
 	std::cout << "\n COLLISION CHECK: FALSE!";
 	return false;
+}
+
+void Collider2D::RenderCollider(SDL_Renderer* m_window_renderer)
+{
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+
+	SDL_SetRenderDrawColor(m_window_renderer, 0, 0, 0, 255);
+	SDL_RenderDrawRect(m_window_renderer, &rect);
+
+	SDL_SetRenderDrawColor(m_window_renderer, 0, 0, 0, 255);
+
+	SDL_RenderPresent(m_window_renderer);
 }
