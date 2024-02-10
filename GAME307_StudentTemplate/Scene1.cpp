@@ -70,12 +70,14 @@ bool Scene1::OnCreate() {
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setTextureWith("Blinky.png") )
+	if (!blinky->OnCreate(this) || !blinky->setTextureWith("assets/enemyBoat1.png") )
 	{
 		return false;
 	}
-
+	blinky->getBody()->setPos(Vec3(-4, -4, 0));
 	// end of character set ups
+
+
 
 	return true;
 }
@@ -84,12 +86,11 @@ void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
 
-	if (game->getPlayer()->getAccel().x > 0.0) game->getPlayer()->SetOrientation(-1.56f);
-	if (game->getPlayer()->getAccel().x < 0.0) game->getPlayer()->SetOrientation(1.56f);
-	if (game->getPlayer()->getAccel().y < 0.0) game->getPlayer()->SetOrientation(0.0f);
-	if (game->getPlayer()->getAccel().y > 0.0) game->getPlayer()->SetOrientation(-3.15f);
+	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->Update(deltaTime);
 
 	game->getPlayer()->Update(deltaTime);
+
 }
 
 void Scene1::Render() {
@@ -97,8 +98,8 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render any npc's
-	//blinky->render(0.15f);
 
+	blinky->render(0.25f);
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
@@ -112,6 +113,7 @@ void Scene1::Render() {
 	game->RenderPlayer(0.05f);
 
 	SDL_RenderPresent(renderer);
+
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)

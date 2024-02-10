@@ -70,7 +70,6 @@ void Character::Update(float deltaTime)
 
 		
 
-		std::cout << body->getOrientation() << std::endl;
 		//Set the radius of the target
 		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
 		//Set the slow radius so the AI will begin to slow down once it enters this radius
