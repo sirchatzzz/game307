@@ -70,7 +70,7 @@ bool Scene1::OnCreate() {
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setTextureWith("Blinky.png") )
+	if (!blinky->OnCreate(this) || !blinky->setTextureWith("assets/enemyBoat1.png") )
 	{
 		return false;
 	}
@@ -86,7 +86,7 @@ void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
 
-	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->setTarget(game->getPlayer());
 	blinky->Update(deltaTime);
 
 	game->getPlayer()->Update(deltaTime);
@@ -111,7 +111,7 @@ void Scene1::Render() {
 
 	// render the player
 	game->RenderPlayer(0.05f);
-	blinky->render(0.1f);
+	blinky->render(0.075f);
 	SDL_RenderPresent(renderer);
 
 }

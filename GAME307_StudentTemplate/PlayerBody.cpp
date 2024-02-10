@@ -60,29 +60,39 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 {
     // if key pressed, set velocity or acceleration
 
+    const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
+
+
+
     switch (event.type)
     {
     case SDL_KEYDOWN:
     //Change rotation of player with the A and D keys
     //Increase or decrease speed of player with W and S keys
-        if (event.key.keysym.sym == SDLK_w)
+
+        if (keyboard_state_array[SDL_SCANCODE_W])
         {
             speed += 1;
         }
-        if (event.key.keysym.sym == SDLK_a)
+        if (keyboard_state_array[SDL_SCANCODE_A])
         {
             orientation -= 0.05;
         }
-        if (event.key.keysym.sym == SDLK_s)
+        if (keyboard_state_array[SDL_SCANCODE_S])
         {
             speed -= 1;
         }
-        if (event.key.keysym.sym == SDLK_d)
+        if (keyboard_state_array[SDL_SCANCODE_D])
         {
             orientation += 0.05;
         }
         break;
     }
+
+
+
+
+
 }
 
 void PlayerBody::Update(float deltaTime)

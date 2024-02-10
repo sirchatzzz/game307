@@ -1,6 +1,6 @@
 #include "Character.h"
 #include "Arrive.h"
-
+#include "Align.h"
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -61,15 +61,14 @@ void Character::Update(float deltaTime)
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
 
+
+
 	//Find the distance between the AI and its target
-	Vec3 distance = target - body->getPos();
-	body->setOrientation(std::atan2(distance.x, distance.y) * 170 / M_PI / 50);
+	Vec3 distance = target->getPos() - body->getPos();
+	//body->setOrientation(std::atan2(distance.x, distance.y) * 170 / M_PI / 50);
 	//Check to see if AI is near target
 	if (!checkIfNearTarget())
 	{
-
-		
-
 		//Set the radius of the target
 		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
 		//Set the slow radius so the AI will begin to slow down once it enters this radius
@@ -77,23 +76,18 @@ void Character::Update(float deltaTime)
 		//Create an Arrive steering behaviour and set the parameters
 		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
 		//Call arrive function that sets this steering behaviour to the one created in the function
-		steering = arrive.getSteering(target, this);
+		steering = arrive.getSteering(target->getPos(), this);
 
+		
+		Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
+		steering->angular = align.getSteering(target->getOrientation(), this);
+		
 	}
-
 
 	//Update AI
 	body->Update(deltaTime, steering);
 	//Delete steering behaviour when finished
 	delete steering;
-
-
-
-
-
-
-
-
 
 
 
@@ -131,7 +125,7 @@ void Character::render(float scale)
 }
 
 ///Setter for target
-void Character::setTarget(Vec3 target_)
+void Character::setTarget(PlayerBody* target_)
 {
 	target = target_;
 }
@@ -143,7 +137,7 @@ bool Character::checkIfNearTarget()
 
 
 
-	Vec3 distance = target - body->getPos();
+	Vec3 distance = target->getPos() - body->getPos();
 	bool nearTarget;
 
 

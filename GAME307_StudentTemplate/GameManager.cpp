@@ -159,7 +159,9 @@ void GameManager::handleEvents()
                 }
             }
             currentScene->HandleEvents( event );
+
         }
+
 }
 
 GameManager::~GameManager() {}

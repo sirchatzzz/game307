@@ -62,7 +62,7 @@ public:
     void Update( float deltaTime );
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
-    
+
 };
 
 #endif /* PLAYERBODY_H */
