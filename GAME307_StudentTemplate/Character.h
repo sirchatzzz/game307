@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Scene.h"
-#include "KinematicBody.h"
+#include "Steering/KinematicBody.h"
 
 
 using namespace std;

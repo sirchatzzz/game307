@@ -5,6 +5,9 @@
 * Date:				February 2024
 * Description:		This class is to add a 2D collider box around the actor or objects in the scenes.
 */
+#include "Vector.h"
+using namespace MATH;
+
 class Collider2D
 {
 private:
@@ -28,6 +31,9 @@ public:
 	Collider2D();
 	Collider2D(float x_, float y_, float w_, float h_);
 
+
+
+
 	/// <summary>
 	/// Set the position of the collider.
 	/// </summary>
@@ -39,8 +45,8 @@ public:
 	/// Set the bounds of the collider
 	/// </summary>
 	/// <param name="w_"></param>
-	/// <param name="y_"></param>
-	void SetColliderBounds(float w_, float y_);
+	/// <param name="h_"></param>
+	void SetColliderBounds(float w_, float h_);
 
 	/// <summary>
 	/// Check if two Collider2D objects have interected. 

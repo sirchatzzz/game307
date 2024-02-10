@@ -1,6 +1,6 @@
 #pragma once
-#include "SteeringOutput.h"
-#include <VMath.h>
+#include "Steering/SteeringOutput.h"
+#include "VMath.h"
 #include "Character.h"
 using namespace MATH;
 
