@@ -46,10 +46,15 @@ public:
 	void SetColliderBounds(float w_, float h_);
 
 	/// <summary>
+	/// Change state of if collider is active or not. 
+	/// </summary>
+	/// <param name="changeState"></param>
+	void SetColliderActive(bool changeState);
+
+	/// <summary>
 	/// Check if two Collider2D objects have intersected. 
 	/// </summary>
-	/// <param name="objectOne"></param>
-	/// <param name="objectTwo"></param>
+	/// <param name="otherObject"></param>
 	/// <returns></returns>
 	bool CollisionCheck(Collider2D otherObject);
 
@@ -57,8 +62,7 @@ public:
 	/// Check if two Collider2D objects have intersected.
 	/// Prints debug messages into console.
 	/// </summary>
-	/// <param name="objectOne"></param>
-	/// <param name="objectTwo"></param>
+	/// <param name="otherObject"></param>
 	/// <returns></returns>
 	bool CollisionCheckWithDebugMessages(Collider2D otherObject);
 

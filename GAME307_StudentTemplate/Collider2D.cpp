@@ -1,5 +1,11 @@
-#include "Collider2D.h"
+/*
+* Programmer:		Ahmed Hammoud
+* Project:			GAME 307 - AI Programming
+* Date:				February 2024
+* Description:		This class is to add a 2D collider box around the actor or objects in the scenes.
+*/
 
+#include "Collider2D.h"
 
 Collider2D::Collider2D(): x(0.0), y(0.0), w(0.0), h(0.0), isActive(false) {}
 
@@ -22,6 +28,11 @@ void Collider2D::SetColliderBounds(float w_, float h_)
 {
 	w = w_;
 	h = h_;
+}
+
+void Collider2D::SetColliderActive(bool changeState)
+{
+	isActive = changeState;
 }
 
 bool Collider2D::CollisionCheck(Collider2D otherObject)
