@@ -128,8 +128,7 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 		r2.x = otherObject.x + otherObject.w;
 		r2.y = otherObject.y + otherObject.h;
 
-		
-
+		//Is left corner outside of right corner, then they don't intersect. 
 		if (l1.x > r2.x)
 		{
 			if (debugColliderFlag)
@@ -210,7 +209,11 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 		debugColliderFlag = false;
 		std::cout << "\n COLLISION CHECK: FALSE!";
 	}
-		
+	
+	//Recursion call to test other side of collision.
+	Collider2D tempColl = Collider2D(x, y, w, h);
+	CollisionCheckWithDebugMessages(tempColl);
+
 	return false;
 }
 

@@ -20,10 +20,13 @@ private:
 	SDL_Texture* playerTexture;
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
+
 	// islands
 	std::vector<SDL_Surface*> islandImage;
 	std::vector<SDL_Texture*> islandTexture;
 	std::vector<SDL_Rect> islandRect;
+
+	Collider2D islandColl[5];
 
 	Character* blinky;
 

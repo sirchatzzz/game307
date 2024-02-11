@@ -57,6 +57,9 @@ bool Scene1::OnCreate() {
 	}
 
 	islandRect[0] = { 550, 250, 250, 300 };
+	islandColl[0] = Collider2D(550, 270, islandImage[0]->w, islandImage[0]->h-50);
+	islandColl[0].SetColliderActive(true);
+	
 	islandRect[1] = { 400, 50, 150, 150 };
 	islandRect[2] = { 700, 0, 200, 250 };
 	islandRect[3] = { 100, 200, 200, 200 };
@@ -93,7 +96,6 @@ void Scene1::Update(const float deltaTime) {
 
 	
 	game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
-	blinky->GetCollider().CollisionCheckWithDebugMessages(game->getPlayer()->GetCollider());
 }
 
 void Scene1::Render() {
@@ -116,6 +118,8 @@ void Scene1::Render() {
 	game->RenderPlayer(0.05f);
 	blinky->render(0.1f);
 	SDL_RenderPresent(renderer);
+
+	islandColl[0].RenderCollider(renderer);
 
 }
 
