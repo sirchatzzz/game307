@@ -33,6 +33,8 @@ bool Character::OnCreate(Scene* scene_)
 		return false;
 	}
 
+	collider.SetColliderActive(true);
+
 	return true;
 }
 
@@ -128,6 +130,12 @@ void Character::render(float scale)
 
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
+	
+	collider.SetColliderBounds(w, h);
+	collider.SetColliderPosition(screenCoords.x - (w / 2), screenCoords.y - (h / 2));
+	collider.RenderCollider(renderer);
+
+
 }
 
 ///Setter for target
@@ -154,4 +162,9 @@ bool Character::checkIfNearTarget()
 
 	return nearTarget;
 
+}
+
+Collider2D Character::GetCollider()
+{
+	return collider;
 }

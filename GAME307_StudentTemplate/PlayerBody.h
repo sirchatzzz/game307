@@ -18,6 +18,7 @@ class PlayerBody : public Body
 protected:
     class GameManager* game;
     bool isAccelerating;
+    Collider2D collider;
 
 public:
     PlayerBody() : Body{}
@@ -55,7 +56,7 @@ public:
         , isAccelerating(false)
     {}
     
-    Collider2D collider;
+    
 
     // use the base class versions of getters
 
@@ -66,6 +67,8 @@ public:
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     
+    Collider2D GetCollider();
+
 };
 
 #endif /* PLAYERBODY_H */

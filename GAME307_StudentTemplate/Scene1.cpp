@@ -91,6 +91,9 @@ void Scene1::Update(const float deltaTime) {
 
 	game->getPlayer()->Update(deltaTime);
 
+	
+	game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
+	blinky->GetCollider().CollisionCheckWithDebugMessages(game->getPlayer()->GetCollider());
 }
 
 void Scene1::Render() {

@@ -28,6 +28,8 @@ private:
 	/// </summary>
 	bool isActive;
 
+	bool debugColliderFlag;
+
 public:
 	
 	//Constructors

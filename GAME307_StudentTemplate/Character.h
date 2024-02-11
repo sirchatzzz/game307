@@ -5,7 +5,7 @@
 
 #include "Scene.h"
 #include "Steering/KinematicBody.h"
-
+#include "Collider2D.h"
 
 using namespace std;
 
@@ -16,6 +16,8 @@ private:
 	class Scene* scene;
 	float speed;
 	Vec3 target;
+	Collider2D collider;
+
 public:
 	Character()
 	{
@@ -40,6 +42,7 @@ public:
 	bool checkIfNearTarget();
 	KinematicBody* getBody() { return body; }
 
+	Collider2D GetCollider();
 
 };
 

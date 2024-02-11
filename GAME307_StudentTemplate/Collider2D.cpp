@@ -8,7 +8,7 @@
 #include "Collider2D.h"
 
 
-Collider2D::Collider2D(): x(0.0), y(0.0), w(0.0), h(0.0), isActive(false) {}
+Collider2D::Collider2D(): x(0.0), y(0.0), w(0.0), h(0.0), isActive(false), debugColliderFlag(false) {}
 
 Collider2D::Collider2D(float x_, float y_, float w_, float h_)
 {
@@ -104,6 +104,8 @@ bool Collider2D::CollisionCheck(Collider2D otherObject)
 
 bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 {
+	debugColliderFlag = false;
+
 	if (otherObject.isActive && isActive)
 	{
 		//Player Collider Box
@@ -126,16 +128,16 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 		r2.x = otherObject.x + otherObject.w;
 		r2.y = otherObject.y + otherObject.h;
 
-		std::cout << "\nObjectOne Dimensions: "
-			<< "\nx: " << l1.x << " y: " << l1.y << " width: " << r1.x << " height: " << r1.y << std::endl;
 		
-		std::cout << "\nObjectTwo Dimensions: "
-			<< "\nx: " << l2.x << " y: " << l2.y << " width: " << r2.x << " height: " << r2.y << std::endl;
 
 		if (l1.x > r2.x)
 		{
-			std::cout << "\n COLLISION CHECK: FALSE!";
-			return false;		
+			if (debugColliderFlag)
+			{
+				debugColliderFlag = false;
+				std::cout << "\n COLLISION CHECK: FALSE!";
+			}
+			return false;
 		}
 		else
 		{
@@ -144,12 +146,20 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 			{
 				if (l1.y >= l2.y && l1.y <= r2.y)
 				{
-					std::cout << "\n COLLISION CHECK: TRUE!";
+					if (!debugColliderFlag)
+					{
+						debugColliderFlag = true;
+						std::cout << "\n COLLISION CHECK: TRUE!";
+					}
 					return true;
 				}	
 				if (r1.y <= l1.y && r1.y <= r2.y)
 				{
-					std::cout << "\n COLLISION CHECK: TRUE!";
+					if (!debugColliderFlag)
+					{
+						debugColliderFlag = true;
+						std::cout << "\n COLLISION CHECK: TRUE!";
+					}
 					return true;
 				}
 			}
@@ -158,7 +168,11 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 
 		if (r1.x < l2.x)
 		{
-			std::cout << "\n COLLISION CHECK: FALSE!";
+			if (debugColliderFlag)
+			{
+				debugColliderFlag = false;
+				std::cout << "\n COLLISION CHECK: FALSE!";
+			}
 			return false;
 		}
 		else
@@ -168,12 +182,20 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 			{
 				if (l1.y >= l2.y && l1.y <= r2.y)
 				{
-					std::cout << "\n COLLISION CHECK: TRUE!";
+					if (!debugColliderFlag)
+					{
+						debugColliderFlag = true;
+						std::cout << "\n COLLISION CHECK: TRUE!";
+					}
 					return true;
 				}
 				if (r1.y >= l2.y && r1.y <= r2.y)
 				{
-					std::cout << "\n COLLISION CHECK: TRUE!";
+					if (!debugColliderFlag)
+					{
+						debugColliderFlag = true;
+						std::cout << "\n COLLISION CHECK: TRUE!";
+					}
 					return true;
 				}
 
@@ -183,7 +205,12 @@ bool Collider2D::CollisionCheckWithDebugMessages(Collider2D otherObject)
 
 
 	//if all else fails, not overlapping
-	std::cout << "\n COLLISION CHECK: FALSE!";
+	if (debugColliderFlag)
+	{
+		debugColliderFlag = false;
+		std::cout << "\n COLLISION CHECK: FALSE!";
+	}
+		
 	return false;
 }
 

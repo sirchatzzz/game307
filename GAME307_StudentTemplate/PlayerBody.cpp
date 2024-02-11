@@ -141,3 +141,8 @@ void PlayerBody::resetToOrigin()
 {
     pos = Vec3(0.0f + radius, 0.0f + radius, 0.0f);
 }
+
+Collider2D PlayerBody::GetCollider()
+{
+    return collider;
+}
