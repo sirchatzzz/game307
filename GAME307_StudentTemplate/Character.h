@@ -44,6 +44,8 @@ public:
 
 	Collider2D GetCollider();
 
+	void IslandAvoidance(std::vector<Collider2D> islandColliders);
+
 };
 
 #endif

@@ -83,20 +83,10 @@ void Character::Update(float deltaTime)
 
 	}
 
-
 	//Update AI
 	body->Update(deltaTime, steering);
 	//Delete steering behaviour when finished
 	delete steering;
-
-
-
-
-
-
-
-
-
 
 
 }
@@ -104,6 +94,19 @@ void Character::Update(float deltaTime)
 void Character::HandleEvents(const SDL_Event& event)
 {
 	// handle events here, if needed
+	switch (event.type)
+	{
+	case SDL_KEYDOWN:
+		//Change rotation of player with the A and D keys
+		//Increase or decrease speed of player with W and S keys
+		
+		if (event.key.keysym.sym == SDLK_2)
+		{
+			std::cout << "\Character Collider Details\n"
+				<< collider.GetColliderRect().x << " " << collider.GetColliderRect().y << " " << collider.GetColliderRect().w << " " << collider.GetColliderRect().h;
+		}
+		break;
+	}
 }
 
 void Character::render(float scale)
@@ -131,8 +134,8 @@ void Character::render(float scale)
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
 	
-	collider.SetColliderBounds(w, h);
-	collider.SetColliderPosition(screenCoords.x - (w / 2), screenCoords.y - (h / 2));
+	collider.SetColliderBounds(square.w, square.h);
+	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
 
@@ -168,3 +171,23 @@ Collider2D Character::GetCollider()
 {
 	return collider;
 }
+
+void Character::IslandAvoidance(std::vector<Collider2D> islandColliders)
+{
+	for (int i = 0; i < islandColliders.size(); i++)
+	{
+		if (collider.CollisionCheck(islandColliders[i]))
+		{
+			Vec3 islandPos, currentPos;
+			islandPos.x = islandColliders[i].GetColliderRect().x;
+			islandPos.y = islandColliders[i].GetColliderRect().y;
+			currentPos.x = body->getPos().x;
+			currentPos.y = body->getPos().y;
+
+			Vec3 reflect = VMath::reflect(currentPos, islandPos);
+			setTarget(reflect);
+		}
+	}
+}
+
+

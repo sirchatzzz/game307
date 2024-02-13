@@ -57,9 +57,13 @@ bool Scene1::OnCreate() {
 	}
 
 	islandRect[0] = { 550, 250, 250, 300 };
-	islandColl[0] = Collider2D(550, 270, islandImage[0]->w, islandImage[0]->h-50);
-	islandColl[0].SetColliderActive(true);
-	
+	Collider2D nullColl;
+	nullColl.SetColliderActive(true);
+	islandColls.push_back(nullColl);
+	islandColls[0] = Collider2D(550, 250, islandImage[0]->w-50, islandImage[0]->h-50);
+	islandColls[0].SetColliderActive(true);
+
+
 	islandRect[1] = { 400, 50, 150, 150 };
 	islandRect[2] = { 700, 0, 200, 250 };
 	islandRect[3] = { 100, 200, 200, 200 };
@@ -80,7 +84,7 @@ bool Scene1::OnCreate() {
 	blinky->getBody()->setPos(Vec3(-4, -4, 0));
 	// end of character set ups
 
-
+	game->getPlayer()->GetCollider().collFlagChange(false);
 
 	return true;
 }
@@ -89,13 +93,24 @@ void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
 
+	//Enemy AI Targets Player
 	blinky->setTarget(game->getPlayer()->getPos());
-	blinky->Update(deltaTime);
 
 	game->getPlayer()->Update(deltaTime);
-
 	
-	game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
+	
+	
+
+	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
+	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
+
+	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
+	{
+		std::cout << "\nBlicky Collision Detected By Player";
+	}
+
+	blinky->IslandAvoidance(islandColls);
+	blinky->Update(deltaTime);
 }
 
 void Scene1::Render() {
@@ -119,7 +134,7 @@ void Scene1::Render() {
 	blinky->render(0.1f);
 	SDL_RenderPresent(renderer);
 
-	islandColl[0].RenderCollider(renderer);
+	islandColls[0].RenderCollider(renderer);
 
 }
 
@@ -129,4 +144,6 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
+	blinky->HandleEvents(event);
+	
 }

@@ -26,7 +26,7 @@ private:
 	std::vector<SDL_Texture*> islandTexture;
 	std::vector<SDL_Rect> islandRect;
 
-	Collider2D islandColl[5];
+	std::vector<Collider2D> islandColls;
 
 	Character* blinky;
 

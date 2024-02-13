@@ -58,8 +58,8 @@ void PlayerBody::Render(float scale)
     SDL_RenderCopyEx(renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
     
-    collider.SetColliderBounds(w, h);
-    collider.SetColliderPosition(screenCoords.x-(w/2), screenCoords.y-(h/2));
+    collider.SetColliderBounds(square.w, square.h);
+    collider.SetColliderPosition(square.x, square.y);
     collider.RenderCollider(renderer);
 
 }
@@ -88,6 +88,11 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
         if (event.key.keysym.sym == SDLK_d)
         {
             orientation += 0.05;
+        }
+        if (event.key.keysym.sym == SDLK_2)
+        {
+            std::cout << "\nPlayer Collider Details\n"
+                << collider.GetColliderRect().x << " " << collider.GetColliderRect().y << " " << collider.GetColliderRect().w << " " << collider.GetColliderRect().h;
         }
         break;
     }

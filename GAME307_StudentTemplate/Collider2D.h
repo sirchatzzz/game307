@@ -21,17 +21,19 @@ private:
 	/// Width and Height are the collidor bounds.
 	/// X and Y are the collider position
 	/// </summary>
-	float x, y, w, h;
+	
 
 	/// <summary>
 	/// Is the collider active? True or False.
 	/// </summary>
 	bool isActive;
-
-	bool debugColliderFlag;
+	bool collisionFlag = false;
+	float x, y, w, h;
+	bool printed;
 
 public:
 	
+
 	//Constructors
 	Collider2D();
 	Collider2D(float x_, float y_, float w_, float h_);
@@ -64,17 +66,15 @@ public:
 	bool CollisionCheck(Collider2D otherObject);
 
 	/// <summary>
-	/// Check if two Collider2D objects have intersected.
-	/// Prints debug messages into console.
-	/// </summary>
-	/// <param name="otherObject"></param>
-	/// <returns></returns>
-	bool CollisionCheckWithDebugMessages(Collider2D otherObject);
-
-	/// <summary>
 	/// Renders a visual of the collider
 	/// </summary>
 	void RenderCollider(SDL_Renderer* m_window_renderer);
+
+	bool CollisionMathTesting(Collider2D otherObject);
+
+	void collFlagChange(bool newBool) { collisionFlag = newBool; }
+
+	SDL_Rect GetColliderRect();
 
 };
 
