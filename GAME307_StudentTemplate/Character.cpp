@@ -188,7 +188,7 @@ void Character::IslandAvoidance(std::vector<Collider2D> islandColliders)
 			//currentPos = currentPos + target;
 
 			Vec3 reflect = VMath::reflect(currentPos, islandPos);
-			setTarget(reflect);
+			target = new PlayerBody(reflect, Vec3(), Vec3(), 0, 0, target->getOrientation(), 0, 0, 0, 0, 0, 0, nullptr);
 		}
 	}
 }
