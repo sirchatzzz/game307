@@ -21,6 +21,9 @@ bool PlayerBody::OnCreate()
         std::cerr << "Can't create the texture" << std::endl;
         return false;
     }
+
+    collider.SetColliderActive(true);
+
     return true;
 }
 
@@ -54,6 +57,11 @@ void PlayerBody::Render(float scale)
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
+    
+    collider.SetColliderBounds(square.w, square.h);
+    collider.SetColliderPosition(square.x, square.y);
+    collider.RenderCollider(renderer);
+
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)
@@ -85,6 +93,11 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
         if (keyboard_state_array[SDL_SCANCODE_D])
         {
             orientation += 0.05;
+        }
+        if (event.key.keysym.sym == SDLK_2)
+        {
+            std::cout << "\nPlayer Collider Details\n"
+                << collider.GetColliderRect().x << " " << collider.GetColliderRect().y << " " << collider.GetColliderRect().w << " " << collider.GetColliderRect().h;
         }
         break;
     }
@@ -137,10 +150,14 @@ void PlayerBody::Update(float deltaTime)
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
 
-
 }
 
 void PlayerBody::resetToOrigin()
 {
     pos = Vec3(0.0f + radius, 0.0f + radius, 0.0f);
+}
+
+Collider2D PlayerBody::GetCollider()
+{
+    return collider;
 }

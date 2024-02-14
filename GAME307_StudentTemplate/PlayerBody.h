@@ -11,12 +11,14 @@
 #include <stdio.h>
 #include "Body.h"
 #include "GameManager.h"
+#include "Collider2D.h"
 
 class PlayerBody : public Body
 {
 protected:
     class GameManager* game;
     bool isAccelerating;
+    Collider2D collider;
 
 public:
     PlayerBody() : Body{}
@@ -54,6 +56,8 @@ public:
         , isAccelerating(false)
     {}
     
+    
+
     // use the base class versions of getters
 
     bool OnCreate();
@@ -62,6 +66,8 @@ public:
     void Update( float deltaTime );
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
+    
+    Collider2D GetCollider();
 
 };
 

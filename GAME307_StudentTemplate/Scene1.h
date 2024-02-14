@@ -1,12 +1,11 @@
 #ifndef SCENE1_H
 #define SCENE1_H
 
-#include <MMath.h>
-#include <VMath.h>
+#include "MMath.h"
+#include "VMath.h"
 #include "Scene.h"
 #include <vector>
 #include "Character.h"
-
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -21,10 +20,13 @@ private:
 	SDL_Texture* playerTexture;
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
+
 	// islands
 	std::vector<SDL_Surface*> islandImage;
 	std::vector<SDL_Texture*> islandTexture;
 	std::vector<SDL_Rect> islandRect;
+
+	std::vector<Collider2D> islandColls;
 
 	Character* blinky;
 
@@ -41,6 +43,8 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
+
+	
 };
 
 #endif

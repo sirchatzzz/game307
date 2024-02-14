@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "Scene.h"
-#include "KinematicBody.h"
-
+#include "Steering/KinematicBody.h"
+#include "Collider2D.h"
 
 using namespace std;
 
@@ -16,6 +16,8 @@ private:
 	class Scene* scene;
 	float speed;
 	PlayerBody* target;
+	Collider2D collider;
+
 public:
 	Character()
 	{
@@ -40,6 +42,9 @@ public:
 	bool checkIfNearTarget();
 	KinematicBody* getBody() { return body; }
 
+	Collider2D GetCollider();
+
+	void IslandAvoidance(std::vector<Collider2D> islandColliders);
 
 };
 

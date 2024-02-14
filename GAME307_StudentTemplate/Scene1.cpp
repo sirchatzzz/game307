@@ -39,6 +39,7 @@ bool Scene1::OnCreate() {
 		islandImage.push_back(nullptr);
 		islandTexture.push_back(nullptr);
 		islandRect.push_back(SDL_Rect());
+		islandColls.push_back(Collider2D());
 	}
 
 	islandImage[0] = IMG_Load("assets/island1.png");
@@ -56,7 +57,11 @@ bool Scene1::OnCreate() {
 		islandTexture[i] = SDL_CreateTextureFromSurface(renderer, islandImage[i]);
 	}
 
-	islandRect[0] = { 550, 250, 250, 300 };
+	islandRect[0] = { 1200, 600, 250, 300 };
+	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y+50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
+	islandColls[0].SetColliderActive(true);
+
+
 	islandRect[1] = { 400, 50, 150, 150 };
 	islandRect[2] = { 700, 0, 200, 250 };
 	islandRect[3] = { 100, 200, 200, 200 };
@@ -77,7 +82,7 @@ bool Scene1::OnCreate() {
 	blinky->getBody()->setPos(Vec3(-4, -4, 0));
 	// end of character set ups
 
-
+	game->getPlayer()->GetCollider().collFlagChange(false);
 
 	return true;
 }
@@ -86,11 +91,24 @@ void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
 
-	blinky->setTarget(game->getPlayer());
-	blinky->Update(deltaTime);
+	//Enemy AI Targets Player
+	blinky->setTarget(game->getPlayer()->getPos());
 
 	game->getPlayer()->Update(deltaTime);
+	
+	
+	
 
+	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
+	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
+
+	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
+	{
+		std::cout << "\nBlicky Collision Detected By Player";
+	}
+
+	blinky->IslandAvoidance(islandColls);
+	blinky->Update(deltaTime);
 }
 
 void Scene1::Render() {
@@ -114,6 +132,8 @@ void Scene1::Render() {
 	blinky->render(0.075f);
 	SDL_RenderPresent(renderer);
 
+	islandColls[0].RenderCollider(renderer);
+
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
@@ -122,4 +142,6 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
+	blinky->HandleEvents(event);
+	
 }
