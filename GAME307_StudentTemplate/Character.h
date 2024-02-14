@@ -17,7 +17,8 @@ private:
 	float speed;
 	PlayerBody* target;
 	Collider2D collider;
-
+	Vec3 collidedTargetPosition;
+	std::vector<Collider2D> islandColliders;
 public:
 	Character()
 	{
@@ -44,8 +45,8 @@ public:
 
 	Collider2D GetCollider();
 
-	void IslandAvoidance(std::vector<Collider2D> islandColliders);
-
+	bool IslandAvoidance();
+	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
 };
 
 #endif

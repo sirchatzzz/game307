@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "Arrive.h"
 #include "Align.h"
+#include "Evade.h"
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -69,21 +70,33 @@ void Character::Update(float deltaTime)
 	Vec3 distance = target->getPos() - body->getPos();
 	//body->setOrientation(std::atan2(distance.x, distance.y) * 170 / M_PI / 50);
 	//Check to see if AI is near target
-	if (!checkIfNearTarget())
+	if (IslandAvoidance() != true)
 	{
-		//Set the radius of the target
-		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-		//Set the slow radius so the AI will begin to slow down once it enters this radius
-		float slowRadius = targetRadius + 5;
-		//Create an Arrive steering behaviour and set the parameters
-		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
-		//Call arrive function that sets this steering behaviour to the one created in the function
-		steering = arrive.getSteering(target->getPos(), this);
+		if (!checkIfNearTarget())
+		{
+			//Set the radius of the target
+			float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+			//Set the slow radius so the AI will begin to slow down once it enters this radius
+			float slowRadius = targetRadius + 5;
+			//Create an Arrive steering behaviour and set the parameters
+			Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
+			//Call arrive function that sets this steering behaviour to the one created in the function
+			steering = arrive.getSteering(target->getPos(), this);
 
-		
-		Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
-		steering->angular = align.getSteering(target->getOrientation(), this);
-		
+
+			Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
+			steering->angular = align.getSteering(target->getOrientation(), this);
+
+		}
+	}
+	else
+	{
+		/*Character* character_ = new Character();
+		character_->getBody()->setPos(scene->getProjectionMatrix() * body->getPos());*/
+
+		Evade evade(4 , body->getMaxAcceleration());
+		steering = evade.getSteering(this, collidedTargetPosition);
+
 	}
 
 	//Update AI
@@ -173,24 +186,24 @@ Collider2D Character::GetCollider()
 	return collider;
 }
 
-void Character::IslandAvoidance(std::vector<Collider2D> islandColliders)
+bool Character::IslandAvoidance()
 {
 	for (int i = 0; i < islandColliders.size(); i++)
 	{
 		if (collider.CollisionCheck(islandColliders[i]))
 		{
-			Vec3 islandPos, currentPos;
+			Vec3 islandPos;
 			islandPos.x = islandColliders[i].GetColliderRect().x;
 			islandPos.y = islandColliders[i].GetColliderRect().y;
-			currentPos.x = body->getPos().x;
-			currentPos.y = body->getPos().y;
-			
-			//currentPos = currentPos + target;
 
-			Vec3 reflect = VMath::reflect(currentPos, islandPos);
-			target = new PlayerBody(reflect, Vec3(), Vec3(), 0, 0, target->getOrientation(), 0, 0, 0, 0, 0, 0, nullptr);
+
+			collidedTargetPosition = islandPos;
+			return true;
+
 		}
+
 	}
+	return false;
 }
 
 

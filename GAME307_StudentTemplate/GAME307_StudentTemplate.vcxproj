@@ -138,6 +138,7 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collider2D.cpp" />
+    <ClCompile Include="Evade.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MMath.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Body.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collider2D.h" />
+    <ClInclude Include="Evade.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MMath.h" />

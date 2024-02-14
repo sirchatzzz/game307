@@ -43,6 +43,10 @@
     <ClCompile Include="Scene1.cpp">
       <Filter>Class\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Align.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Evade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -93,6 +97,10 @@
     <ClInclude Include="Scene1.h">
       <Filter>Header\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Align.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Evade.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
