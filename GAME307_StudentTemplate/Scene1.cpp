@@ -39,6 +39,7 @@ bool Scene1::OnCreate() {
 		islandImage.push_back(nullptr);
 		islandTexture.push_back(nullptr);
 		islandRect.push_back(SDL_Rect());
+		islandColls.push_back(Collider2D());
 	}
 
 	islandImage[0] = IMG_Load("assets/island1.png");
@@ -56,11 +57,8 @@ bool Scene1::OnCreate() {
 		islandTexture[i] = SDL_CreateTextureFromSurface(renderer, islandImage[i]);
 	}
 
-	islandRect[0] = { 550, 250, 250, 300 };
-	Collider2D nullColl;
-	nullColl.SetColliderActive(true);
-	islandColls.push_back(nullColl);
-	islandColls[0] = Collider2D(550, 250, islandImage[0]->w-50, islandImage[0]->h-50);
+	islandRect[0] = { 1200, 600, 250, 300 };
+	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y+50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
 	islandColls[0].SetColliderActive(true);
 
 

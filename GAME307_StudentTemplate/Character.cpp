@@ -183,6 +183,8 @@ void Character::IslandAvoidance(std::vector<Collider2D> islandColliders)
 			islandPos.y = islandColliders[i].GetColliderRect().y;
 			currentPos.x = body->getPos().x;
 			currentPos.y = body->getPos().y;
+			
+			//currentPos = currentPos + target;
 
 			Vec3 reflect = VMath::reflect(currentPos, islandPos);
 			setTarget(reflect);
