@@ -195,11 +195,14 @@ bool Character::IslandAvoidance()
 			Vec3 islandPos;
 			islandPos.x = islandColliders[i].GetColliderRect().x;
 			islandPos.y = islandColliders[i].GetColliderRect().y;
+			currentPos.x = body->getPos().x;
+			currentPos.y = body->getPos().y;
 
+			Vec3 distance{ 100,100,0 };
 
-			collidedTargetPosition = islandPos;
-			return true;
+			Vec3 reflect = VMath::reflect(currentPos+distance, islandPos);
 
+			setTarget(reflect);
 		}
 
 	}
