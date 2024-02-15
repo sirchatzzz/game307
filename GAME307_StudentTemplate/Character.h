@@ -19,6 +19,9 @@ private:
 	Collider2D collider;
 	Vec3 collidedTargetPosition;
 	std::vector<Collider2D> islandColliders;
+	//Near target variables
+	Vec3 nearTargetAccel;
+	bool near;
 public:
 	Character()
 	{
@@ -45,7 +48,7 @@ public:
 
 	Collider2D GetCollider();
 
-	bool IslandAvoidance();
+	void IslandAvoidance();
 	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
 };
 

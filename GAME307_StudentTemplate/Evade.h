@@ -16,7 +16,7 @@ public:
 
 	Evade(float radius_, float maxAccel_);
 
-	SteeringOutput* getSteering(Character* character_, Vec3 collidedPosition_);
+	SteeringOutput* getSteering(Character* character_, PlayerBody* target_);
 
 
 

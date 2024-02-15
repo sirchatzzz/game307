@@ -6,9 +6,6 @@
 using namespace MATH;
 
 
-
-
-
 class Align
 {
 	
