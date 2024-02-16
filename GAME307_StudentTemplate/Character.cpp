@@ -68,7 +68,7 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target->getPos() - body->getPos();
-	body->setOrientation((std::atan2(-distance.x, -distance.y) * 170 / M_PI / 50));
+	//body->setOrientation((std::atan2(-distance.x, -distance.y) * 170 / M_PI / 50));
 
 	//Check to see if AI is near target
 
@@ -85,8 +85,8 @@ void Character::Update(float deltaTime)
 		steering = arrive.getSteering(target->getPos(), this);
 
 
-		//Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
-		//steering->angular = align.getSteering(target->getOrientation(), this);
+		Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
+		steering->angular = align.getSteering(target->getOrientation(), this);
 		near = true;
 	}
 	else
@@ -97,15 +97,15 @@ void Character::Update(float deltaTime)
 		{
 			double x = target->getPos().x;
 
-			if (x < body->getPos().x) x = body->getAccel().x + 4.5;
+			if (x < body->getPos().x) x = body->getAccel().x + 4;
 
-			if (x >= body->getPos().x) x = body->getAccel().x - 4.5;
+			if (x >= body->getPos().x) x = body->getAccel().x - 4;
 
 			double y = target->getPos().y;
 
-			if (y < body->getPos().y) y = body->getAccel().y - 4.5;
+			if (y < body->getPos().y) y = body->getAccel().y - 4;
 
-			if (y >= body->getPos().y) y = body->getAccel().y + 4.5;
+			if (y >= body->getPos().y) y = body->getAccel().y + 4;
 
 			nearTargetAccel = Vec3(x, y, 0);
 			near = false;
@@ -190,7 +190,7 @@ bool Character::checkIfNearTarget()
 	bool nearTarget;
 
 
-	if (abs(distance.x) < 3 && abs(distance.y) < 3 && abs(distance.z) < 3) nearTarget = true;
+	if (abs(distance.x) < 2 && abs(distance.y) < 2 && abs(distance.z) < 2) nearTarget = true;
 	else nearTarget = false;
 
 
