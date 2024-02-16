@@ -79,7 +79,7 @@ bool Scene1::OnCreate() {
 	{
 		return false;
 	}
-	blinky->getBody()->setPos(Vec3(-4, -4, 0));
+	blinky->getBody()->setPos(Vec3(1, 1, 0));
 	// end of character set ups
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
@@ -92,7 +92,7 @@ void Scene1::OnDestroy() {}
 void Scene1::Update(const float deltaTime) {
 
 	//Enemy AI Targets Player
-	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->setTarget(game->getPlayer());
 
 	game->getPlayer()->Update(deltaTime);
 	
@@ -107,7 +107,8 @@ void Scene1::Update(const float deltaTime) {
 		std::cout << "\nBlicky Collision Detected By Player";
 	}
 
-	blinky->IslandAvoidance(islandColls);
+	blinky->setIslandColliders(islandColls);
+	blinky->IslandAvoidance();
 	blinky->Update(deltaTime);
 }
 

@@ -76,6 +76,7 @@ public:
 	// so that mouse position can be copied into a Body.
     virtual void setPos( Vec3 pos );
     void setSpeed(float speed_) { speed = speed_; }
+    float getSpeed() { return speed; }
 };
 
 #endif /* BODY_H */

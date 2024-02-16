@@ -15,9 +15,13 @@ private:
 	class KinematicBody* body;
 	class Scene* scene;
 	float speed;
-	Vec3 target;
+	PlayerBody* target;
 	Collider2D collider;
-
+	Vec3 collidedTargetPosition;
+	std::vector<Collider2D> islandColliders;
+	//Near target variables
+	Vec3 nearTargetAccel;
+	bool near;
 public:
 	Character()
 	{
@@ -36,7 +40,7 @@ public:
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
 	void render(float scale = 1.0f);
-	void setTarget(Vec3 target_);
+	void setTarget(PlayerBody* target_);
 
 	//void steerTo(Vec3 target_, float speed_, SteeringOutput* steering_);
 	bool checkIfNearTarget();
@@ -44,8 +48,8 @@ public:
 
 	Collider2D GetCollider();
 
-	void IslandAvoidance(std::vector<Collider2D> islandColliders);
-
+	void IslandAvoidance();
+	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
 };
 
 #endif
