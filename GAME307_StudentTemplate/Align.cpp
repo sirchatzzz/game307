@@ -26,17 +26,17 @@ double mapToRange(double degrees) {
 	return r;
 
 }
-float Align::getSteering(float targetOrientation_, Character* character_)
+SteeringOutput* Align::getSteering(float targetOrientation_, Character* character_)
 {
 
 	//Create steering behaviour
 	SteeringOutput* result;
-	result = new SteeringOutput();
+	result = new SteeringOutput();	
 
 	float rotation = targetOrientation_ - character_->getBody()->getOrientation();
 	rotation = mapToRange(rotation);
 	float rotationSize = abs(rotation);
-	if (rotationSize < targetRadius) return 0;
+	if (rotationSize < targetRadius) return result;
 	
 	float currentRotation;
 
@@ -56,7 +56,7 @@ float Align::getSteering(float targetOrientation_, Character* character_)
 		result->angular *= maxAngularAccel;
 
 	}
-
-	return result->angular;
+	//return result->angular;
+	return result;
 
 }

@@ -82,11 +82,13 @@ void Character::Update(float deltaTime)
 		//Create an Arrive steering behaviour and set the parameters
 		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
 		//Call arrive function that sets this steering behaviour to the one created in the function
-		steering = arrive.getSteering(target->getPos(), this);
+		*steering += *(arrive.getSteering(target->getPos(), this));
 
 
 		Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
-		steering->angular = align.getSteering(target->getOrientation(), this);
+		//steering->angular = align.getSteering(target->getOrientation(), this);
+		*steering += *(align.getSteering(target->getOrientation(), this));
+
 		near = true;
 	}
 	else

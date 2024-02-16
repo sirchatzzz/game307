@@ -23,7 +23,7 @@ public:
 
 	Align(float maxAngularAccel_, float maxRotation_, float targetRadius_, float slowRadius_, float timeToTarget_ = 0.1);
 
-	float getSteering(float targetOrientation_, Character* character_);
+	SteeringOutput* getSteering(float targetOrientation_, Character* character_);
 
 
 };
