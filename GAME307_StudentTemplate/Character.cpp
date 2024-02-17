@@ -68,7 +68,7 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target->getPos() - body->getPos();
-	//body->setOrientation((std::atan2(-distance.x, -distance.y) * 170 / M_PI / 50));
+	body->setOrientation((std::atan2(-distance.x, -distance.y)));
 
 	//Check to see if AI is near target
 
@@ -80,14 +80,14 @@ void Character::Update(float deltaTime)
 		//Set the slow radius so the AI will begin to slow down once it enters this radius
 		float slowRadius = targetRadius + 5;
 		//Create an Arrive steering behaviour and set the parameters
-		Arrive arrive(body->getMaxAcceleration() + 2, body->getMaxSpeed() + 4, targetRadius, slowRadius);
+		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
 		//Call arrive function that sets this steering behaviour to the one created in the function
 		*steering += *(arrive.getSteering(target->getPos(), this));
 
 
-		Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
-		//steering->angular = align.getSteering(target->getOrientation(), this);
-		*steering += *(align.getSteering(target->getOrientation(), this));
+		//Align align(body->getMaxAngular(), body->getMaxRotation(), 1, 1);
+		////steering->angular = align.getSteering(target->getOrientation(), this);
+		//*steering += *(align.getSteering(target->getOrientation(), this));
 
 		near = true;
 	}
