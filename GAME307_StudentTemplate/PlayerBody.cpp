@@ -7,6 +7,18 @@
 
 #include "PlayerBody.h"
 
+GearState& operator+=(GearState& state, int increment) {
+    int value = static_cast<int>(state) + increment;
+    state = static_cast<GearState>(value % 6); // Ensure the value stays within the range of enum
+    return state;
+}
+
+GearState& operator-=(GearState& state, int increment) {
+    int value = static_cast<int>(state) - increment;
+    state = static_cast<GearState>(value % 6); // Ensure the value stays within the range of enum
+    return state;
+}
+
 bool PlayerBody::OnCreate()
 {
     image = IMG_Load("Pacman.png");
@@ -23,7 +35,7 @@ bool PlayerBody::OnCreate()
     }
 
     collider.SetColliderActive(true);
-
+    gearState = GearState::NEUTRAL;
     return true;
 }
 
@@ -72,28 +84,34 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
 
 
+        //Change rotation of player with the A and D keys
+        //Increase or decrease speed of player with W and S keys
     switch (event.type)
     {
     case SDL_KEYDOWN:
-    //Change rotation of player with the A and D keys
-    //Increase or decrease speed of player with W and S keys
-
-        if (keyboard_state_array[SDL_SCANCODE_W])
+        if (event.key.keysym.scancode == SDL_SCANCODE_W && event.key.repeat == 0)
         {
-            speed += 1;
+            if (gearState != GearState::DRIVE3) gearState += 1;
         }
+
         if (keyboard_state_array[SDL_SCANCODE_A])
         {
             orientation -= 0.05;
+
         }
-        if (keyboard_state_array[SDL_SCANCODE_S])
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_S && event.key.repeat == 0)
         {
-            speed -= 1;
+            if (gearState != GearState::REVERSE) gearState -= 1;
+
         }
+
         if (keyboard_state_array[SDL_SCANCODE_D])
         {
             orientation += 0.05;
+
         }
+
         if (event.key.keysym.sym == SDLK_2)
         {
             std::cout << "\nPlayer Collider Details\n"
@@ -101,10 +119,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
         }
         break;
     }
-
-
-
-
+   
 
 }
 
@@ -141,12 +156,14 @@ void PlayerBody::Update(float deltaTime)
         vel.y = 0.0f;
     }
 
-    //IF speed is less than 0, set it to 0
-    if (speed < 0) speed = 0;
-    //IF speed is equal to 0, then set it to a base speed value
-    if (speed == 0) speed = 0.15;
-    //IF speed is greater than maxSpeed, set speed to equal maxSpeed
-    if (speed > maxSpeed) speed = maxSpeed;
+   
+    CalculateSpeed();
+    ////IF speed is less than 0, set it to 0
+    //if (speed < 0) speed = 0;
+    ////IF speed is equal to 0, then set it to a base speed value
+    //if (speed == 0) speed = 0.15;
+    ////IF speed is greater than maxSpeed, set speed to equal maxSpeed
+    //if (speed > maxSpeed) speed = maxSpeed;
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
 
@@ -160,4 +177,51 @@ void PlayerBody::resetToOrigin()
 Collider2D PlayerBody::GetCollider()
 {
     return collider;
+}
+
+void PlayerBody::CalculateSpeed()
+{
+
+    if(gearState == GearState::DRIVE3)
+    {
+
+        speed = getMaxSpeed();
+
+    }
+
+    if (gearState == GearState::DRIVE2)
+    {
+
+        speed = getMaxSpeed() / 2;
+
+    }
+    if (gearState == GearState::DRIVE1)
+    {
+
+        speed = getMaxSpeed() / 4;
+
+    }
+
+    if (gearState == GearState::NEUTRAL)
+    {
+
+        speed = 0.25;
+
+    }
+
+    if (gearState == GearState::PARK)
+    {
+
+        speed = 0;
+
+    }
+
+    if (gearState == GearState::REVERSE)
+    {
+
+        speed = (getMaxSpeed() / 4) * -1;
+
+    }
+
+    
 }

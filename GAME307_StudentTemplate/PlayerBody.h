@@ -13,12 +13,26 @@
 #include "GameManager.h"
 #include "Collider2D.h"
 
+enum GearState {
+
+     REVERSE = 0,
+     PARK = 1,
+     NEUTRAL = 2,
+     DRIVE1 = 3,
+     DRIVE2 = 4,
+     DRIVE3 = 5
+};
+
+
+
 class PlayerBody : public Body
 {
 protected:
     class GameManager* game;
     bool isAccelerating;
     Collider2D collider;
+    GearState gearState;
+    bool keyDown;
 
 public:
     PlayerBody() : Body{}
@@ -56,8 +70,6 @@ public:
         , isAccelerating(false)
     {}
     
-    
-
     // use the base class versions of getters
 
     bool OnCreate();
@@ -69,6 +81,9 @@ public:
     
     Collider2D GetCollider();
 
+    void CalculateSpeed();
+    GearState GetGearState() { return gearState; }
+    void IncreaseO() { orientation -= 0.05; }
 };
 
 #endif /* PLAYERBODY_H */

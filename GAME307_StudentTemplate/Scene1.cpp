@@ -70,7 +70,7 @@ bool Scene1::OnCreate() {
 
 	game->getPlayer()->setImage(playerImage);
 	game->getPlayer()->setTexture(playerTexture);
-	game->getPlayer()->SetMaxSpeed(20);
+	game->getPlayer()->SetMaxSpeed(15);
 
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this

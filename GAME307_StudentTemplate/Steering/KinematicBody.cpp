@@ -15,5 +15,5 @@ void KinematicBody::Update( float deltaTime, SteeringOutput *steering )
         accel = steering->linear;
         angular = steering->angular ;
     }
-
+    orientation = angular;
 }
