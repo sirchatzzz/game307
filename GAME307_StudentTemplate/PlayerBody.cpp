@@ -96,7 +96,8 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         if (keyboard_state_array[SDL_SCANCODE_A])
         {
-            orientation -= 0.05;
+            if (gearState != GearState::REVERSE) orientation -= 0.1;
+            else orientation += 0.1;
 
         }
 
@@ -108,7 +109,8 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         if (keyboard_state_array[SDL_SCANCODE_D])
         {
-            orientation += 0.05;
+            if (gearState != GearState::REVERSE) orientation += 0.1;
+            else orientation -= 0.1;
 
         }
 
@@ -158,12 +160,6 @@ void PlayerBody::Update(float deltaTime)
 
    
     CalculateSpeed();
-    ////IF speed is less than 0, set it to 0
-    //if (speed < 0) speed = 0;
-    ////IF speed is equal to 0, then set it to a base speed value
-    //if (speed == 0) speed = 0.15;
-    ////IF speed is greater than maxSpeed, set speed to equal maxSpeed
-    //if (speed > maxSpeed) speed = maxSpeed;
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
 
