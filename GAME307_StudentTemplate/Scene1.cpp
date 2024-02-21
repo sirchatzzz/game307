@@ -92,7 +92,7 @@ void Scene1::OnDestroy() {}
 void Scene1::Update(const float deltaTime) {
 
 	//Enemy AI Targets Player
-	blinky->setTarget(game->getPlayer());
+	blinky->setTarget(game->getPlayer()->getPos());
 
 	game->getPlayer()->Update(deltaTime);
 	

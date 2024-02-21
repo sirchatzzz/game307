@@ -67,12 +67,12 @@ void Character::Update(float deltaTime)
 
 
 	//Find the distance between the AI and its target
-	Vec3 distance = target->getPos() - body->getPos();
+	Vec3 distance = target - body->getPos();
 	//body->setOrientation((std::atan2(-distance.x, -distance.y)));
 
 	//Change Orientation of Character
 	Align align;
-	*steering += *(align.getSteering(target->getPos(), this));
+	*steering += *(align.getSteering(target, this));
 
 	//Check to see if AI is near target
 	if (!checkIfNearTarget())
@@ -85,7 +85,7 @@ void Character::Update(float deltaTime)
 		//Create an Arrive steering behaviour and set the parameters
 		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
 		//Call arrive function that sets this steering behaviour to the one created in the function
-		*steering += *(arrive.getSteering(target->getPos(), this));
+		*steering += *(arrive.getSteering(target, this));
 
 		near = true;
 	}
@@ -95,13 +95,13 @@ void Character::Update(float deltaTime)
 		//Avoid collision with player
 		if (near == true)
 		{
-			double x = target->getPos().x;
+			double x = target.x;
 
 			if (x < body->getPos().x) x = body->getAccel().x + 4;
 
 			if (x >= body->getPos().x) x = body->getAccel().x - 4;
 
-			double y = target->getPos().y;
+			double y = target.y;
 
 			if (y < body->getPos().y) y = body->getAccel().y - 4;
 
@@ -174,7 +174,7 @@ void Character::render(float scale)
 }
 
 ///Setter for target
-void Character::setTarget(PlayerBody* target_)
+void Character::setTarget(Vec3 target_)
 {
 	target = target_;
 }
@@ -186,7 +186,7 @@ bool Character::checkIfNearTarget()
 
 
 
-	Vec3 distance = target->getPos() - body->getPos();
+	Vec3 distance = target - body->getPos();
 	bool nearTarget;
 
 
@@ -218,7 +218,7 @@ void Character::IslandAvoidance()
 
 			Vec3 reflect = VMath::reflect(body->getPos() +distance, islandPos);
 
-			setTarget(new PlayerBody(reflect,Vec3(),Vec3(),0,0,target->getOrientation(),0,0,0,0,0,0,nullptr));
+			setTarget(reflect);
 		}
 
 	}

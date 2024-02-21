@@ -32,7 +32,7 @@ protected:
     bool isAccelerating;
     Collider2D collider;
     GearState gearState;
-    bool keyDown;
+
 
 public:
     PlayerBody() : Body{}
