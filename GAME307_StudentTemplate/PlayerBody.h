@@ -12,7 +12,7 @@
 #include "Body.h"
 #include "GameManager.h"
 #include "Collider2D.h"
-
+#include "ShipStats.h"
 enum GearState {
 
      REVERSE = 0,
@@ -32,7 +32,8 @@ protected:
     bool isAccelerating;
     Collider2D collider;
     GearState gearState;
-
+    ShipStats* playerStats;
+    ShipAmmo* playerAmmo;
 
 public:
     PlayerBody() : Body{}
@@ -84,6 +85,9 @@ public:
     void CalculateSpeed();
     GearState GetGearState() { return gearState; }
     void IncreaseO() { orientation -= 0.05; }
+
+    ShipStats* GetPlayerStats() { return playerStats; }
+    ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
 };
 
 #endif /* PLAYERBODY_H */

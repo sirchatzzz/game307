@@ -105,6 +105,7 @@ void Scene1::Update(const float deltaTime) {
 	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
 	{
 		std::cout << "\nBlicky Collision Detected By Player";
+		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
 	}
 
 	blinky->setIslandColliders(islandColls);

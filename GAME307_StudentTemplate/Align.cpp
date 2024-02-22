@@ -37,29 +37,6 @@ SteeringOutput* Align::getSteering(Vec3 targetPos_, Character* character_)
 	SteeringOutput* result;
 	result = new SteeringOutput();	
 
-	//float rotation = targetOrientation_ - character_->getBody()->getOrientation();
-	//rotation = mapToRange(rotation);
-	//float rotationSize = abs(rotation);
-	//if (rotationSize < targetRadius) return result;
-	//
-	//float currentRotation;
-
-	//if (rotationSize > slowRadius) currentRotation = maxRotation;
-	//else currentRotation = maxRotation * rotationSize / slowRadius;
-
-	//currentRotation *= rotation / rotationSize;
-
-	//result->angular = currentRotation - character_->getBody()->getRotation();
-	//result->angular /= timeToTarget;
-
-	//float angularAccel = abs(result->angular);
-	//if (angularAccel > maxAngularAccel)
-	//{
-
-	//	result->angular /= angularAccel;
-	//	result->angular *= maxAngularAccel;
-
-	//}
 	Vec3 distance = targetPos_ - character_->getBody()->getPos();
 	result->angular = std::atan2(-distance.x, -distance.y);
 

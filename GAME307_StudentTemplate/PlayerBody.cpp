@@ -36,6 +36,10 @@ bool PlayerBody::OnCreate()
 
     collider.SetColliderActive(true);
     gearState = GearState::NEUTRAL;
+
+    playerStats = new ShipStats(50, 100, 0, 0);
+    playerAmmo = new ShipAmmo(100,34,7);
+
     return true;
 }
 
@@ -114,11 +118,35 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         }
 
-        if (event.key.keysym.sym == SDLK_2)
-        {
-            std::cout << "\nPlayer Collider Details\n"
-                << collider.GetColliderRect().x << " " << collider.GetColliderRect().y << " " << collider.GetColliderRect().w << " " << collider.GetColliderRect().h;
-        }
+        ///Player DEBUG ONLY
+            if (keyboard_state_array[SDL_SCANCODE_H])
+            {
+                playerStats->Heal(7);
+
+            }
+
+            if (keyboard_state_array[SDL_SCANCODE_I])
+            {
+                playerStats->TakeDamage(7);
+
+            }
+
+            if (keyboard_state_array[SDL_SCANCODE_K])
+            {
+                playerAmmo->DecreaseCurrentMagAmmo(1);
+
+            }
+            if (keyboard_state_array[SDL_SCANCODE_R])
+            {
+                playerAmmo->Reload();
+
+            }
+
+            if (event.key.keysym.sym == SDLK_2)
+            {
+                std::cout << "\nPlayer Collider Details\n"
+                    << collider.GetColliderRect().x << " " << collider.GetColliderRect().y << " " << collider.GetColliderRect().w << " " << collider.GetColliderRect().h;
+            }
         break;
     }
    
@@ -158,7 +186,7 @@ void PlayerBody::Update(float deltaTime)
         vel.y = 0.0f;
     }
 
-   
+    std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;
     CalculateSpeed();
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);

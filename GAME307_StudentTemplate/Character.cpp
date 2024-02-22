@@ -68,7 +68,6 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
-	//body->setOrientation((std::atan2(-distance.x, -distance.y)));
 
 	//Change Orientation of Character
 	Align align;
@@ -129,8 +128,6 @@ void Character::HandleEvents(const SDL_Event& event)
 	switch (event.type)
 	{
 	case SDL_KEYDOWN:
-		//Change rotation of player with the A and D keys
-		//Increase or decrease speed of player with W and S keys
 		
 		if (event.key.keysym.sym == SDLK_2)
 		{
