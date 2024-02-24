@@ -49,6 +49,7 @@ ShipAmmo::ShipAmmo()
 	currentTotalAmmo = 0;
 	currentMagAmmo = 0;
 	isReloading = false;
+	reloadTimer = 0;
 	magSize = 0;
 }
 
@@ -59,7 +60,7 @@ ShipAmmo::ShipAmmo(float maxAmmo_, float currentTotalAmmo_, float magSize_)
 	isReloading = false;
 	magSize = magSize_;
 	currentMagAmmo = 0;
-
+	reloadTimer = 0;
 	InitializeAmmo();
 
 }
@@ -95,14 +96,13 @@ void ShipAmmo::DecreaseCurrentMagAmmo(float ammoDecrease_)
 void ShipAmmo::Reload()
 {
 
-	isReloading = true;
-
-	InitializeAmmo();
 
 	std::cout << "Reloading!" << std::endl;
+	isReloading = true;
+	
+		
+	
 
-
-	isReloading = false;
 }
 
 void ShipAmmo::InitializeAmmo()
@@ -142,6 +142,20 @@ void ShipAmmo::InitializeAmmo()
 			if (currentTotalAmmo < 0) currentTotalAmmo = 0;
 		}
 
+	}
+
+}
+
+void ShipAmmo::Update(float deltaTime)
+{
+
+	if (isReloading == true) reloadTimer++;
+
+	if (reloadTimer > 25)
+	{
+		InitializeAmmo();
+		isReloading = false;
+		reloadTimer = 0;
 	}
 
 }

@@ -40,6 +40,7 @@ private:
 	float currentMagAmmo;
 	float magSize;
 	bool isReloading;
+	float reloadTimer;
 
 public:
 	
@@ -61,6 +62,6 @@ public:
 
 	void Reload();
 	void InitializeAmmo();
-
+	void Update(float deltaTime);
 
 };

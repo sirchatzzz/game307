@@ -6,7 +6,9 @@
 //
 
 #include "PlayerBody.h"
-
+#include "Projectile.h"
+Projectile bullet;
+std::vector<Projectile> bullets;
 GearState& operator+=(GearState& state, int increment) {
     int value = static_cast<int>(state) + increment;
     state = static_cast<GearState>(value % 6); // Ensure the value stays within the range of enum
@@ -39,6 +41,11 @@ bool PlayerBody::OnCreate()
 
     playerStats = new ShipStats(50, 100, 0, 0);
     playerAmmo = new ShipAmmo(100,34,7);
+
+    bullet = Projectile();
+    bullet.SetGame(game);
+  
+    bullet.SetPos(Vec3(-500,-500,0));
 
     return true;
 }
@@ -78,6 +85,13 @@ void PlayerBody::Render(float scale)
     collider.SetColliderPosition(square.x, square.y);
     collider.RenderCollider(renderer);
 
+    for (int i = 0; i < bullets.size(); i++)
+    {
+
+        if (bullets.at(i).GetFiredStatus() == true) bullets.at(i).Render(0.05);
+
+    }
+
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)
@@ -116,6 +130,26 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
             if (gearState != GearState::REVERSE) orientation += 0.1;
             else orientation -= 0.1;
 
+        }
+
+
+        if (keyboard_state_array[SDL_SCANCODE_SPACE])
+        {
+            if ((playerAmmo->GetCurrentTotalAmmo() != 0 || playerAmmo->GetCurrentMagAmmo() != 0) && playerAmmo->IsReloading() != true)
+            {   
+                    
+                    
+                    bullets.push_back(bullet);
+                    bullets.at(bullets.size() - 1).OnCreate();
+                    bullets.at(bullets.size() - 1).SetFiredStatus(true);
+                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0));
+                    bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
+                    bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(orientation), -cos(orientation), 0));
+                    playerAmmo->DecreaseCurrentMagAmmo(1);
+                    //->SetPos(Vec3(-500, -500, 0));
+                    //bullet->SetDirectionVector(Vec3(0,0,0));
+
+            }
         }
 
         ///Player DEBUG ONLY
@@ -186,11 +220,22 @@ void PlayerBody::Update(float deltaTime)
         vel.y = 0.0f;
     }
 
-    std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;
+    /*std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;*/
     CalculateSpeed();
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
 
+    for (int i = 0; i < bullets.size(); i++)
+    {
+       
+        if (bullets.at(i).GetFiredStatus() == true)
+        {    
+            bullets.at(i).Update(deltaTime);
+            
+        }
+       
+    }
+    playerAmmo->Update(deltaTime);
 }
 
 void PlayerBody::resetToOrigin()

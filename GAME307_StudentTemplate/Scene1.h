@@ -30,6 +30,9 @@ private:
 
 	Character* blinky;
 
+	
+
+
 public:
 	Scene1(SDL_Window* sdlWindow, GameManager* game_);
 	~Scene1();

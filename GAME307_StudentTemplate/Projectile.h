@@ -1,52 +1,28 @@
-//
-//  PlayerBody.h
-//  DemoAI
-//
-//  Created by Gail Harris on 2021-Dec-23.
-//
-
-#ifndef PLAYERBODY_H
-#define PLAYERBODY_H
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
 
 #include <stdio.h>
 #include "Body.h"
 #include "GameManager.h"
 #include "Collider2D.h"
-#include "ShipStats.h"
-#include "Projectile.h"
-#include <vector>
-enum GearState {
-
-     REVERSE = 0,
-     PARK = 1,
-     NEUTRAL = 2,
-     DRIVE1 = 3,
-     DRIVE2 = 4,
-     DRIVE3 = 5
-};
-
-
-
-class PlayerBody : public Body
+#include "Timer.h"
+class Projectile : public Body
 {
 protected:
     class GameManager* game;
-    bool isAccelerating;
     Collider2D collider;
-    GearState gearState;
-    ShipStats* playerStats;
-    ShipAmmo* playerAmmo;
-
-
-
-
+    float time;
+    bool shotFired;
+    Vec3 direction;
+    bool render;
+    float projectileSpeed;
 public:
-    PlayerBody() : Body{}
+    Projectile() : Body{}
     {
         game = nullptr;
     }
 
-    PlayerBody(
+    Projectile(
         Vec3 pos_, Vec3 vel_, Vec3 accel_,
         float mass_,
         float radius_,
@@ -73,9 +49,9 @@ public:
         , maxAngular_
     }
         , game{ game_ }
-        , isAccelerating(false)
-    {}
     
+    {}
+    ~Projectile();
     // use the base class versions of getters
 
     bool OnCreate();
@@ -84,13 +60,15 @@ public:
     void Update( float deltaTime );
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
-    
+    void SetGame(GameManager* game_) { game = game_; }
+    void SetPos(Vec3 pos_) { pos = pos_; }
+    void SetVel(Vec3 vel_) { vel = vel_; }
+    void SetDirectionVector(Vec3 direction_) { direction = direction_; }
     Collider2D GetCollider();
-
-    void CalculateSpeed();
-    GearState GetGearState() { return gearState; }
-    ShipStats* GetPlayerStats() { return playerStats; }
-    ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
+    bool GetFiredStatus() { return shotFired; }
+    void SetFiredStatus(bool firedStatus_) {shotFired = firedStatus_;}
+    void SetProjectileSpeed(float projectileSpeed_) { projectileSpeed = projectileSpeed_; }
+    float GetProjectileSpeed() { return projectileSpeed; }
 };
 
-#endif /* PLAYERBODY_H */
+#endif
