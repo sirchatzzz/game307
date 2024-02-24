@@ -142,7 +142,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
                     bullets.push_back(bullet);
                     bullets.at(bullets.size() - 1).OnCreate();
                     bullets.at(bullets.size() - 1).SetFiredStatus(true);
-                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0));
+                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(orientation), -cos(orientation), 0) * 0.5);
                     bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
                     bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(orientation), -cos(orientation), 0));
                     playerAmmo->DecreaseCurrentMagAmmo(1);
