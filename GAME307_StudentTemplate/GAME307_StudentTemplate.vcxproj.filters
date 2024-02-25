@@ -49,6 +49,7 @@
     <ClCompile Include="Evade.cpp" />
     <ClCompile Include="ShipStats.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Tiles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -105,6 +106,7 @@
     <ClInclude Include="Evade.h" />
     <ClInclude Include="ShipStats.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Tiles.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

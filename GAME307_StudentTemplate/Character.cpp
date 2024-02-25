@@ -2,6 +2,8 @@
 #include "Arrive.h"
 #include "Align.h"
 #include "Evade.h"
+#include <algorithm>
+
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -36,6 +38,8 @@ bool Character::OnCreate(Scene* scene_)
 
 	collider.SetColliderActive(true);
 	nearTargetAccel = Vec3(0, 0, 0);
+	
+
 	return true;
 }
 
@@ -60,66 +64,79 @@ bool Character::setTextureWith(string file)
 
 void Character::Update(float deltaTime)
 {
-	//Create steering behaviour
+	////Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
-	static float time = 0;
+	//static float time = 0;
 
 
-	//Find the distance between the AI and its target
-	Vec3 distance = target - body->getPos();
+	////Find the distance between the AI and its target
+	//Vec3 distance = target - body->getPos();
 
-	//Change Orientation of Character
-	Align align;
-	*steering += *(align.getSteering(target, this));
+	////Change Orientation of Character
+	//Align align;
+	//*steering += *(align.getSteering(target, this));
 
-	//Check to see if AI is near target
-	if (!checkIfNearTarget())
-	{
-		time = 0;
-		//Set the radius of the target
-		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-		//Set the slow radius so the AI will begin to slow down once it enters this radius
-		float slowRadius = targetRadius + 5;
-		//Create an Arrive steering behaviour and set the parameters
-		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-		//Call arrive function that sets this steering behaviour to the one created in the function
-		*steering += *(arrive.getSteering(target, this));
+	////Check to see if AI is near target
+	//if (!checkIfNearTarget())
+	//{
+	//	time = 0;
+	//	//Set the radius of the target
+	//	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+	//	//Set the slow radius so the AI will begin to slow down once it enters this radius
+	//	float slowRadius = targetRadius + 5;
+	//	//Create an Arrive steering behaviour and set the parameters
+	//	Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+	//	//Call arrive function that sets this steering behaviour to the one created in the function
+	//	*steering += *(arrive.getSteering(target, this));
 
-		near = true;
-	}
-	else
-	{
+	//	near = true;
+	//}
+	//else
+	//{
 
-		//Avoid collision with player
-		if (near == true)
-		{
-			double x = target.x;
+	//	//Avoid collision with player
+	//	if (near == true)
+	//	{
+	//		double x = target.x;
 
-			if (x < body->getPos().x) x = body->getAccel().x + 4;
+	//		if (x < body->getPos().x) x = body->getAccel().x + 4;
 
-			if (x >= body->getPos().x) x = body->getAccel().x - 4;
+	//		if (x >= body->getPos().x) x = body->getAccel().x - 4;
 
-			double y = target.y;
+	//		double y = target.y;
 
-			if (y < body->getPos().y) y = body->getAccel().y - 4;
+	//		if (y < body->getPos().y) y = body->getAccel().y - 4;
 
-			if (y >= body->getPos().y) y = body->getAccel().y + 4;
+	//		if (y >= body->getPos().y) y = body->getAccel().y + 4;
 
-			nearTargetAccel = Vec3(x, y, 0);
-			near = false;
-		}
-		
+	//		nearTargetAccel = Vec3(x, y, 0);
+	//		near = false;
+	//	}
+	//	
 
-		time++;
-		if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
-		steering->linear = nearTargetAccel;
-	}
+	//	time++;
+	//	if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
+	//	steering->linear = nearTargetAccel;
+	//}
 
-	//Update AI
-	body->Update(deltaTime, steering);
-	//Delete steering behaviour when finished
-	delete steering;
+	//if (test == false) CalculateTiles();
+	////Update AI
+	//body->Update(deltaTime, steering);
+	////Delete steering behaviour when finished
+	//delete steering;
+
+
+
+	Vec3 direction = previousTile.GetPos() - body->getPos();
+	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+	PathfindTiles();
+
+
+	body->setVel(Vec3(-sin(body->getOrientation()) * 1, -cos(body->getOrientation()) * 1, 0));
+
+
+	body->Update(deltaTime,steering);
 }
 
 void Character::HandleEvents(const SDL_Event& event)
@@ -219,6 +236,102 @@ void Character::IslandAvoidance()
 		}
 
 	}
+
+}
+
+void Character::CalculateTiles()
+{
+	if (closeTiles.size() > 0) closeTiles.clear();
+
+	std::vector<float>tilesDistance;
+	std::vector<Tiles> tilesNew;
+
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		Vec3 distanceVector = tiles.at(i).GetPos() - body->getPos();
+
+		float distance = sqrt(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
+		
+		tilesDistance.push_back(distance);
+		tilesNew.push_back(tiles.at(i));
+
+
+	}
+
+
+	for (int i = 0; i < 9; i++)
+	{
+		float min_element = std::numeric_limits<float>::max(); // Initialize with maximum possible value
+		size_t min_index = 0;
+
+		auto min_it = std::min_element(tilesDistance.begin(), tilesDistance.end());
+		// Iterate through the vector to find the minimum element and its index
+		for (size_t i = 0; i < tilesDistance.size(); ++i) {
+			if (tilesDistance[i] < min_element) {
+				min_element = tilesDistance[i];
+				min_index = i;
+				tile = tilesNew.at(i);
+
+
+			}
+		}
+
+		closeTiles.push_back(tile);
+
+		size_t index = std::distance(tilesDistance.begin(), min_it);
+		auto erase_it = std::next(tilesNew.begin(), index);
+		tilesDistance.erase(min_it);
+		tilesNew.erase(erase_it);
+	}
+
+
+	
+	resetTileCheck = true;
+}
+
+void Character::PathfindTiles()
+{
+
+
+	if (resetTileCheck != true) CalculateTiles();
+
+	for (int i = 0; i < closeTiles.size()-1; i++)
+
+	{
+		if (closeTiles.at(i+1).GetID() != currentTile.GetID())
+		{
+			if (closeTiles.at(i+1).GetID() != previousTile.GetID())
+			{
+				if (closeTiles.at(i+1).GetID() != furtherTile.GetID())
+				{
+					if (closeTiles.at(i+1).TileStatus())
+					{
+
+						targetTile = closeTiles.at(i+1);
+						break;
+
+					}
+				}
+			}
+		}
+		
+
+	}
+
+
+	Vec3 distance = targetTile.GetPos() - body->getPos();
+	body->SetOrientation(std::atan2(-distance.x, -distance.y));
+
+	float d = sqrt(distance.x * distance.x + distance.y * distance.y);
+
+	if (d < 0.01)
+	{
+		furtherTile = previousTile;
+		previousTile = currentTile;
+		currentTile = targetTile;
+		resetTileCheck = false;
+	}
+
 
 }
 

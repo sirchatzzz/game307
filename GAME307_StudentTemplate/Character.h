@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "Steering/KinematicBody.h"
 #include "Collider2D.h"
-
+#include "Tiles.h"
 using namespace std;
 
 class Character
@@ -22,6 +22,20 @@ private:
 	//Near target variables
 	Vec3 nearTargetAccel;
 	bool near;
+
+	std::vector<Tiles> tiles;
+
+	Tiles tile;
+	Tiles targetTile;
+	Tiles currentTile;
+	Tiles previousTile;
+	Tiles furtherTile;
+	std::vector<Tiles> closeTiles;
+	
+	bool setInitialTile;
+
+	bool resetTileCheck;
+
 public:
 	Character()
 	{
@@ -50,6 +64,10 @@ public:
 
 	void IslandAvoidance();
 	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
+	void SetTiles(std::vector<Tiles> tiles_) { tiles = tiles_; }
+
+	void CalculateTiles();
+	void PathfindTiles();
 };
 
 #endif

@@ -73,6 +73,43 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->SetMaxSpeed(15);
 
 
+	for (int i = 0; i < 25; i++)
+	{
+
+		tiles.push_back(Tiles());
+
+
+	}
+
+	tiles[0] = Tiles(1, 14, 250, 250, true, game,1);
+	tiles[1] = Tiles(4.25, 14, 250, 250, false, game, 2);
+	tiles[2] = Tiles(7.5, 14, 250, 250, true, game, 3);
+	tiles[3] = Tiles(10.75, 14, 250, 250, true, game, 4);
+	tiles[4] = Tiles(14, 14, 250, 250, true, game, 5);
+	tiles[5] = Tiles(1, 11, 250, 250, true, game, 6);
+	tiles[6] = Tiles(4.25, 11, 250, 250, false, game, 7);
+	tiles[7] = Tiles(7.5, 11, 250, 250, true, game, 8);
+	tiles[8] = Tiles(10.75, 11, 250, 250, false, game, 9);
+	tiles[9] = Tiles(14, 11, 250, 250, true, game, 10);
+	tiles[10] = Tiles(1, 8, 250, 250, true, game, 11);
+	tiles[11] = Tiles(4.25, 8, 250, 250, true, game, 12);
+	tiles[12] = Tiles(7.5, 8, 250, 250, true, game, 13);
+	tiles[13] = Tiles(10.75, 8, 250, 250, true, game, 14);
+	tiles[14] = Tiles(14, 8, 250, 250, true, game, 15);
+	tiles[15] = Tiles(1, 5, 250, 250, true, game, 16);
+	tiles[16] = Tiles(4.25, 5, 250, 250, false, game, 17);
+	tiles[17] = Tiles(7.5, 5, 250, 250, false, game, 18);
+	tiles[18] = Tiles(10.75, 5, 250, 250, true, game, 19);
+	tiles[19] = Tiles(14, 5, 250, 250, false, game, 20);
+	tiles[20] = Tiles(1, 2, 250, 250, true, game, 21);
+	tiles[21] = Tiles(4.25, 2, 250, 250, true, game, 22);
+	tiles[22] = Tiles(7.5, 2, 250, 250, true, game, 23);
+	tiles[23] = Tiles(10.75, 2, 250, 250, true, game, 24);
+	tiles[24] = Tiles(14, 2, 250, 250, true, game, 25);
+
+
+
+
 
 
 
@@ -84,8 +121,10 @@ bool Scene1::OnCreate() {
 	{
 		return false;
 	}
-	blinky->getBody()->setPos(Vec3(1, 1, 0));
+	blinky->getBody()->setPos(Vec3(4, 8, 0));
 	// end of character set ups
+
+	blinky->SetTiles(tiles);
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
@@ -134,6 +173,13 @@ void Scene1::Render() {
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}
 
+	for (int i = 0; i < tiles.size(); i++)
+	{
+
+		tiles.at(i).RenderTile(renderer);
+
+
+	}
 	// render the player
 	game->RenderPlayer(0.03f);
 	blinky->render(0.03f);
