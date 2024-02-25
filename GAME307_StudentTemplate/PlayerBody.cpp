@@ -8,7 +8,7 @@
 #include "PlayerBody.h"
 #include "Projectile.h"
 Projectile bullet;
-std::vector<Projectile> bullets;
+
 GearState& operator+=(GearState& state, int increment) {
     int value = static_cast<int>(state) + increment;
     state = static_cast<GearState>(value % 6); // Ensure the value stays within the range of enum
@@ -46,6 +46,9 @@ bool PlayerBody::OnCreate()
     bullet.SetGame(game);
   
     bullet.SetPos(Vec3(-500,-500,0));
+    turret = new Turret();
+    turret->SetGame(game);
+    turret->OnCreate();
 
     return true;
 }
@@ -92,6 +95,7 @@ void PlayerBody::Render(float scale)
 
     }
 
+    turret->Render(scale / 2);
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)
@@ -132,6 +136,18 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         }
 
+        if (keyboard_state_array[SDL_SCANCODE_LEFT])
+        {
+            turret->SetOrientation(turret->getOrientation() + 0.1);
+
+        }
+
+
+        if (keyboard_state_array[SDL_SCANCODE_RIGHT])
+        {
+            turret->SetOrientation(turret->getOrientation() - 0.1);
+
+        }
 
         if (keyboard_state_array[SDL_SCANCODE_SPACE])
         {
@@ -142,9 +158,9 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
                     bullets.push_back(bullet);
                     bullets.at(bullets.size() - 1).OnCreate();
                     bullets.at(bullets.size() - 1).SetFiredStatus(true);
-                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(orientation), -cos(orientation), 0) * 0.5);
+                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
                     bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
-                    bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(orientation), -cos(orientation), 0));
+                    bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
                     playerAmmo->DecreaseCurrentMagAmmo(1);
                     //->SetPos(Vec3(-500, -500, 0));
                     //bullet->SetDirectionVector(Vec3(0,0,0));
@@ -236,6 +252,10 @@ void PlayerBody::Update(float deltaTime)
        
     }
     playerAmmo->Update(deltaTime);
+
+    turret->setPos(pos);
+    turret->Update(deltaTime);
+
 }
 
 void PlayerBody::resetToOrigin()

@@ -150,6 +150,7 @@
     <ClCompile Include="Steering\SteeringOutput.cpp" />
     <ClCompile Include="Tiles.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Turret.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="Steering\SteeringOutput.h" />
     <ClInclude Include="Tiles.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Turret.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />

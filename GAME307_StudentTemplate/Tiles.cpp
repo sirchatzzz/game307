@@ -55,7 +55,7 @@ void Tiles::RenderTile(SDL_Renderer* m_window_renderer)
 
 	if (safeTile == true) SDL_SetRenderDrawColor(m_window_renderer, 0, 255, 0, 255);
 	if (safeTile == false) SDL_SetRenderDrawColor(m_window_renderer, 255, 0, 0, 255);
-	SDL_RenderDrawRect(m_window_renderer, &rect);
+	SDL_RenderFillRect(m_window_renderer, &rect);
 
 	SDL_SetRenderDrawColor(m_window_renderer, 0, 0, 0, 255);
 

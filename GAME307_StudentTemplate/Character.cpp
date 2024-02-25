@@ -3,7 +3,8 @@
 #include "Align.h"
 #include "Evade.h"
 #include <algorithm>
-
+#include <chrono>
+#include <thread>
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -38,7 +39,7 @@ bool Character::OnCreate(Scene* scene_)
 
 	collider.SetColliderActive(true);
 	nearTargetAccel = Vec3(0, 0, 0);
-	
+	aggroRadius = 6;
 
 	return true;
 }
@@ -67,76 +68,73 @@ void Character::Update(float deltaTime)
 	////Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
-	//static float time = 0;
+	static float time = 0;
 
 
-	////Find the distance between the AI and its target
-	//Vec3 distance = target - body->getPos();
+	//Find the distance between the AI and its target
+	Vec3 distance = target - body->getPos();
 
-	////Change Orientation of Character
-	//Align align;
-	//*steering += *(align.getSteering(target, this));
+	if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
+	{
+		//Change Orientation of Character
+		Align align;
+		*steering += *(align.getSteering(target, this));
 
-	////Check to see if AI is near target
-	//if (!checkIfNearTarget())
-	//{
-	//	time = 0;
-	//	//Set the radius of the target
-	//	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-	//	//Set the slow radius so the AI will begin to slow down once it enters this radius
-	//	float slowRadius = targetRadius + 5;
-	//	//Create an Arrive steering behaviour and set the parameters
-	//	Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-	//	//Call arrive function that sets this steering behaviour to the one created in the function
-	//	*steering += *(arrive.getSteering(target, this));
+		//Check to see if AI is near target
+		if (!checkIfNearTarget())
+		{
+			time = 0;
+			//Set the radius of the target
+			float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+			//Set the slow radius so the AI will begin to slow down once it enters this radius
+			float slowRadius = targetRadius + 5;
+			//Create an Arrive steering behaviour and set the parameters
+			Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+			//Call arrive function that sets this steering behaviour to the one created in the function
+			*steering += *(arrive.getSteering(target, this));
 
-	//	near = true;
-	//}
-	//else
-	//{
+			near = true;
+		}
+		else
+		{
 
-	//	//Avoid collision with player
-	//	if (near == true)
-	//	{
-	//		double x = target.x;
+			//Avoid collision with player
+			if (near == true)
+			{
+				double x = target.x;
 
-	//		if (x < body->getPos().x) x = body->getAccel().x + 4;
+				if (x < body->getPos().x) x = body->getAccel().x + 4;
 
-	//		if (x >= body->getPos().x) x = body->getAccel().x - 4;
+				if (x >= body->getPos().x) x = body->getAccel().x - 4;
 
-	//		double y = target.y;
+				double y = target.y;
 
-	//		if (y < body->getPos().y) y = body->getAccel().y - 4;
+				if (y < body->getPos().y) y = body->getAccel().y - 4;
 
-	//		if (y >= body->getPos().y) y = body->getAccel().y + 4;
+				if (y >= body->getPos().y) y = body->getAccel().y + 4;
 
-	//		nearTargetAccel = Vec3(x, y, 0);
-	//		near = false;
-	//	}
-	//	
-
-	//	time++;
-	//	if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
-	//	steering->linear = nearTargetAccel;
-	//}
-
-	//if (test == false) CalculateTiles();
-	////Update AI
-	//body->Update(deltaTime, steering);
-	////Delete steering behaviour when finished
-	//delete steering;
+				nearTargetAccel = Vec3(x, y, 0);
+				near = false;
+			}
 
 
+			time++;
+			if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
+			steering->linear = nearTargetAccel;
+		}
+	}
+	else
+	{
+		PathfindTiles();
 
-	Vec3 direction = previousTile.GetPos() - body->getPos();
-	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-	PathfindTiles();
 
-
-	body->setVel(Vec3(-sin(body->getOrientation()) * 1, -cos(body->getOrientation()) * 1, 0));
-
-
+		body->setVel(Vec3(-sin(body->getOrientation()) * 1, -cos(body->getOrientation()) * 1, 0));
+	}
+	//Update AI
 	body->Update(deltaTime,steering);
+
+	//Delete steering behaviour when finished
+	delete steering;
 }
 
 void Character::HandleEvents(const SDL_Event& event)
@@ -284,8 +282,6 @@ void Character::CalculateTiles()
 		tilesNew.erase(erase_it);
 	}
 
-
-	
 	resetTileCheck = true;
 }
 
@@ -295,44 +291,91 @@ void Character::PathfindTiles()
 
 	if (resetTileCheck != true) CalculateTiles();
 
-	for (int i = 0; i < closeTiles.size()-1; i++)
+	for (int i = 0; i < closeTiles.size(); i++)
 
 	{
-		if (closeTiles.at(i+1).GetID() != currentTile.GetID())
+		if (closeTiles.at(i).GetID() != currentTile.GetID())
 		{
-			if (closeTiles.at(i+1).GetID() != previousTile.GetID())
+			if (closeTiles.at(i).GetID() != previousTile.GetID())
 			{
-				if (closeTiles.at(i+1).GetID() != furtherTile.GetID())
-				{
-					if (closeTiles.at(i+1).TileStatus())
+			
+					if (closeTiles.at(i).TileStatus())
 					{
 
-						targetTile = closeTiles.at(i+1);
+						targetTile = closeTiles.at(i);
 						break;
 
 					}
-				}
+				
 			}
 		}
 		
 
 	}
 
-
+	
 	Vec3 distance = targetTile.GetPos() - body->getPos();
-	body->SetOrientation(std::atan2(-distance.x, -distance.y));
+	
+	targetOrientation = std::atan2(-distance.x, -distance.y);
+	body->setOrientation(targetOrientation);
 
 	float d = sqrt(distance.x * distance.x + distance.y * distance.y);
 
 	if (d < 0.01)
 	{
-		furtherTile = previousTile;
+	
 		previousTile = currentTile;
 		currentTile = targetTile;
 		resetTileCheck = false;
 	}
 
+	if (resetTileCheck == true)
+	{
 
+		for (int i = 0; i < closeTiles.size(); i++)
+
+		{
+			if (closeTiles.at(i).GetID() != currentTile.GetID())
+			{
+				if (closeTiles.at(i).GetID() != previousTile.GetID())
+				{
+					if (closeTiles.at(i).GetID() != targetTile.GetID())
+					{
+						if (closeTiles.at(i).TileStatus())
+						{
+
+							nextTile = closeTiles.at(i);
+							break;
+							
+						}
+					}
+				}
+			}
+
+
+		}
+
+	}
+
+	if (d < 0.5)
+	{
+
+		Vec3 newDistance = nextTile.GetPos() - body->getPos();
+
+		float nextOrientation = std::atan2(-newDistance.x, -newDistance.y) / M_PI;
+
+		if (nextOrientation > targetOrientation) body->setOrientation(body->getOrientation() - 0.05);
+		if (nextOrientation < targetOrientation) body->setOrientation(body->getOrientation() + 0.05);
+	
+	}
+
+}
+
+bool Character::CheckForClosestTile()
+{
+	
+	return closeTiles.at(1).TileStatus();
+	
 }
 
 

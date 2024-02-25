@@ -15,6 +15,8 @@
 #include "ShipStats.h"
 #include "Projectile.h"
 #include <vector>
+#include "Turret.h"
+
 enum GearState {
 
      REVERSE = 0,
@@ -25,7 +27,7 @@ enum GearState {
      DRIVE3 = 5
 };
 
-
+class Projectile;
 
 class PlayerBody : public Body
 {
@@ -36,8 +38,8 @@ protected:
     GearState gearState;
     ShipStats* playerStats;
     ShipAmmo* playerAmmo;
-
-
+    class Turret* turret;
+    class std::vector<Projectile> bullets;
 
 
 public:
@@ -91,6 +93,7 @@ public:
     GearState GetGearState() { return gearState; }
     ShipStats* GetPlayerStats() { return playerStats; }
     ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
+    std::vector<Projectile> GetBullets() { return bullets; }
 };
 
 #endif /* PLAYERBODY_H */

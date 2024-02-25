@@ -4,6 +4,7 @@
 Projectile::~Projectile()
 {
     render = false;
+    pos = Vec3(-1000, -1000, 0);
 }
 
 bool Projectile::OnCreate()

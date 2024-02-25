@@ -29,12 +29,15 @@ private:
 	Tiles targetTile;
 	Tiles currentTile;
 	Tiles previousTile;
-	Tiles furtherTile;
+	Tiles nextTile;
 	std::vector<Tiles> closeTiles;
 	
-	bool setInitialTile;
 
 	bool resetTileCheck;
+	float targetOrientation;
+
+	float aggroRadius;
+
 
 public:
 	Character()
@@ -68,6 +71,7 @@ public:
 
 	void CalculateTiles();
 	void PathfindTiles();
+	bool CheckForClosestTile();
 };
 
 #endif
