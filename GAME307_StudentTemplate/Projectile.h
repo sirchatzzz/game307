@@ -14,7 +14,7 @@ protected:
     float time;
     bool shotFired;
     Vec3 direction;
-    bool render;
+    float projectileDamage;
     float projectileSpeed;
 public:
     Projectile() : Body{}
@@ -69,6 +69,9 @@ public:
     void SetFiredStatus(bool firedStatus_) {shotFired = firedStatus_;}
     void SetProjectileSpeed(float projectileSpeed_) { projectileSpeed = projectileSpeed_; }
     float GetProjectileSpeed() { return projectileSpeed; }
+
+    void SetProjectileDamage(float projectileDamage_) { projectileDamage = projectileDamage_; }
+    float GetProjectileDamage() { return projectileDamage; }
 };
 
 #endif

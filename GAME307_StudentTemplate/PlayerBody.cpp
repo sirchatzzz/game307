@@ -6,7 +6,7 @@
 //
 
 #include "PlayerBody.h"
-#include "Projectile.h"
+
 Projectile bullet;
 
 GearState& operator+=(GearState& state, int increment) {
@@ -39,7 +39,7 @@ bool PlayerBody::OnCreate()
     collider.SetColliderActive(true);
     gearState = GearState::NEUTRAL;
 
-    playerStats = new ShipStats(50, 100, 0, 0);
+    playerStats = new ShipStats(50, 100, 5);
     playerAmmo = new ShipAmmo(100,34,7);
 
     bullet = Projectile();
@@ -138,14 +138,14 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         if (keyboard_state_array[SDL_SCANCODE_LEFT])
         {
-            turret->SetOrientation(turret->getOrientation() + 0.1);
+            turret->SetOrientation(turret->getOrientation() - 0.1);
 
         }
 
 
         if (keyboard_state_array[SDL_SCANCODE_RIGHT])
         {
-            turret->SetOrientation(turret->getOrientation() - 0.1);
+            turret->SetOrientation(turret->getOrientation() + 0.1);
 
         }
 
@@ -157,10 +157,12 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
                     
                     bullets.push_back(bullet);
                     bullets.at(bullets.size() - 1).OnCreate();
-                    bullets.at(bullets.size() - 1).SetFiredStatus(true);
                     bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
                     bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
+                    bullets.at(bullets.size() - 1).SetProjectileDamage(playerStats->GetWeaponDamage());
                     bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
+                    bullets.at(bullets.size() - 1).Update(0.1);
+                    bullets.at(bullets.size() - 1).SetFiredStatus(true);
                     playerAmmo->DecreaseCurrentMagAmmo(1);
                     //->SetPos(Vec3(-500, -500, 0));
                     //bullet->SetDirectionVector(Vec3(0,0,0));

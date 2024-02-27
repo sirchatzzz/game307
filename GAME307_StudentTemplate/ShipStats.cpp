@@ -6,18 +6,18 @@ ShipStats::ShipStats()
 	health = 0;
 	maxHealth = 0;
 	weaponDamage = 0;
-	ammoAmount = 0;
+
 
 
 }
 
-ShipStats::ShipStats(float health_, float maxHealth_, float weaponDamage_, float ammoAmount_)
+ShipStats::ShipStats(float health_, float maxHealth_, float weaponDamage_)
 {
 
 	health = health_;
 	maxHealth = maxHealth_;
 	weaponDamage = weaponDamage_;
-	ammoAmount = ammoAmount_;
+
 }
 
 void ShipStats::TakeDamage(float damage_)

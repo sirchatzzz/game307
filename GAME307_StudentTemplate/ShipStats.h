@@ -8,21 +8,21 @@ private:
 	float health;
 	float maxHealth;
 	float weaponDamage;
-	float ammoAmount;
+
 public:
 
 	ShipStats();
-	ShipStats(float health_, float maxHealth_, float weaponDamage_, float ammoAmount_);
+	ShipStats(float health_, float maxHealth_, float weaponDamage_);
 
 	void SetHealth(float health_) { health = health_; }
 	void SetMaxHealth(float maxHealth_) { maxHealth = maxHealth_; }
 	void SetWeaponDamage(float weaponDamage_) { weaponDamage = weaponDamage_; }
-	void SetAmmoAmount(float ammoAmount_) { ammoAmount = ammoAmount_; }
+
 
 	float GetHealth() { return health; }
 	float GetMaxHealth() { return maxHealth; }
 	float GetWeaponDamage() { return weaponDamage; }
-	float GetAmmoAmount() { return ammoAmount; }
+
 
 	void TakeDamage(float damage_);
 	void Heal(float healthIncrease_);

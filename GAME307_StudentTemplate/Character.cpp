@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
+
+Projectile bullet2;
+
+
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -40,6 +44,15 @@ bool Character::OnCreate(Scene* scene_)
 	collider.SetColliderActive(true);
 	nearTargetAccel = Vec3(0, 0, 0);
 	aggroRadius = 6;
+	
+	bullet2 = Projectile();
+	bullet2.SetGame(scene->game);
+
+	enemyStats = new ShipStats(100, 100, 5);
+	turret = new Turret();
+	turret->SetGame(scene->game);
+	turret->OnCreate();
+	attackSpeed = 80;
 
 	return true;
 }
@@ -93,35 +106,55 @@ void Character::Update(float deltaTime)
 			//Call arrive function that sets this steering behaviour to the one created in the function
 			*steering += *(arrive.getSteering(target, this));
 
-			near = true;
+			//near = true;
 		}
 		else
 		{
 
-			//Avoid collision with player
-			if (near == true)
+			time++;
+			if (time > attackSpeed)
 			{
-				double x = target.x;
 
-				if (x < body->getPos().x) x = body->getAccel().x + 4;
+				bullets.push_back(bullet2);
+				bullets.at(bullets.size() - 1).OnCreate();
+				bullets.at(bullets.size() - 1).SetFiredStatus(true);
+				bullets.at(bullets.size() - 1).SetPos(body->getPos() + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
+				bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
+				bullets.at(bullets.size() - 1).SetProjectileDamage(enemyStats->GetWeaponDamage());
+				bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
 
-				if (x >= body->getPos().x) x = body->getAccel().x - 4;
 
-				double y = target.y;
-
-				if (y < body->getPos().y) y = body->getAccel().y - 4;
-
-				if (y >= body->getPos().y) y = body->getAccel().y + 4;
-
-				nearTargetAccel = Vec3(x, y, 0);
-				near = false;
+				time = 0;
 			}
 
-
-			time++;
-			if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
-			steering->linear = nearTargetAccel;
 		}
+		//else
+		//{
+
+		//	//Avoid collision with player
+		//	if (near == true)
+		//	{
+		//		double x = target.x;
+
+		//		if (x < body->getPos().x) x = body->getAccel().x + 4;
+
+		//		if (x >= body->getPos().x) x = body->getAccel().x - 4;
+
+		//		double y = target.y;
+
+		//		if (y < body->getPos().y) y = body->getAccel().y - 4;
+
+		//		if (y >= body->getPos().y) y = body->getAccel().y + 4;
+
+		//		nearTargetAccel = Vec3(x, y, 0);
+		//		near = false;
+		//	}
+
+
+		//	time++;
+		//	if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
+		//	steering->linear = nearTargetAccel;
+		//}
 	}
 	else
 	{
@@ -135,6 +168,23 @@ void Character::Update(float deltaTime)
 
 	//Delete steering behaviour when finished
 	delete steering;
+
+
+	turret->setPos(body->getPos());
+	turret->SetOrientation(body->getOrientation());
+	turret->Update(deltaTime);
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+
+		if (bullets.at(i).GetFiredStatus() == true)
+		{
+			bullets.at(i).Update(deltaTime);
+
+		}
+
+	}
+
 }
 
 void Character::HandleEvents(const SDL_Event& event)
@@ -182,6 +232,14 @@ void Character::render(float scale)
 	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
+	turret->Render(scale / 2);
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+
+		if (bullets.at(i).GetFiredStatus() == true) bullets.at(i).Render(0.05);
+
+	}
 
 }
 

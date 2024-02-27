@@ -3,7 +3,7 @@
 
 Projectile::~Projectile()
 {
-    render = false;
+    shotFired = false;
     pos = Vec3(-1000, -1000, 0);
 }
 
@@ -25,14 +25,15 @@ bool Projectile::OnCreate()
     collider.SetColliderActive(true);
 
     time = 0;
-    render = true;
+    projectileDamage = 0;
+    projectileSpeed = 0;
 
     return true;
 }
 
 void Projectile::Render(float scale)
 {
-    if (render == true)
+    if (shotFired == true)
     {
         // This is why we need game in the constructore, to get the renderer, etc.
         SDL_Renderer* renderer = game->getRenderer();

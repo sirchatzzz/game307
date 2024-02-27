@@ -152,19 +152,44 @@ void Scene1::Update(const float deltaTime) {
 		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
 	}
 
-	for (int i = 0; i < game->getPlayer()->GetBullets().size(); i++)
+
+	//Check for player bullets hitting enemy
+	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
 	{
 
-		if (game->getPlayer()->GetBullets().at(i).GetCollider().CollisionMathTesting(blinky->GetCollider()))
+		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(blinky->GetCollider()))
 		{
 
 			std::cout << "Blinky Hit!!" << std::endl;
+			game->getPlayer()->GetBullets()->at(i).~Projectile();
+
+			blinky->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+
+			auto it = game->getPlayer()->GetBullets()->begin() + i;
+			game->getPlayer()->GetBullets()->erase(it);
 
 		}
-
-
-
 	}
+
+	//Check for enemy bullets hitting player
+	for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	{
+
+		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+		{
+
+			std::cout << "Player Hit!!" << std::endl;
+			blinky->GetBullets()->at(i).~Projectile();
+
+			game->getPlayer()->GetPlayerStats()->TakeDamage(blinky->GetBullets()->at(i).GetProjectileDamage());
+
+			auto it = blinky->GetBullets()->begin() + i;
+			blinky->GetBullets()->erase(it);
+
+		}
+	}
+
+
 
 	blinky->setIslandColliders(islandColls);
 	blinky->IslandAvoidance();
@@ -187,19 +212,19 @@ void Scene1::Render() {
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}
 
-	for (int i = 0; i < tiles.size(); i++)
-	{
+	//for (int i = 0; i < tiles.size(); i++)
+	//{
 
-		tiles.at(i).RenderTile(renderer);
+	//	tiles.at(i).RenderTile(renderer);
 
 
-	}
+	//}
 	// render the player
 	game->RenderPlayer(0.03f);
 	blinky->render(0.03f);
 	SDL_RenderPresent(renderer);
 
-	islandColls[0].RenderCollider(renderer);
+	//islandColls[0].RenderCollider(renderer);
 
 }
 

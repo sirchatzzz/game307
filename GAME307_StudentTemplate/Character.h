@@ -7,7 +7,12 @@
 #include "Steering/KinematicBody.h"
 #include "Collider2D.h"
 #include "Tiles.h"
+#include "ShipStats.h"
+#include "Turret.h"
+#include "Projectile.h"
+
 using namespace std;
+
 
 class Character
 {
@@ -23,6 +28,11 @@ private:
 	Vec3 nearTargetAccel;
 	bool near;
 
+	ShipStats* enemyStats;
+	class Turret* turret;
+
+	class std::vector<Projectile> bullets;
+
 	std::vector<Tiles> tiles;
 
 	Tiles tile;
@@ -33,11 +43,12 @@ private:
 	std::vector<Tiles> closeTiles;
 	
 
+
 	bool resetTileCheck;
 	float targetOrientation;
 
 	float aggroRadius;
-
+	float attackSpeed;
 
 public:
 	Character()
@@ -69,9 +80,13 @@ public:
 	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
 	void SetTiles(std::vector<Tiles> tiles_) { tiles = tiles_; }
 
+	ShipStats* GetEnemyStats() { return enemyStats; }
+
 	void CalculateTiles();
 	void PathfindTiles();
 	bool CheckForClosestTile();
+
+	std::vector<Projectile>* GetBullets() { return &bullets; }
 };
 
 #endif

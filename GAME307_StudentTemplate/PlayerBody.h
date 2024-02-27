@@ -93,7 +93,7 @@ public:
     GearState GetGearState() { return gearState; }
     ShipStats* GetPlayerStats() { return playerStats; }
     ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
-    std::vector<Projectile> GetBullets() { return bullets; }
+    std::vector<Projectile>* GetBullets() { return &bullets; }
 };
 
 #endif /* PLAYERBODY_H */
