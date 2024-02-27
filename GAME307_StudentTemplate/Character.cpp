@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
-
+#include <random>
 Projectile bullet2;
 
 
@@ -121,7 +121,21 @@ void Character::Update(float deltaTime)
 				bullets.at(bullets.size() - 1).SetPos(body->getPos() + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
 				bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
 				bullets.at(bullets.size() - 1).SetProjectileDamage(enemyStats->GetWeaponDamage());
-				bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
+
+				std::random_device rd;
+				std::mt19937 gen(rd());
+
+				// Define the range
+				float lower_bound = -1.0;
+				float upper_bound = 1.0;
+
+				// Create a distribution
+				std::uniform_int_distribution<> distr(lower_bound, upper_bound);
+
+				// Generate and print a random number within the range
+				float random_number = distr(gen);
+
+				bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()) + random_number, -cos(turret->getOrientation()) + random_number, 0));
 
 
 				time = 0;

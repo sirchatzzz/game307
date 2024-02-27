@@ -28,6 +28,11 @@ private:
 
 	std::vector<Collider2D> islandColls;
 
+	Collider2D leftOutOfBoundsColl;
+	Collider2D rightOutOfBoundsColl;
+	Collider2D upOutOfBoundsColl;
+	Collider2D downOutOfBoundsColl;
+
 	Character* blinky;
 	std::vector<Tiles> tiles;
 

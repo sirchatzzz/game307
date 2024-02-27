@@ -61,6 +61,18 @@ bool Scene1::OnCreate() {
 	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y+50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
 	islandColls[0].SetColliderActive(true);
 
+	leftOutOfBoundsColl = Collider2D(-50, 0, 5, 1200);
+	leftOutOfBoundsColl.SetColliderActive(true);
+
+	rightOutOfBoundsColl = Collider2D(1920, 0, 5, 1200);
+	rightOutOfBoundsColl.SetColliderActive(true);
+
+	upOutOfBoundsColl = Collider2D(0, -50, 2000, 5);
+	upOutOfBoundsColl.SetColliderActive(true);
+
+	downOutOfBoundsColl = Collider2D(0, 1080, 2000, 5);
+	downOutOfBoundsColl.SetColliderActive(true);
+
 
 	islandRect[1] = { 1300, 150, 150, 150 };
 	islandRect[2] = { 900, 600, 200, 250 };
@@ -189,6 +201,38 @@ void Scene1::Update(const float deltaTime) {
 		}
 	}
 
+	//Check for player bullets going off screen
+	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
+	{
+
+		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+		{
+
+			//game->getPlayer()->GetBullets()->at(i).~Projectile();
+
+			auto it = game->getPlayer()->GetBullets()->begin() + i;
+			game->getPlayer()->GetBullets()->erase(it);
+
+		}
+	}
+
+
+	//Check for enemy bullets going off screen
+	for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	{
+
+		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+		{
+
+			//game->getPlayer()->GetBullets()->at(i).~Projectile();
+
+			auto it = blinky->GetBullets()->begin() + i;
+			blinky->GetBullets()->erase(it);
+
+		}
+	}
+
+
 
 
 	blinky->setIslandColliders(islandColls);
@@ -225,7 +269,10 @@ void Scene1::Render() {
 	SDL_RenderPresent(renderer);
 
 	//islandColls[0].RenderCollider(renderer);
-
+	leftOutOfBoundsColl.RenderCollider(renderer);
+	rightOutOfBoundsColl.RenderCollider(renderer);
+	upOutOfBoundsColl.RenderCollider(renderer);
+	downOutOfBoundsColl.RenderCollider(renderer);
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
