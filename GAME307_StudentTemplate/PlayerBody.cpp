@@ -40,7 +40,7 @@ bool PlayerBody::OnCreate()
     gearState = GearState::NEUTRAL;
 
     playerStats = new ShipStats(50, 100, 5);
-    playerAmmo = new ShipAmmo(100,34,7);
+    playerAmmo = new ShipAmmo(100,65,14);
 
     bullet = Projectile();
     bullet.SetGame(game);
@@ -106,16 +106,19 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
 
 
-        //Change rotation of player with the A and D keys
-        //Increase or decrease speed of player with W and S keys
+    //Change rotation of player with the A and D keys
+    //Increase or decrease speed of player with W and S keys
     switch (event.type)
     {
     case SDL_KEYDOWN:
+
+        //Shift the gear up
         if (event.key.keysym.scancode == SDL_SCANCODE_W && event.key.repeat == 0)
         {
             if (gearState != GearState::DRIVE3) gearState += 1;
         }
 
+        //Rotate the ship counterclockwise
         if (keyboard_state_array[SDL_SCANCODE_A])
         {
             if (gearState != GearState::REVERSE) orientation -= 0.1;
@@ -123,12 +126,14 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         }
 
+        //Shift the gear down
         if (event.key.keysym.scancode == SDL_SCANCODE_S && event.key.repeat == 0)
         {
             if (gearState != GearState::REVERSE) gearState -= 1;
 
         }
 
+        //Rotate the ship clockwise
         if (keyboard_state_array[SDL_SCANCODE_D])
         {
             if (gearState != GearState::REVERSE) orientation += 0.1;
@@ -136,36 +141,27 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         }
 
+        //Rotate the turret counterclockwise
         if (keyboard_state_array[SDL_SCANCODE_LEFT])
         {
             turret->SetOrientation(turret->getOrientation() - 0.1);
 
         }
 
-
+        //Rotate the turret clockwise
         if (keyboard_state_array[SDL_SCANCODE_RIGHT])
         {
             turret->SetOrientation(turret->getOrientation() + 0.1);
 
         }
 
+        //Fire Bullets
         if (keyboard_state_array[SDL_SCANCODE_SPACE])
         {
             if ((playerAmmo->GetCurrentTotalAmmo() != 0 || playerAmmo->GetCurrentMagAmmo() != 0) && playerAmmo->IsReloading() != true)
             {   
                     
-                    
-                    bullets.push_back(bullet);
-                    bullets.at(bullets.size() - 1).OnCreate();
-                    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
-                    bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
-                    bullets.at(bullets.size() - 1).SetProjectileDamage(playerStats->GetWeaponDamage());
-                    bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
-                    bullets.at(bullets.size() - 1).Update(0.1);
-                    bullets.at(bullets.size() - 1).SetFiredStatus(true);
-                    playerAmmo->DecreaseCurrentMagAmmo(1);
-                    //->SetPos(Vec3(-500, -500, 0));
-                    //bullet->SetDirectionVector(Vec3(0,0,0));
+                FireBullet();
 
             }
         }
@@ -238,11 +234,15 @@ void PlayerBody::Update(float deltaTime)
         vel.y = 0.0f;
     }
 
-    /*std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;*/
+    std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;
+
+    //Calculate speed for the player
     CalculateSpeed();
+
     //Acceleration is based on the orientation of the player, player will be moving at all times since they are moving on water
     accel = Vec3(-sin(orientation) * speed, -cos(orientation) * speed, 0);
 
+    //Update bullets
     for (int i = 0; i < bullets.size(); i++)
     {
        
@@ -253,8 +253,10 @@ void PlayerBody::Update(float deltaTime)
         }
        
     }
+    //Update ammo
     playerAmmo->Update(deltaTime);
 
+    //Update turret
     turret->setPos(pos);
     turret->Update(deltaTime);
 
@@ -270,9 +272,11 @@ Collider2D PlayerBody::GetCollider()
     return collider;
 }
 
+//Calculate speed for player
 void PlayerBody::CalculateSpeed()
 {
 
+    //Calculate the speed for when the gear is in D3
     if(gearState == GearState::DRIVE3)
     {
 
@@ -280,12 +284,15 @@ void PlayerBody::CalculateSpeed()
 
     }
 
+    //Calculate the speed for when the gear is in D2
     if (gearState == GearState::DRIVE2)
     {
 
         speed = getMaxSpeed() / 2;
 
     }
+
+    //Calculate the speed for when the gear is in D1
     if (gearState == GearState::DRIVE1)
     {
 
@@ -293,6 +300,7 @@ void PlayerBody::CalculateSpeed()
 
     }
 
+    //Calculate the speed for when the gear is in N
     if (gearState == GearState::NEUTRAL)
     {
 
@@ -300,6 +308,7 @@ void PlayerBody::CalculateSpeed()
 
     }
 
+    //Calculate the speed for when the gear is in P
     if (gearState == GearState::PARK)
     {
 
@@ -307,6 +316,7 @@ void PlayerBody::CalculateSpeed()
 
     }
 
+    //Calculate the speed for when the gear is in R
     if (gearState == GearState::REVERSE)
     {
 
@@ -315,4 +325,21 @@ void PlayerBody::CalculateSpeed()
     }
 
     
+}
+
+//Fire Bullets
+void PlayerBody::FireBullet()
+{
+
+    //Push back bullet and set the necessary variables
+    bullets.push_back(bullet);
+    bullets.at(bullets.size() - 1).OnCreate();
+    bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
+    bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
+    bullets.at(bullets.size() - 1).SetProjectileDamage(playerStats->GetWeaponDamage());
+    bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));
+    bullets.at(bullets.size() - 1).Update(0.1);
+    bullets.at(bullets.size() - 1).SetFiredStatus(true);
+    playerAmmo->DecreaseCurrentMagAmmo(1);
+
 }

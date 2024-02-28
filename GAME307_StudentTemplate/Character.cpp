@@ -42,7 +42,7 @@ bool Character::OnCreate(Scene* scene_)
 	}
 
 	collider.SetColliderActive(true);
-	nearTargetAccel = Vec3(0, 0, 0);
+
 	aggroRadius = 6;
 	
 	bullet2 = Projectile();
@@ -84,18 +84,22 @@ void Character::Update(float deltaTime)
 	static float time = 0;
 
 
+
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
 
 	if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
 	{
-		//Change Orientation of Character
-		Align align;
-		*steering += *(align.getSteering(target, this));
+	
 
 		//Check to see if AI is near target
 		if (!checkIfNearTarget())
 		{
+
+			//Change Orientation of Character
+			Align align;
+			*steering += *(align.getSteering(target, this));
+
 			time = 0;
 			//Set the radius of the target
 			float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
@@ -110,33 +114,12 @@ void Character::Update(float deltaTime)
 		}
 		else
 		{
-
+			//If near player then Fire
 			time++;
 			if (time > attackSpeed)
 			{
 
-				bullets.push_back(bullet2);
-				bullets.at(bullets.size() - 1).OnCreate();
-				bullets.at(bullets.size() - 1).SetFiredStatus(true);
-				bullets.at(bullets.size() - 1).SetPos(body->getPos() + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
-				bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
-				bullets.at(bullets.size() - 1).SetProjectileDamage(enemyStats->GetWeaponDamage());
-
-				std::random_device rd;
-				std::mt19937 gen(rd());
-
-				// Define the range
-				float lower_bound = -1.0;
-				float upper_bound = 1.0;
-
-				// Create a distribution
-				std::uniform_int_distribution<> distr(lower_bound, upper_bound);
-
-				// Generate and print a random number within the range
-				float random_number = distr(gen);
-
-				bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()) + random_number, -cos(turret->getOrientation()) + random_number, 0));
-
+				FireBullet();
 
 				time = 0;
 			}
@@ -170,34 +153,27 @@ void Character::Update(float deltaTime)
 		//	steering->linear = nearTargetAccel;
 		//}
 	}
+	//If not steering towards target instead use path finding to patrol map
 	else
 	{
+		//Calculate Tiles and move towards nearest one
 		PathfindTiles();
 
 
-		body->setVel(Vec3(-sin(body->getOrientation()) * 1, -cos(body->getOrientation()) * 1, 0));
+		body->setVel(Vec3(-sin(body->getOrientation()), -cos(body->getOrientation()), 0));
 	}
+
+
+
 	//Update AI
 	body->Update(deltaTime,steering);
 
 	//Delete steering behaviour when finished
 	delete steering;
 
-
-	turret->setPos(body->getPos());
-	turret->SetOrientation(body->getOrientation());
-	turret->Update(deltaTime);
-
-	for (int i = 0; i < bullets.size(); i++)
-	{
-
-		if (bullets.at(i).GetFiredStatus() == true)
-		{
-			bullets.at(i).Update(deltaTime);
-
-		}
-
-	}
+	//Update turret and bullets
+	UpdateTurret(deltaTime);
+	UpdateBullets(deltaTime);
 
 }
 
@@ -268,16 +244,11 @@ void Character::setTarget(Vec3 target_)
 bool Character::checkIfNearTarget()
 {
 
-
-
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
 
-
 	if (abs(distance.x) < 2 && abs(distance.y) < 2 && abs(distance.z) < 2) nearTarget = true;
 	else nearTarget = false;
-
-
 
 	return nearTarget;
 
@@ -309,13 +280,16 @@ void Character::IslandAvoidance()
 
 }
 
+//Calculate the nearest 9 tiles to the AI
 void Character::CalculateTiles()
 {
+	//Clear the closest tiles vector if it isn't empty
 	if (closeTiles.size() > 0) closeTiles.clear();
 
 	std::vector<float>tilesDistance;
 	std::vector<Tiles> tilesNew;
 
+	//Run through each tile in the scene and push back the distance between the AI and the Tile 
 	for (int i = 0; i < tiles.size(); i++)
 	{
 		Vec3 distanceVector = tiles.at(i).GetPos() - body->getPos();
@@ -328,7 +302,7 @@ void Character::CalculateTiles()
 
 	}
 
-
+	//Run through each tile's distance and find the 9 closest tiles to the AI and push those 9 tiles into another vector
 	for (int i = 0; i < 9; i++)
 	{
 		float min_element = std::numeric_limits<float>::max(); // Initialize with maximum possible value
@@ -360,9 +334,10 @@ void Character::CalculateTiles()
 void Character::PathfindTiles()
 {
 
-
+	//Calculate closest tiles if it hasn't been calculated yet
 	if (resetTileCheck != true) CalculateTiles();
 
+	//Run through the 9 closes tiles except for the current tile the AI is on and the tile the AI was previously on and check to see what the closest tile that is able to be entered
 	for (int i = 0; i < closeTiles.size(); i++)
 
 	{
@@ -382,17 +357,16 @@ void Character::PathfindTiles()
 			}
 		}
 		
-
 	}
-
 	
+	//Set orientation based on the tile the AI is moving towards
 	Vec3 distance = targetTile.GetPos() - body->getPos();
 	
-	targetOrientation = std::atan2(-distance.x, -distance.y);
-	body->setOrientation(targetOrientation);
-
 	float d = sqrt(distance.x * distance.x + distance.y * distance.y);
 
+	if (d > 2) targetOrientation = std::atan2(-distance.x, -distance.y);
+
+	//If AI reaches tile then update the previous and current tile variables and re-calculate the closest tiles
 	if (d < 0.01)
 	{
 	
@@ -401,6 +375,7 @@ void Character::PathfindTiles()
 		resetTileCheck = false;
 	}
 
+	//Work In Progress; Find the next tile the AI is going to move towards so that the orientation can be updated smoothly
 	if (resetTileCheck == true)
 	{
 
@@ -424,30 +399,111 @@ void Character::PathfindTiles()
 				}
 			}
 
-
 		}
 
 	}
+	float nextOrientation = 0;
+	//Work In Progress; Update orientation based on the angle difference between the current tile and the next tile
+	//if (d < 0.5)
+	//{
 
-	if (d < 0.5)
-	{
+	//	Vec3 newDistance = nextTile.GetPos() - body->getPos();
 
-		Vec3 newDistance = nextTile.GetPos() - body->getPos();
+	//	nextOrientation = std::atan2(-newDistance.x, -newDistance.y) / M_PI;
 
-		float nextOrientation = std::atan2(-newDistance.x, -newDistance.y) / M_PI;
+	//	if (nextOrientation > targetOrientation && (nextOrientation - targetOrientation > 0.1))
+	//	{
+	//		targetOrientation += 0.1;
+	//	}
+	//	if (nextOrientation < targetOrientation && (targetOrientation - nextOrientation > 0.1))
+	//	{
+	//		targetOrientation -= 0.1;
+	//	}
+	//
+	//}
 
-		if (nextOrientation > targetOrientation) body->setOrientation(body->getOrientation() - 0.05);
-		if (nextOrientation < targetOrientation) body->setOrientation(body->getOrientation() + 0.05);
+	body->setOrientation(targetOrientation);
 	
-	}
-
 }
 
+//Return the status of the closest tile
 bool Character::CheckForClosestTile()
 {
 	
 	return closeTiles.at(1).TileStatus();
 	
+}
+
+//Update the turret object 
+void Character::UpdateTurret(float deltaTime_)
+{
+
+
+	turret->setPos(body->getPos());
+
+	//Match orientation to the AI's orientation if the AI is not close enough to attack player
+	if (!checkIfNearTarget()) turret->SetOrientation(body->getOrientation());
+	//If the AI is close enough to attack then change the turret orientation to be where the player is
+	else
+	{
+		Vec3 distance = target - turret->getPos();
+		turret->SetOrientation(std::atan2(-distance.x, -distance.y));
+
+
+	}
+
+
+
+	turret->Update(deltaTime_);
+
+}
+
+//Update bullets 
+void Character::UpdateBullets(float deltaTime_)
+{
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+
+		if (bullets.at(i).GetFiredStatus() == true)
+		{
+			bullets.at(i).Update(deltaTime_);
+
+		}
+
+	}
+
+}
+
+//Create and fire bullets
+void Character::FireBullet()
+{
+
+	//Push back bullet and set the necessary variables
+	bullets.push_back(bullet2);
+	bullets.at(bullets.size() - 1).OnCreate();
+	bullets.at(bullets.size() - 1).SetFiredStatus(true);
+	bullets.at(bullets.size() - 1).SetPos(body->getPos() + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
+	bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
+	bullets.at(bullets.size() - 1).SetProjectileDamage(enemyStats->GetWeaponDamage());
+
+	//Work In Progress; Create an offset for the bullet so it fires slighty to the left or right so the shooting isn't 100% accurate
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Define the range
+	float lower_bound = -0.25;
+	float upper_bound = 0.25;
+
+	// Create a distribution
+	std::uniform_int_distribution<> distr(lower_bound, upper_bound);
+
+	// Generate and print a random number within the range
+	float random_number = distr(gen);
+
+	//Set direction vector for the bullet to move towards
+	bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()) + random_number, -cos(turret->getOrientation()) + random_number, 0));
+
 }
 
 
