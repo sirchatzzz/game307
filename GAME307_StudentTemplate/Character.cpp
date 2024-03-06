@@ -38,9 +38,9 @@ bool Character::OnCreate(Scene* scene_)
 	return true;
 }
 
-bool Character::setTextureWith(string file)
+bool Character::setImageWith(SDL_Surface* file)
 {
-	SDL_Surface* image = IMG_Load(file.c_str());
+	SDL_Surface* image = file;
 	if (image == nullptr) {
 		std::cerr << "Can't open the image" << std::endl;
 		return false;

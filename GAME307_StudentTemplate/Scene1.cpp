@@ -1,7 +1,7 @@
 #include "Scene1.h"
 
 
-Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): playerImage(nullptr), playerTexture(nullptr), waterBackground(nullptr), waterTexture(nullptr){
+Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0), waterBackground(nullptr), waterTexture(nullptr){
 	window = sdlWindow_;
     game = game_;
 	renderer = SDL_GetRenderer(window);
@@ -31,7 +31,16 @@ bool Scene1::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 
-	playerImage = IMG_Load("assets/playerBoat.png");
+	playerImage[0] = IMG_Load("assets/playerBoat1.png");
+	playerImage[1] = IMG_Load("assets/playerBoat2.png");
+	playerImage[2] = IMG_Load("assets/playerBoat3.png");
+	playerImage[3] = IMG_Load("assets/playerBoat4.png");
+
+	enemyImage[0] = IMG_Load("assets/enemyBoat3_1.png");
+	enemyImage[1] = IMG_Load("assets/enemyBoat3_2.png");
+	enemyImage[2] = IMG_Load("assets/enemyBoat3_3.png");
+	enemyImage[3] = IMG_Load("assets/enemyBoat3_4.png");
+
 	waterBackground = IMG_Load("assets/water.png");
 
 	for (int i = 0; i < 6; i++)
@@ -49,7 +58,11 @@ bool Scene1::OnCreate() {
 	islandImage[4] = IMG_Load("assets/island5.png");
 	islandImage[5] = IMG_Load("assets/island6.png");
 
-	playerTexture = SDL_CreateTextureFromSurface(renderer, playerImage);
+	playerTexture[0] = SDL_CreateTextureFromSurface(renderer, playerImage[0]);
+	playerTexture[1] = SDL_CreateTextureFromSurface(renderer, playerImage[1]);
+	playerTexture[2] = SDL_CreateTextureFromSurface(renderer, playerImage[2]);
+	playerTexture[3] = SDL_CreateTextureFromSurface(renderer, playerImage[3]);
+
 	waterTexture = SDL_CreateTextureFromSurface(renderer, waterBackground);
 
 	for (int i = 0; i < islandTexture.size(); i++)
@@ -68,14 +81,12 @@ bool Scene1::OnCreate() {
 	islandRect[4] = { 800, 300, 150, 150 };
 	islandRect[5] = { 400, 650, 150, 150 };
 
-	game->getPlayer()->setImage(playerImage);
-	game->getPlayer()->setTexture(playerTexture);
 	game->getPlayer()->SetMaxSpeed(20);
 
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setTextureWith("assets/enemyBoat3.png") )
+	if (!blinky->OnCreate(this) || !blinky->setImageWith(enemyImage[0]))
 	{
 		return false;
 	}
@@ -90,14 +101,18 @@ bool Scene1::OnCreate() {
 void Scene1::OnDestroy() {}
 
 void Scene1::Update(const float deltaTime) {
-
+	++animationCounter;
+	if (animationCounter > 60) animationCounter = 0;
+	int indexSelector = std::round(animationCounter / 20.0f);
 	//Enemy AI Targets Player
 	blinky->setTarget(game->getPlayer()->getPos());
+	blinky->setImageWith(enemyImage[indexSelector]);
+
+	game->getPlayer()->setImage(playerImage[indexSelector]);
+	game->getPlayer()->setTexture(playerTexture[indexSelector]);
 
 	game->getPlayer()->Update(deltaTime);
-	
-	
-	
+
 
 	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
 	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
@@ -128,8 +143,8 @@ void Scene1::Render() {
 	}
 
 	// render the player
-	game->RenderPlayer(0.03f);
-	blinky->render(0.03f);
+	game->RenderPlayer(0.5f);
+	blinky->render(0.5f);
 	SDL_RenderPresent(renderer);
 
 	islandColls[0].RenderCollider(renderer);

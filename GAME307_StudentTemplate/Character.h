@@ -32,7 +32,7 @@ public:
 
 	bool OnCreate(Scene* scene_);
 	void OnDestroy() {};
-	bool setTextureWith(string file);
+	bool setImageWith(SDL_Surface* file);
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
 	void render(float scale = 1.0f);

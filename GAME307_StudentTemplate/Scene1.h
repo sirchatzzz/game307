@@ -10,14 +10,20 @@
 using namespace MATH;
 class Scene1 : public Scene {
 private:
+	float animationCounter;
 	SDL_Window *window;
 	float xAxis = 25.0f;
 	float yAxis = 15.0f;
 	SDL_Renderer* renderer;
 	Matrix4 projectionMatrix;
     Matrix4 inverseProjection;
-	SDL_Surface* playerImage;
-	SDL_Texture* playerTexture;
+
+	SDL_Surface* playerImage[4];
+	SDL_Texture* playerTexture[4];
+
+	SDL_Surface* enemyImage[4];
+	SDL_Texture* enemyTexture[4];
+
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
 
