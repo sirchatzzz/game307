@@ -9,7 +9,7 @@ Projectile::~Projectile()
 
 bool Projectile::OnCreate()
 {
-    image = IMG_Load("assets/island5.png");
+    image = IMG_Load("assets/projectile.png");
     if (image == nullptr) {
         std::cerr << "Can't open the image" << std::endl;
         return false;

@@ -95,7 +95,7 @@ void PlayerBody::Render(float scale)
 
     }
 
-    turret->Render(scale / 2);
+    turret->Render(scale / 32);
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)

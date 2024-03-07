@@ -43,8 +43,8 @@ bool Character::OnCreate(Scene* scene_)
 
 	collider.SetColliderActive(true);
 
-	aggroRadius = 6;
-	
+	aggroRadius = 8;
+	attackRadius = 3;
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
@@ -87,7 +87,7 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
-
+	//Steering
 	if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
 	{
 	
@@ -125,42 +125,12 @@ void Character::Update(float deltaTime)
 			}
 
 		}
-		//else
-		//{
 
-		//	//Avoid collision with player
-		//	if (near == true)
-		//	{
-		//		double x = target.x;
-
-		//		if (x < body->getPos().x) x = body->getAccel().x + 4;
-
-		//		if (x >= body->getPos().x) x = body->getAccel().x - 4;
-
-		//		double y = target.y;
-
-		//		if (y < body->getPos().y) y = body->getAccel().y - 4;
-
-		//		if (y >= body->getPos().y) y = body->getAccel().y + 4;
-
-		//		nearTargetAccel = Vec3(x, y, 0);
-		//		near = false;
-		//	}
-
-
-		//	time++;
-		//	if (time > 30) nearTargetAccel = Vec3(0, 0, 0);
-		//	steering->linear = nearTargetAccel;
-		//}
 	}
 	//If not steering towards target instead use path finding to patrol map
 	else
 	{
-		//Calculate Tiles and move towards nearest one
-		PathfindTiles();
 
-
-		body->setVel(Vec3(-sin(body->getOrientation()), -cos(body->getOrientation()), 0));
 	}
 
 
@@ -222,7 +192,7 @@ void Character::render(float scale)
 	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
-	turret->Render(scale / 2);
+	turret->Render(scale / 32);
 
 	for (int i = 0; i < bullets.size(); i++)
 	{
@@ -247,7 +217,7 @@ bool Character::checkIfNearTarget()
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
 
-	if (abs(distance.x) < 2 && abs(distance.y) < 2 && abs(distance.z) < 2) nearTarget = true;
+	if (abs(distance.x) < attackRadius && abs(distance.y) < attackRadius && abs(distance.z) < attackRadius) nearTarget = true;
 	else nearTarget = false;
 
 	return nearTarget;

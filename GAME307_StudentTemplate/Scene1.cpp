@@ -93,48 +93,48 @@ bool Scene1::OnCreate() {
 	islandRect[4] = { 800, 300, 150, 150 };
 	islandRect[5] = { 400, 650, 150, 150 };
 
-	game->getPlayer()->setImage(playerImage);
-	game->getPlayer()->setTexture(playerTexture);
+	game->getPlayer()->setImage(playerImage[0]);
+	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
 
 
-	for (int i = 0; i < 29; i++)
-	{
+	//for (int i = 0; i < 29; i++)
+	//{
 
-		tiles.push_back(Tiles());
+	//	tiles.push_back(Tiles());
 
 
-	}
+	//}
 
-	tiles[0] = Tiles(5.25, 12.25, 175, 175, false, game,1);
-	tiles[1] = Tiles(17.75, 12, 175, 175, false, game, 2);
-	tiles[2] = Tiles(11.5, 10, 175, 175, false, game, 3);
-	tiles[3] = Tiles(6.25, 5, 175, 175, false, game, 4);
-	tiles[4] = Tiles(13, 5, 175, 175, false, game, 5);
-	tiles[5] = Tiles(20, 4.5, 175, 175, false, game, 6);
-	tiles[6] = Tiles(18.5, 4.5, 175, 175, false, game, 7);
-	tiles[7] = Tiles(20, 3.5, 175, 175, false, game, 8);
-	tiles[8] = Tiles(18.5, 3.5, 175, 175, false, game, 9);
-	tiles[9] = Tiles(0, 14, 175, 175, false, game, 10);
-	tiles[10] = Tiles(2, 11.5, 300, 175, true, game, 11);
-	tiles[11] = Tiles(6, 14.5, 400, 125, true, game, 12);
-	tiles[12] = Tiles(2.70, 13.75, 225, 225, true, game, 13);
-	tiles[13] = Tiles(12.5, 1.75, 250, 275, true, game, 14);
-	tiles[14] = Tiles(15.75, 1.75, 250, 275, true, game, 15);
-	tiles[15] = Tiles(1, 5.25, 150, 250, false, game, 16);
-	tiles[16] = Tiles(1.5, 1.5, 250, 300, false, game, 17);
-	tiles[17] = Tiles(4, 1.5, 250, 300, false, game, 18);
-	tiles[18] = Tiles(23, 14.1, 300, 200, true, game, 19);
-	tiles[19] = Tiles(23, 11, 300, 250, true, game, 20);
-	tiles[20] = Tiles(23, 7.5, 300, 250, true, game, 21);
-	tiles[21] = Tiles(23, 4, 300, 250, true, game, 22);
-	tiles[22] = Tiles(23.0, 1, 350, 175, true, game, 23);
-	tiles[23] = Tiles(2, 1, 175, 175, true, game, 24);
-	tiles[24] = Tiles(19, 1, 275, 175, true, game, 25);
-	tiles[25] = Tiles(2, 8.5, 300, 225, true, game, 26);
-	tiles[26] = Tiles(3.5, 5.25, 250, 250, true, game, 27);
-	tiles[27] = Tiles(7, 1.75, 200, 275, true, game, 28);
-	tiles[28] = Tiles(9.5, 1.75, 200, 275, true, game, 29);
+	//tiles[0] = Tiles(5.25, 12.25, 175, 175, false, game,1);
+	//tiles[1] = Tiles(17.75, 12, 175, 175, false, game, 2);
+	//tiles[2] = Tiles(11.5, 10, 175, 175, false, game, 3);
+	//tiles[3] = Tiles(6.25, 5, 175, 175, false, game, 4);
+	//tiles[4] = Tiles(13, 5, 175, 175, false, game, 5);
+	//tiles[5] = Tiles(20, 4.5, 175, 175, false, game, 6);
+	//tiles[6] = Tiles(18.5, 4.5, 175, 175, false, game, 7);
+	//tiles[7] = Tiles(20, 3.5, 175, 175, false, game, 8);
+	//tiles[8] = Tiles(18.5, 3.5, 175, 175, false, game, 9);
+	//tiles[9] = Tiles(0, 14, 175, 175, false, game, 10);
+	//tiles[10] = Tiles(2, 11.5, 300, 175, true, game, 11);
+	//tiles[11] = Tiles(6, 14.5, 400, 125, true, game, 12);
+	//tiles[12] = Tiles(2.70, 13.75, 225, 225, true, game, 13);
+	//tiles[13] = Tiles(12.5, 1.75, 250, 275, true, game, 14);
+	//tiles[14] = Tiles(15.75, 1.75, 250, 275, true, game, 15);
+	//tiles[15] = Tiles(1, 5.25, 150, 250, false, game, 16);
+	//tiles[16] = Tiles(1.5, 1.5, 250, 300, false, game, 17);
+	//tiles[17] = Tiles(4, 1.5, 250, 300, false, game, 18);
+	//tiles[18] = Tiles(23, 14.1, 300, 200, true, game, 19);
+	//tiles[19] = Tiles(23, 11, 300, 250, true, game, 20);
+	//tiles[20] = Tiles(23, 7.5, 300, 250, true, game, 21);
+	//tiles[21] = Tiles(23, 4, 300, 250, true, game, 22);
+	//tiles[22] = Tiles(23.0, 1, 350, 175, true, game, 23);
+	//tiles[23] = Tiles(2, 1, 175, 175, true, game, 24);
+	//tiles[24] = Tiles(19, 1, 275, 175, true, game, 25);
+	//tiles[25] = Tiles(2, 8.5, 300, 225, true, game, 26);
+	//tiles[26] = Tiles(3.5, 5.25, 250, 250, true, game, 27);
+	//tiles[27] = Tiles(7, 1.75, 200, 275, true, game, 28);
+	//tiles[28] = Tiles(9.5, 1.75, 200, 275, true, game, 29);
 
 
 
@@ -273,10 +273,6 @@ void Scene1::Render() {
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}
 
-	//for (int i = 0; i < tiles.size(); i++)
-	//{
-
-	//	tiles.at(i).RenderTile(renderer);
 
 
 	//}
@@ -286,10 +282,7 @@ void Scene1::Render() {
 	SDL_RenderPresent(renderer);
 
 	//islandColls[0].RenderCollider(renderer);
-	//leftOutOfBoundsColl.RenderCollider(renderer);
-	//rightOutOfBoundsColl.RenderCollider(renderer);
-	//upOutOfBoundsColl.RenderCollider(renderer);
-	//downOutOfBoundsColl.RenderCollider(renderer);
+
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)

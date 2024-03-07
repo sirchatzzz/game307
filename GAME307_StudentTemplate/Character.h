@@ -52,6 +52,7 @@ private:
 
 	//Variables to determine what and how fast an AI should execute tasks
 	float aggroRadius;
+	float attackRadius;
 	float attackSpeed;
 
 public:
