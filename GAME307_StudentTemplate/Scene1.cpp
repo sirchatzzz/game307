@@ -115,9 +115,9 @@ bool Scene1::OnCreate() {
 	tiles[19] = Tiles(23, 11, 300, 250, true, game, 20);
 	tiles[20] = Tiles(23, 7.5, 300, 250, true, game, 21);
 	tiles[21] = Tiles(23, 4, 300, 250, true, game, 22);
-	tiles[22] = Tiles(23.5, 1, 250, 175, true, game, 23);
-	tiles[23] = Tiles(20.75, 1, 175, 175, true, game, 24);
-	tiles[24] = Tiles(18.5, 1, 175, 175, true, game, 25);
+	tiles[22] = Tiles(23.0, 1, 350, 175, true, game, 23);
+	tiles[23] = Tiles(2, 1, 175, 175, true, game, 24);
+	tiles[24] = Tiles(19, 1, 275, 175, true, game, 25);
 	tiles[25] = Tiles(2, 8.5, 300, 225, true, game, 26);
 	tiles[26] = Tiles(3.5, 5.25, 250, 250, true, game, 27);
 	tiles[27] = Tiles(7, 1.75, 200, 275, true, game, 28);
@@ -269,10 +269,10 @@ void Scene1::Render() {
 	SDL_RenderPresent(renderer);
 
 	//islandColls[0].RenderCollider(renderer);
-	leftOutOfBoundsColl.RenderCollider(renderer);
-	rightOutOfBoundsColl.RenderCollider(renderer);
-	upOutOfBoundsColl.RenderCollider(renderer);
-	downOutOfBoundsColl.RenderCollider(renderer);
+	//leftOutOfBoundsColl.RenderCollider(renderer);
+	//rightOutOfBoundsColl.RenderCollider(renderer);
+	//upOutOfBoundsColl.RenderCollider(renderer);
+	//downOutOfBoundsColl.RenderCollider(renderer);
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
