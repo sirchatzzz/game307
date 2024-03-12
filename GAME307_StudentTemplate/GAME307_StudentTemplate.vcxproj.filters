@@ -47,6 +47,10 @@
       <Filter>Class</Filter>
     </ClCompile>
     <ClCompile Include="Evade.cpp" />
+    <ClCompile Include="ShipStats.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Tiles.cpp" />
+    <ClCompile Include="Turret.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -101,6 +105,10 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Evade.h" />
+    <ClInclude Include="ShipStats.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Tiles.h" />
+    <ClInclude Include="Turret.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

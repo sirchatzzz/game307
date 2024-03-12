@@ -1,13 +1,17 @@
 #include "Align.h"
 
+Align::Align()
+{
+}
+
 Align::Align(float maxAngularAccel_, float maxRotation_, float targetRadius_, float slowRadius_, float timeToTarget_)
 {
 
-	maxAngularAccel = maxAngularAccel_;
-	maxRotation = maxRotation_;
-	targetRadius = targetRadius_;
-	slowRadius = slowRadius_;
-	timeToTarget = timeToTarget_;
+	//maxAngularAccel = maxAngularAccel_;
+	//maxRotation = maxRotation_;
+	//targetRadius = targetRadius_;
+	//slowRadius = slowRadius_;
+	//timeToTarget = timeToTarget_;
 
 }
 
@@ -26,37 +30,16 @@ double mapToRange(double degrees) {
 	return r;
 
 }
-float Align::getSteering(float targetOrientation_, Character* character_)
+SteeringOutput* Align::getSteering(Vec3 targetPos_, Character* character_)
 {
 
 	//Create steering behaviour
 	SteeringOutput* result;
-	result = new SteeringOutput();
+	result = new SteeringOutput();	
 
-	float rotation = targetOrientation_ - character_->getBody()->getOrientation();
-	rotation = mapToRange(rotation);
-	float rotationSize = abs(rotation);
-	if (rotationSize < targetRadius) return 0;
-	
-	float currentRotation;
+	Vec3 distance = targetPos_ - character_->getBody()->getPos();
+	result->angular = std::atan2(-distance.x, -distance.y);
 
-	if (rotationSize > slowRadius) currentRotation = maxRotation;
-	else currentRotation = maxRotation * rotationSize / slowRadius;
-
-	currentRotation *= rotation / rotationSize;
-
-	result->angular = currentRotation - character_->getBody()->getRotation();
-	result->angular /= timeToTarget;
-
-	float angularAccel = abs(result->angular);
-	if (angularAccel > maxAngularAccel)
-	{
-
-		result->angular /= angularAccel;
-		result->angular *= maxAngularAccel;
-
-	}
-
-	return result->angular;
+	return result;
 
 }

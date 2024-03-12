@@ -59,9 +59,6 @@ void Body::ApplyForce( Vec3 force_ ) {
 void Body::Update( float deltaTime ){
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
     vel = vel + accel * deltaTime;
-    // Update orientation
-    orientation += rotation * deltaTime;
-    rotation += angular * deltaTime;
 
     // Clip to maxspeed, if speed exceeds max
     if (VMath::mag(vel) > maxSpeed)

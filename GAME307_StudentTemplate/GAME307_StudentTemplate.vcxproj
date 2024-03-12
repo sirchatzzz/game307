@@ -143,10 +143,14 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MMath.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Scene1.cpp" />
+    <ClCompile Include="ShipStats.cpp" />
     <ClCompile Include="Steering\KinematicBody.cpp" />
     <ClCompile Include="Steering\SteeringOutput.cpp" />
+    <ClCompile Include="Tiles.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Turret.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -161,11 +165,15 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MMath.h" />
     <ClInclude Include="PlayerBody.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />
+    <ClInclude Include="ShipStats.h" />
     <ClInclude Include="Steering\KinematicBody.h" />
     <ClInclude Include="Steering\SteeringOutput.h" />
+    <ClInclude Include="Tiles.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Turret.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />

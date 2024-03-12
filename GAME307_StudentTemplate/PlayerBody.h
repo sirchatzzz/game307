@@ -12,13 +12,45 @@
 #include "Body.h"
 #include "GameManager.h"
 #include "Collider2D.h"
+#include "ShipStats.h"
+#include "Projectile.h"
+#include <vector>
+#include "Turret.h"
+
+//Enum for gear states
+enum GearState {
+
+     REVERSE = 0,
+     PARK = 1,
+     NEUTRAL = 2,
+     DRIVE1 = 3,
+     DRIVE2 = 4,
+     DRIVE3 = 5
+};
+
+class Projectile;
 
 class PlayerBody : public Body
 {
 protected:
     class GameManager* game;
-    bool isAccelerating;
+
+    //Collider object
     Collider2D collider;
+
+    //Gear states
+    GearState gearState;
+
+    //Ship stats for player
+    ShipStats* playerStats;
+    ShipAmmo* playerAmmo;
+
+    //Turret object
+    class Turret* turret;
+
+    //Bullet vector
+    class std::vector<Projectile> bullets;
+
 
 public:
     PlayerBody() : Body{}
@@ -53,13 +85,9 @@ public:
         , maxAngular_
     }
         , game{ game_ }
-        , isAccelerating(false)
     {}
     
-    
-
-    // use the base class versions of getters
-
+    //Base functions for each class
     bool OnCreate();
     void Render( float scale = 1.0f );
     void HandleEvents( const SDL_Event& event );
@@ -67,7 +95,22 @@ public:
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     
+    //Getter for collider
     Collider2D GetCollider();
+
+    //Calculate speed for player
+    void CalculateSpeed();
+
+    //Getters for player stats and info
+    GearState GetGearState() { return gearState; }
+    ShipStats* GetPlayerStats() { return playerStats; }
+    ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
+
+    //Getter for bullets
+    std::vector<Projectile>* GetBullets() { return &bullets; }
+
+    //Function to fire bullets
+    void FireBullet();
 
 };
 

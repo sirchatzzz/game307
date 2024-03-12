@@ -28,6 +28,10 @@ namespace  MATH {
 
 	struct Vec2 {
 		float  x, y;
+
+		inline Vec2(float x_, float y_) {
+			x = x_; y = y_;
+		}
 	};
 
 	struct Vec3 {

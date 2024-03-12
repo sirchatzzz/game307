@@ -12,18 +12,18 @@ class Align
 private:
 
 
-	float maxAngularAccel;
-	float maxRotation;
-	float targetRadius;
-	float slowRadius;
-	float timeToTarget = 0.1;
+	//float maxAngularAccel;
+	//float maxRotation;
+	//float targetRadius;
+	//float slowRadius;
+	//float timeToTarget = 0.1;
 
 
 public: 
-
+	Align();
 	Align(float maxAngularAccel_, float maxRotation_, float targetRadius_, float slowRadius_, float timeToTarget_ = 0.1);
 
-	float getSteering(float targetOrientation_, Character* character_);
+	SteeringOutput* getSteering(Vec3 targetPos_, Character* character_);
 
 
 };

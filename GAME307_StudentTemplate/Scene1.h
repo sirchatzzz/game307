@@ -6,18 +6,24 @@
 #include "Scene.h"
 #include <vector>
 #include "Character.h"
-
+#include "Tiles.h"
 using namespace MATH;
 class Scene1 : public Scene {
 private:
+	float animationCounter;
 	SDL_Window *window;
 	float xAxis = 25.0f;
 	float yAxis = 15.0f;
 	SDL_Renderer* renderer;
 	Matrix4 projectionMatrix;
     Matrix4 inverseProjection;
-	SDL_Surface* playerImage;
-	SDL_Texture* playerTexture;
+
+	SDL_Surface* playerImage[4];
+	SDL_Texture* playerTexture[4];
+
+	SDL_Surface* enemyImage[4];
+	SDL_Texture* enemyTexture[4];
+
 	SDL_Surface* waterBackground;
 	SDL_Texture* waterTexture;
 
@@ -28,7 +34,13 @@ private:
 
 	std::vector<Collider2D> islandColls;
 
+	Collider2D leftOutOfBoundsColl;
+	Collider2D rightOutOfBoundsColl;
+	Collider2D upOutOfBoundsColl;
+	Collider2D downOutOfBoundsColl;
+
 	Character* blinky;
+	std::vector<Tiles> tiles;
 
 public:
 	Scene1(SDL_Window* sdlWindow, GameManager* game_);
