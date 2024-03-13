@@ -113,9 +113,29 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
     case SDL_KEYDOWN:
 
         //Shift the gear up
-        if (event.key.keysym.scancode == SDL_SCANCODE_W && event.key.repeat == 0)
+        if (event.key.keysym.scancode == SDL_SCANCODE_W && event.key.repeat == 0 || keyboard_state_array[SDL_SCANCODE_D])
         {
-            if (gearState != GearState::DRIVE3) gearState += 1;
+            if (keyboard_state_array[SDL_SCANCODE_D])
+            {
+                if (gearState != GearState::REVERSE) orientation += 0.1;
+                else orientation -= 0.1;
+            }
+            else if (event.key.keysym.scancode == SDL_SCANCODE_W)
+            {
+                if (gearState != GearState::DRIVE3) 
+                    gearState += 1;
+            }
+            else
+            {
+                if (gearState != GearState::REVERSE) orientation += 0.1;
+                else orientation -= 0.1;
+                
+                if (gearState != GearState::DRIVE3)
+                    gearState += 1;
+            }
+            
+              
+
         }
 
         //Rotate the ship counterclockwise
@@ -128,7 +148,8 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
         //Shift the gear down
         if (event.key.keysym.scancode == SDL_SCANCODE_S && event.key.repeat == 0)
-        {
+        {      
+
             if (gearState != GearState::REVERSE) gearState -= 1;
 
         }

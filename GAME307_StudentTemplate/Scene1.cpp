@@ -70,9 +70,7 @@ bool Scene1::OnCreate() {
 		islandTexture[i] = SDL_CreateTextureFromSurface(renderer, islandImage[i]);
 	}
 
-	islandRect[0] = { 1350, 650, 250, 300 };
-	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y+50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
-	islandColls[0].SetColliderActive(true);
+	
 
 	leftOutOfBoundsColl = Collider2D(-50, 0, 5, 1200);
 	leftOutOfBoundsColl.SetColliderActive(true);
@@ -86,12 +84,30 @@ bool Scene1::OnCreate() {
 	downOutOfBoundsColl = Collider2D(0, 1080, 2000, 5);
 	downOutOfBoundsColl.SetColliderActive(true);
 
+	//Island Colliders - Have to be manually sized per island.
+	islandRect[0] = { 1350, 650, 250, 300 };
+	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y + 50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
+	islandColls[0].SetColliderActive(true);
 
 	islandRect[1] = { 1300, 150, 150, 150 };
+	islandColls[1] = Collider2D(islandRect[1].x+15, islandRect[1].y+15, islandImage[1]->w/2.5, islandImage[1]->h/2.5);
+	islandColls[1].SetColliderActive(true);
+
 	islandRect[2] = { 900, 600, 200, 250 };
+	islandColls[2] = Collider2D(islandRect[2].x+5, islandRect[2].y+25, islandImage[2]->w/1.6, islandImage[2]->h/1.6);
+	islandColls[2].SetColliderActive(true);
+
 	islandRect[3] = { 300, 100, 200, 200 };
+	islandColls[3] = Collider2D(islandRect[3].x+10, islandRect[3].y+20, islandImage[3]->w / 1.6, islandImage[3]->h / 2);
+	islandColls[3].SetColliderActive(true);
+
 	islandRect[4] = { 800, 300, 150, 150 };
+	islandColls[4] = Collider2D(islandRect[4].x+25, islandRect[4].y+25, islandImage[4]->w / 3, islandImage[4]->h / 3);
+	islandColls[4].SetColliderActive(true);
+
 	islandRect[5] = { 400, 650, 150, 150 };
+	islandColls[5] = Collider2D(islandRect[5].x + 5, islandRect[5].y + 5, islandImage[5]->w / 2, islandImage[5]->h / 2);
+	islandColls[5].SetColliderActive(true);
 
 	game->getPlayer()->setImage(playerImage[0]);
 	game->getPlayer()->setTexture(playerTexture[0]);
@@ -281,7 +297,7 @@ void Scene1::Render() {
 	blinky->render(0.5f);
 	SDL_RenderPresent(renderer);
 
-	//islandColls[0].RenderCollider(renderer);
+	//islandColls[5].RenderCollider(renderer);
 
 }
 
