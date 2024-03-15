@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include <vector>
 #include "Character.h"
-#include "Tiles.h"
+#include "Tile.h"
 using namespace MATH;
 class Scene1 : public Scene {
 private:
@@ -41,6 +41,10 @@ private:
 
 	Character* blinky;
 	std::vector<Tiles> tiles;
+
+	Tile* singleTile;
+	void createTiles();
+
 
 public:
 	Scene1(SDL_Window* sdlWindow, GameManager* game_);

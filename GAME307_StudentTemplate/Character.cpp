@@ -87,6 +87,9 @@ void Character::Update(float deltaTime)
 
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
+
+
+	
 	//Steering
 	if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
 	{

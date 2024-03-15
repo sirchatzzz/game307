@@ -3,6 +3,7 @@
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <GameManager.h>
+
 using namespace MATH;
 
 class Tiles

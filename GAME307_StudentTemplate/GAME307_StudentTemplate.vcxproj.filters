@@ -46,11 +46,25 @@
     <ClCompile Include="Align.cpp">
       <Filter>Class</Filter>
     </ClCompile>
-    <ClCompile Include="Evade.cpp" />
-    <ClCompile Include="ShipStats.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="Tiles.cpp" />
-    <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Evade.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="ShipStats.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Tiles.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Turret.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Ahmed%27s Tile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -104,11 +118,25 @@
     <ClInclude Include="Align.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Evade.h" />
-    <ClInclude Include="ShipStats.h" />
-    <ClInclude Include="Projectile.h" />
-    <ClInclude Include="Tiles.h" />
-    <ClInclude Include="Turret.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Tiles.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipStats.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Turret.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Evade.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Ahmed%27s Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -122,6 +150,9 @@
     </Filter>
     <Filter Include="Header\Scene">
       <UniqueIdentifier>{3c6d666b-ef94-4c61-bb83-0d02a012105b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ahmed%27s Tile">
+      <UniqueIdentifier>{c5f871ee-4c5a-45ca-8cdf-e827b13be7f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

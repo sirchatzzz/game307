@@ -1,6 +1,7 @@
 #include "Scene1.h"
 
 
+
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0), waterBackground(nullptr), waterTexture(nullptr){
 	window = sdlWindow_;
     game = game_;
@@ -19,6 +20,12 @@ Scene1::~Scene1(){
 		delete blinky;
 	}
 }
+
+void Scene1::createTiles()
+{
+	singleTile = new Tile(Vec3(1.25f, 0.25f,0.0f), 0.5f, 0.5f, this);
+}
+
 
 bool Scene1::OnCreate() {
 	int w, h;
@@ -85,7 +92,8 @@ bool Scene1::OnCreate() {
 	downOutOfBoundsColl.SetColliderActive(true);
 
 	//Island Colliders - Have to be manually sized per island.
-	islandRect[0] = { 1350, 650, 250, 300 };
+	/** No longer needed with pathfinding implemented
+	islandRect[0] = {1350, 650, 250, 300};
 	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y + 50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
 	islandColls[0].SetColliderActive(true);
 
@@ -108,49 +116,12 @@ bool Scene1::OnCreate() {
 	islandRect[5] = { 400, 650, 150, 150 };
 	islandColls[5] = Collider2D(islandRect[5].x + 5, islandRect[5].y + 5, islandImage[5]->w / 2, islandImage[5]->h / 2);
 	islandColls[5].SetColliderActive(true);
+	*/
 
+	//Player Initializers
 	game->getPlayer()->setImage(playerImage[0]);
 	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
-
-
-	//for (int i = 0; i < 29; i++)
-	//{
-
-	//	tiles.push_back(Tiles());
-
-
-	//}
-
-	//tiles[0] = Tiles(5.25, 12.25, 175, 175, false, game,1);
-	//tiles[1] = Tiles(17.75, 12, 175, 175, false, game, 2);
-	//tiles[2] = Tiles(11.5, 10, 175, 175, false, game, 3);
-	//tiles[3] = Tiles(6.25, 5, 175, 175, false, game, 4);
-	//tiles[4] = Tiles(13, 5, 175, 175, false, game, 5);
-	//tiles[5] = Tiles(20, 4.5, 175, 175, false, game, 6);
-	//tiles[6] = Tiles(18.5, 4.5, 175, 175, false, game, 7);
-	//tiles[7] = Tiles(20, 3.5, 175, 175, false, game, 8);
-	//tiles[8] = Tiles(18.5, 3.5, 175, 175, false, game, 9);
-	//tiles[9] = Tiles(0, 14, 175, 175, false, game, 10);
-	//tiles[10] = Tiles(2, 11.5, 300, 175, true, game, 11);
-	//tiles[11] = Tiles(6, 14.5, 400, 125, true, game, 12);
-	//tiles[12] = Tiles(2.70, 13.75, 225, 225, true, game, 13);
-	//tiles[13] = Tiles(12.5, 1.75, 250, 275, true, game, 14);
-	//tiles[14] = Tiles(15.75, 1.75, 250, 275, true, game, 15);
-	//tiles[15] = Tiles(1, 5.25, 150, 250, false, game, 16);
-	//tiles[16] = Tiles(1.5, 1.5, 250, 300, false, game, 17);
-	//tiles[17] = Tiles(4, 1.5, 250, 300, false, game, 18);
-	//tiles[18] = Tiles(23, 14.1, 300, 200, true, game, 19);
-	//tiles[19] = Tiles(23, 11, 300, 250, true, game, 20);
-	//tiles[20] = Tiles(23, 7.5, 300, 250, true, game, 21);
-	//tiles[21] = Tiles(23, 4, 300, 250, true, game, 22);
-	//tiles[22] = Tiles(23.0, 1, 350, 175, true, game, 23);
-	//tiles[23] = Tiles(2, 1, 175, 175, true, game, 24);
-	//tiles[24] = Tiles(19, 1, 275, 175, true, game, 25);
-	//tiles[25] = Tiles(2, 8.5, 300, 225, true, game, 26);
-	//tiles[26] = Tiles(3.5, 5.25, 250, 250, true, game, 27);
-	//tiles[27] = Tiles(7, 1.75, 200, 275, true, game, 28);
-	//tiles[28] = Tiles(9.5, 1.75, 200, 275, true, game, 29);
 
 
 
@@ -169,6 +140,8 @@ bool Scene1::OnCreate() {
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
+	createTiles();
+
 	return true;
 }
 
@@ -178,6 +151,7 @@ void Scene1::Update(const float deltaTime) {
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
+	
 	//Enemy AI Targets Player
 	blinky->setTarget(game->getPlayer()->getPos());
 	blinky->setImageWith(enemyImage[indexSelector]);
@@ -266,8 +240,6 @@ void Scene1::Update(const float deltaTime) {
 	}
 
 
-
-
 	blinky->setIslandColliders(islandColls);
 	blinky->IslandAvoidance();
 	blinky->Update(deltaTime);
@@ -278,7 +250,7 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render any npc's
-
+	
 
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
@@ -289,12 +261,13 @@ void Scene1::Render() {
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}
 
-
-
-	//}
+	
 	// render the player
 	game->RenderPlayer(0.5f);
 	blinky->render(0.5f);
+
+	
+	singleTile->Render();
 	SDL_RenderPresent(renderer);
 
 	//islandColls[5].RenderCollider(renderer);
