@@ -408,6 +408,7 @@ bool Character::CheckForClosestTile()
 void Character::UpdateTurret(float deltaTime_)
 {
 
+	if (enemyStats->GetHealth() == 0) EnemyDeath();
 
 	turret->setPos(body->getPos());
 

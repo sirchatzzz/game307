@@ -111,6 +111,7 @@ public:
 
 	//Function to create and fire bullet
 	void FireBullet();
+
 };
 
 #endif

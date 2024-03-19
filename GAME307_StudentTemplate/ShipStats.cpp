@@ -25,7 +25,6 @@ void ShipStats::TakeDamage(float damage_)
 
 	health -= damage_;
 
-	if (health < 0) std::cout << "This Character is Dead" << std::endl;
 	if (health < 0) health = 0;
 
 
