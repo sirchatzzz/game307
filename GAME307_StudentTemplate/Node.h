@@ -4,12 +4,13 @@
 
 class Node
 {
-private:
+private: 
 	int label;
 
 public:
-	Node();
-	Node(int i_);
+	Node(int label_) : label{ label_ } {};
+
+	int getLabel() { return label; };
 
 	void Print();
 };

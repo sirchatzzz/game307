@@ -89,45 +89,48 @@ void Character::Update(float deltaTime)
 	Vec3 distance = target - body->getPos();
 
 
+
+	//Check to see if AI is near target
+	if (!checkIfNearTarget())
+	{
+
+		//Change Orientation of Character
+		Align align;
+		*steering += *(align.getSteering(target, this));
+
+		time = 0;
+		//Set the radius of the target
+		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+		//Set the slow radius so the AI will begin to slow down once it enters this radius
+		float slowRadius = targetRadius + 5;
+		//Create an Arrive steering behaviour and set the parameters
+		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+		//Call arrive function that sets this steering behaviour to the one created in the function
+		*steering += *(arrive.getSteering(target, this));
+
+		//near = true;
+	}
+	else
+	{
+		//If near player then Fire
+		time++;
+		if (time > attackSpeed)
+		{
+
+			FireBullet();
+
+			time = 0;
+		}
+
+	}
+
 	
 	//Steering
 	if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
 	{
 	
 
-		//Check to see if AI is near target
-		if (!checkIfNearTarget())
-		{
-
-			//Change Orientation of Character
-			Align align;
-			*steering += *(align.getSteering(target, this));
-
-			time = 0;
-			//Set the radius of the target
-			float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-			//Set the slow radius so the AI will begin to slow down once it enters this radius
-			float slowRadius = targetRadius + 5;
-			//Create an Arrive steering behaviour and set the parameters
-			Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-			//Call arrive function that sets this steering behaviour to the one created in the function
-			*steering += *(arrive.getSteering(target, this));
-
-			//near = true;
-		}
-		else
-		{
-			//If near player then Fire
-			time++;
-			if (time > attackSpeed)
-			{
-
-				FireBullet();
-
-				time = 0;
-			}
-
-		}
+		
 
 	}
 	//If not steering towards target instead use path finding to patrol map
@@ -477,6 +480,17 @@ void Character::FireBullet()
 	//Set direction vector for the bullet to move towards
 	bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()) + random_number, -cos(turret->getOrientation()) + random_number, 0));
 
+}
+
+bool Character::IsCharacterAtPos(Vec3 pos_)
+{
+	if (body->getPos() != pos_)
+	{
+		setTarget(pos_);
+		return false;
+	}
+
+	return true;
 }
 
 

@@ -1,13 +1,10 @@
 #include "Tile.h"
 
-Tile::Tile(Vec3 pos_, float width_, float height_, Scene* scene_) : 
-	pos{ pos_ }, width{width_}, height{height_}
-{
-	r = 0;
-	g = 255;
-	b = 255;
-	a = 255;
+Tile::Tile(Node* node_,Vec3 pos_, float width_, float height_, Scene* scene_) : 
+	node{node_}, pos{pos_}, width{width_}, height{height_}
+{	
 	scene = scene_;
+	
 }
 
 void Tile::Render()
@@ -31,12 +28,15 @@ void Tile::Render()
 	square.w = static_cast<int>(bottomRightScreen.x - topLeftScreen.x);
 	square.h = static_cast<int>(bottomRightScreen.y - topLeftScreen.y);
 
-	setRGBA(17, 138, 178, 255);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	SDL_SetRenderDrawColor(renderer, tileColour[0], tileColour[1], tileColour[2], tileColour[3]);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_RenderFillRect(renderer, &square);
-
+	
 	//Border around the square
-	setRGBA(0, 0, 0, 255);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	
+	SDL_SetRenderDrawColor(renderer, tileBorderColour[0], tileBorderColour[1], tileBorderColour[2], tileBorderColour[3]);
 	SDL_RenderDrawRect(renderer, &square);
+
 }
+
+

@@ -111,6 +111,8 @@ public:
 
 	//Function to create and fire bullet
 	void FireBullet();
+
+	bool IsCharacterAtPos(Vec3 pos_);
 };
 
 #endif

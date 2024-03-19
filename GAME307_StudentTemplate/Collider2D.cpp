@@ -92,7 +92,7 @@ void Collider2D::RenderCollider(SDL_Renderer* m_window_renderer)
 
 	SDL_SetRenderDrawColor(m_window_renderer, 0, 0, 0, 255);
 
-	SDL_RenderPresent(m_window_renderer);
+	
 }
 
 bool Collider2D::CollisionMathTesting(Collider2D otherObject)

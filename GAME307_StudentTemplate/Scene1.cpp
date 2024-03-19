@@ -2,12 +2,16 @@
 
 
 
-Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0), waterBackground(nullptr), waterTexture(nullptr){
+Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0), waterBackground(nullptr), waterTexture(nullptr), toggleTileRendering(false){
 	window = sdlWindow_;
     game = game_;
 	renderer = SDL_GetRenderer(window);
 	xAxis = 25.0f;
 	yAxis = 15.0f;
+
+	tileWidth = 0.0;
+	tileHeight = 0.0;
+	graph = NULL;
 
 	// create a NPC
 	blinky = nullptr;
@@ -23,7 +27,196 @@ Scene1::~Scene1(){
 
 void Scene1::createTiles()
 {
-	singleTile = new Tile(Vec3(1.25f, 0.25f,0.0f), 0.5f, 0.5f, this);
+	tileWidth = 1;
+	tileHeight = 1;
+	
+	int cols = ceil((xAxis - 0.5f * tileWidth) / tileWidth);
+	int rows = ceil((yAxis - 0.5f * tileHeight) / tileHeight);
+
+	tiles.resize(rows);
+	for (int i = 0; i < rows; i++)
+	{
+		tiles[i].resize(cols);
+	}
+
+	sceneNodes.resize(cols * rows);
+
+	Node* n;
+	int label = 0;
+	Tile* t;
+	int i, j;
+	i = 0;
+	j = 0;
+
+	for (float y = 0.5f * tileHeight; y < yAxis; y += tileHeight)
+	{
+		//do stuff as y increases
+
+		for (float x = 0.5f * tileWidth; x < xAxis; x+=tileWidth)
+		{
+			//do stuff as x increases
+			n = new Node(label);
+			sceneNodes[label] = n;
+			//create tile
+			Vec3 tilePos = Vec3(x, y, 0.0f);
+			t = new Tile(n,tilePos, tileWidth, tileHeight, this);
+			tiles[i][j] = t;
+			j++;
+			label++;
+		}
+		j = 0;
+		i++;
+	}
+
+}
+
+void Scene1::CalculateConnectionWeights()
+{
+
+	// I'm smart enough to only call this
+	// after having properly created the tiles matrix
+	int rows = tiles.size();
+	int cols = tiles[0].size();
+
+	//Island Nodes
+	//islandRect[3]
+
+	//Stores the nodes of which the islands occupy
+	std::vector<Node*> islands;
+	
+	//Island[0]
+	islands.push_back(graph->getNode(69));
+	islands.push_back(graph->getNode(93));
+	islands.push_back(graph->getNode(94));
+	islands.push_back(graph->getNode(118));
+	islands.push_back(graph->getNode(119));
+	islands.push_back(graph->getNode(120));
+
+
+	//Island[1]
+	islands.push_back(graph->getNode(292));
+	islands.push_back(graph->getNode(293));
+	islands.push_back(graph->getNode(317));
+	islands.push_back(graph->getNode(318));
+
+	//Island[2]
+	islands.push_back(graph->getNode(112));
+	islands.push_back(graph->getNode(113));
+	islands.push_back(graph->getNode(137));
+	islands.push_back(graph->getNode(138));
+
+	//Island[3]
+	islands.push_back(graph->getNode(279));
+	islands.push_back(graph->getNode(280));
+	islands.push_back(graph->getNode(304));
+	islands.push_back(graph->getNode(305));
+
+	//Island[4]
+	islands.push_back(graph->getNode(235));
+	islands.push_back(graph->getNode(236));
+	islands.push_back(graph->getNode(260));
+	islands.push_back(graph->getNode(261));
+
+	//Island[5]
+	islands.push_back(graph->getNode(105));
+	islands.push_back(graph->getNode(106));
+	islands.push_back(graph->getNode(130));
+	islands.push_back(graph->getNode(131));
+
+	
+
+
+
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			//tiles[i][j]->getNode();
+			//
+			//          i+1, j
+			//   i,j-1    i, j      i,j+1
+			//          i-1, j
+			Tile* fromTile = tiles[i][j];
+			Node* from = fromTile->getNode();
+
+			// left
+			if (j > 0)
+			{
+				Node* to = tiles[i][j - 1]->getNode();
+
+				bool islandFound = false;
+				for (auto n : islands)
+				{
+					if (to == n || from == n)
+					{
+						graph->addWeightedConnection(from, to, 50.0f);
+						islandFound = true;
+					}
+				}
+
+				if (!islandFound)
+					graph->addWeightedConnection(from, to, tileWidth);
+				
+			}
+
+			// right
+			if (j < cols - 1)
+			{
+
+				Node* to = tiles[i][j + 1]->getNode();
+				
+				bool islandFound = false;
+				for (auto n : islands)
+				{
+					if (to == n || from == n)
+					{
+						graph->addWeightedConnection(from, to, 50.0f);
+						islandFound = true;
+					}
+				}
+
+				if(!islandFound)
+					graph->addWeightedConnection(from, to, tileWidth);
+			}
+
+			// above
+			if (i < rows - 1)
+			{
+				Node* to = tiles[i + 1][j]->getNode();
+				bool islandFound = false;
+				for (auto n : islands)
+				{
+					if (to == n || from == n)
+					{
+						graph->addWeightedConnection(from, to, 50.0f);
+						islandFound = true;
+					}
+				}
+
+				if (!islandFound)
+					graph->addWeightedConnection(from, to, tileWidth);
+			}
+
+			// below
+			if (i > 0)
+			{
+				Node* to = tiles[i - 1][j]->getNode();
+				bool islandFound = false;
+				for (auto n : islands)
+				{
+					if (to == n || from == n)
+					{
+						graph->addWeightedConnection(from, to, 50.0f);
+						islandFound = true;
+					}
+				}
+
+				if (!islandFound)
+					graph->addWeightedConnection(from, to, tileWidth);
+			}
+		}
+	}
 }
 
 
@@ -91,32 +284,14 @@ bool Scene1::OnCreate() {
 	downOutOfBoundsColl = Collider2D(0, 1080, 2000, 5);
 	downOutOfBoundsColl.SetColliderActive(true);
 
-	//Island Colliders - Have to be manually sized per island.
-	/** No longer needed with pathfinding implemented
+	//Island Postions in screen coords
 	islandRect[0] = {1350, 650, 250, 300};
-	islandColls[0] = Collider2D(islandRect[0].x, islandRect[0].y + 50, islandImage[0]->w - 50, islandImage[0]->h / 1.5);
-	islandColls[0].SetColliderActive(true);
-
 	islandRect[1] = { 1300, 150, 150, 150 };
-	islandColls[1] = Collider2D(islandRect[1].x+15, islandRect[1].y+15, islandImage[1]->w/2.5, islandImage[1]->h/2.5);
-	islandColls[1].SetColliderActive(true);
-
 	islandRect[2] = { 900, 600, 200, 250 };
-	islandColls[2] = Collider2D(islandRect[2].x+5, islandRect[2].y+25, islandImage[2]->w/1.6, islandImage[2]->h/1.6);
-	islandColls[2].SetColliderActive(true);
-
-	islandRect[3] = { 300, 100, 200, 200 };
-	islandColls[3] = Collider2D(islandRect[3].x+10, islandRect[3].y+20, islandImage[3]->w / 1.6, islandImage[3]->h / 2);
-	islandColls[3].SetColliderActive(true);
-
-	islandRect[4] = { 800, 300, 150, 150 };
-	islandColls[4] = Collider2D(islandRect[4].x+25, islandRect[4].y+25, islandImage[4]->w / 3, islandImage[4]->h / 3);
-	islandColls[4].SetColliderActive(true);
-
-	islandRect[5] = { 400, 650, 150, 150 };
-	islandColls[5] = Collider2D(islandRect[5].x + 5, islandRect[5].y + 5, islandImage[5]->w / 2, islandImage[5]->h / 2);
-	islandColls[5].SetColliderActive(true);
-	*/
+	islandRect[3] = { 285, 100, 200, 200 };
+	islandRect[4] = { 765, 275, 150, 150 };
+	islandRect[5] = { 385, 650, 150, 150 };
+	
 
 	//Player Initializers
 	game->getPlayer()->setImage(playerImage[0]);
@@ -133,45 +308,32 @@ bool Scene1::OnCreate() {
 	{
 		return false;
 	}
-	blinky->getBody()->setPos(Vec3(20, 15, 0));
+	blinky->getBody()->setPos(Vec3(20, 0, 0));
 	// end of character set ups
-
-	blinky->SetTiles(tiles);
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
 	createTiles();
+
+	//create the graph
+	graph = new Graph();
+	if (!graph->OnCreate(sceneNodes))
+	{
+		// TODO error message
+		return false;
+	}
+
+	CalculateConnectionWeights();
+	
+
 
 	return true;
 }
 
 void Scene1::OnDestroy() {}
 
-void Scene1::Update(const float deltaTime) {
-	++animationCounter;
-	if (animationCounter > 60) animationCounter = 0;
-	int indexSelector = std::round(animationCounter / 20.0f);
-	
-	//Enemy AI Targets Player
-	blinky->setTarget(game->getPlayer()->getPos());
-	blinky->setImageWith(enemyImage[indexSelector]);
-
-	game->getPlayer()->setImage(playerImage[indexSelector]);
-	game->getPlayer()->setTexture(playerTexture[indexSelector]);
-
-	game->getPlayer()->Update(deltaTime);
-
-
-	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
-	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
-
-	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
-	{
-		std::cout << "\nBlicky Collision Detected By Player";
-		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
-	}
-
-
+void Scene1::ManageBullets()
+{
 	//Check for player bullets hitting enemy
 	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
 	{
@@ -238,6 +400,34 @@ void Scene1::Update(const float deltaTime) {
 
 		}
 	}
+}
+
+
+void Scene1::Update(const float deltaTime) {
+	++animationCounter;
+	if (animationCounter > 60) animationCounter = 0;
+	int indexSelector = std::round(animationCounter / 20.0f);
+	
+	//Enemy AI Targets Player
+	//blinky->setTarget(game->getPlayer()->getPos());
+	blinky->setImageWith(enemyImage[indexSelector]);
+
+	game->getPlayer()->setImage(playerImage[indexSelector]);
+	game->getPlayer()->setTexture(playerTexture[indexSelector]);
+
+	game->getPlayer()->Update(deltaTime);
+
+
+	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
+	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
+
+	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
+	{
+		std::cout << "\nBlicky Collision Detected By Player";
+		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
+	}
+
+	ManageBullets();
 
 
 	blinky->setIslandColliders(islandColls);
@@ -255,6 +445,18 @@ void Scene1::Render() {
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
+	//Tile Rendering
+	if (toggleTileRendering)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int j = 0; j < tiles[i].size(); j++)
+			{
+				tiles[i][j]->Render();
+			}
+		}
+	}
+
 	// render the islands
 	for (int i = 0; i < islandTexture.size(); i++)
 	{
@@ -267,10 +469,24 @@ void Scene1::Render() {
 	blinky->render(0.5f);
 
 	
-	singleTile->Render();
+	
+	
+
 	SDL_RenderPresent(renderer);
 
 	//islandColls[5].RenderCollider(renderer);
+
+}
+
+void Scene1::GetMousePOS() 
+{
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+
+	std::cout << "Mouse ScreenCoords\n x " << x << ", y " << y << "\n";
+	Vec3 mousepos{ (float)x,(float)y,0 };
+	mousepos =  projectionMatrix * mousepos;
+	std::cout << "Mouse ProjectionCoords\n x " << mousepos.x << ", y " << mousepos.y << "\n";
 
 }
 
@@ -281,5 +497,94 @@ void Scene1::HandleEvents(const SDL_Event& event)
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
 	blinky->HandleEvents(event);
+	  
+	if (event.type == SDL_KEYDOWN)
+	 {
+		switch (event.key.keysym.scancode)
+		{
+		case SDL_SCANCODE_F1:
+			toggleTileRendering = !toggleTileRendering;
+			break;
+		case SDL_SCANCODE_F3:
+			/*for (int i = 0; i < tiles.size(); i++)
+			{
+				for (int j = 0; j < tiles[i].size(); j++)
+				{
+					if (i < 10)
+						std::cout << i << "," << j << "    ";
+					else
+						std::cout << i << "," << j << "   ";
+
+				}
+				std::cout << std::endl;
+			}*/
+			std::cout << std::endl;
+
+			for (int i = 0; i < tiles.size(); i++)
+			{
+				for (int j = 0; j < tiles[i].size(); j++)
+				{
+					
+					std::cout << "[" << i << "]" << "[" << j << "]" << tiles[i][j]->getNode()->getLabel() << " | ";
+
+				}
+				std::cout << std::endl;
+			}		
+
+			break;
+		case SDL_SCANCODE_F4:
+
+			/*std::cout << "\nNeighbors of node #" << tiles[5][13]->getNode()->getLabel() << std::endl;
+
+			for (Node* n : graph->neighbours(tiles[5][13]->getNode()))
+			{
+
+				std::cout << "node " << n->getLabel() << " with wight of " << graph->GetWeightOfConnection(tiles[5][13]->getNode(), n) << "\n";
+			}*/
+			TestPathFinding();
+
+			break;
+
+		case SDL_SCANCODE_4:
+
+			break;
+		case SDL_SCANCODE_3:
+			//std::cout << "BLINKY POS: " << blinky->getBody()->getPos().x << ", " << blinky->getBody()->getPos().y << "\n";
+			//tiles[4][21]->setRGBA(0, 0, 255, 100);
+
+			break;
+		 default:
+			 break;
+		 }
+			}
+}
+
+void Scene1::TestPathFinding()
+{
+	int pathIterator = 0;
+	std::vector<Node*> newPath = graph->findPath(tiles[1][1]->getNode(), tiles[13][18]->getNode());
+	Node* start = newPath[pathIterator];
+	Node* end = newPath[newPath.size() - 1];
+	Tile findTile(start, Vec3(0, 0, 0), 0, 0, this);
 	
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		for (int j = 0; j < tiles[i].size(); j++)
+		{
+			Uint8 r, g, b, a;
+			r = 0;
+			g = 0;
+			b = 255;
+			a = 100;
+
+			if (tiles[i][j]->getNode() == newPath[pathIterator])
+			{
+				tiles[i][j]->setRGBA(r, g, b, a);
+
+				if (pathIterator != newPath.size() - 1)
+					pathIterator++;
+			}
+		}
+	}
+
 }

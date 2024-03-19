@@ -7,6 +7,9 @@
 #include <vector>
 #include "Character.h"
 #include "Tile.h"
+#include "Node.h"
+#include "Graph.h"
+
 using namespace MATH;
 class Scene1 : public Scene {
 private:
@@ -40,11 +43,25 @@ private:
 	Collider2D downOutOfBoundsColl;
 
 	Character* blinky;
-	std::vector<Tiles> tiles;
 
-	Tile* singleTile;
+	//Scene nodes / Graph
+	Graph* graph;
+	std::vector<Node*> sceneNodes;
+
+	//Tile rendering objects and arrays
+	bool toggleTileRendering;
+	float tileWidth, tileHeight;
+	std::vector< std::vector<Tile*>> tiles;
+
+private:
+
+	//Creates our tile map
 	void createTiles();
 
+	//calculate weight
+	void CalculateConnectionWeights();
+	void GetMousePOS();
+	void ManageBullets();
 
 public:
 	Scene1(SDL_Window* sdlWindow, GameManager* game_);
@@ -59,7 +76,8 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
-
+	void TestPathFinding();
+	void HighlightPath(std::vector<Node*> path_);
 	
 };
 

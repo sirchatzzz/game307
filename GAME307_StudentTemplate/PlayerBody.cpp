@@ -224,6 +224,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
 
 void PlayerBody::Update(float deltaTime)
 {
+
     // Update position, call Update from base class
     // Note that would update velocity too, and rotation motion
 
@@ -255,7 +256,12 @@ void PlayerBody::Update(float deltaTime)
         vel.y = 0.0f;
     }
 
-    std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;
+    if (currentMagTemp != playerAmmo->GetCurrentMagAmmo())
+    {
+        currentMagTemp = playerAmmo->GetCurrentMagAmmo();
+        std::cout << "Ammo: " << playerAmmo->GetCurrentMagAmmo() << "/" << playerAmmo->GetCurrentTotalAmmo() << std::endl;
+    }
+   
 
     //Calculate speed for the player
     CalculateSpeed();
