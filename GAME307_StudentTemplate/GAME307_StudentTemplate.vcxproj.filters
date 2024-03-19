@@ -66,6 +66,8 @@
       <Filter>Class\Ahmed%27s Tile</Filter>
     </ClCompile>
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="FollowAPath.cpp" />
+    <ClCompile Include="Path.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -139,6 +141,8 @@
       <Filter>Class\Ahmed%27s Tile</Filter>
     </ClInclude>
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="FollowAPath.h" />
+    <ClInclude Include="Path.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

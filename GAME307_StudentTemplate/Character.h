@@ -24,7 +24,7 @@ private:
 	Collider2D collider;
 	Vec3 collidedTargetPosition;
 	std::vector<Collider2D> islandColliders;
-
+	
 	//Near target variables
 	bool near;
 

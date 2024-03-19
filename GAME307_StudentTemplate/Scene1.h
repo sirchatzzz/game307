@@ -9,6 +9,7 @@
 #include "Tile.h"
 #include "Node.h"
 #include "Graph.h"
+#include "Path.h"
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -77,7 +78,6 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
-	void HighlightPath(std::vector<Node*> path_);
 	
 };
 

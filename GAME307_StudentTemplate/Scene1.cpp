@@ -59,6 +59,7 @@ void Scene1::createTiles()
 			sceneNodes[label] = n;
 			//create tile
 			Vec3 tilePos = Vec3(x, y, 0.0f);
+			n->SetPos(tilePos);
 			t = new Tile(n,tilePos, tileWidth, tileHeight, this);
 			tiles[i][j] = t;
 			j++;
@@ -561,8 +562,8 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 void Scene1::TestPathFinding()
 {
-	int pathIterator = 0;
-	std::vector<Node*> newPath = graph->findPath(tiles[1][1]->getNode(), tiles[13][18]->getNode());
+	/*int pathIterator = 0;
+	std::vector<Node*> newPath = graph->findPath(tiles[12][1]->getNode(), tiles[1][4]->getNode());
 	Node* start = newPath[pathIterator];
 	Node* end = newPath[newPath.size() - 1];
 	Tile findTile(start, Vec3(0, 0, 0), 0, 0, this);
@@ -585,6 +586,31 @@ void Scene1::TestPathFinding()
 					pathIterator++;
 			}
 		}
+	}*/
+
+	Path newPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][19]->getNode()));
+	
+	Uint8 r, g, b, a;
+	r = 0;
+	g = 0;
+	b = 255;
+	a = 100;
+
+	while (newPath.GetCurrentNode() != nullptr)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int j = 0; j < tiles[i].size(); j++)
+			{
+				if (tiles[i][j]->getNode() == newPath.GetCurrentNode())
+				{
+					tiles[i][j]->setRGBA(r, g, b, a);	
+				}
+			}
+		}
+
+		newPath.MoveToNextNode();
 	}
+	
 
 }
