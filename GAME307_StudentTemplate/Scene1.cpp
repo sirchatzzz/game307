@@ -538,7 +538,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 void Scene1::TestPathFinding()
 {
 
-	Path newPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][22]->getNode()));
+	Path newPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
 	
 	Uint8 r, g, b, a;
 	r = 0;
@@ -575,7 +575,7 @@ void Scene1::SetBlinkyPath()
 	
 	
 
-	patrolPath.SetPath(graph->findPath(tiles[7][0]->getNode(), tiles[14][22]->getNode()));
+	patrolPath.SetPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
 	blinky->SetCharacterPath(patrolPath);
 
 

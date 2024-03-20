@@ -71,6 +71,7 @@ struct NodeAndPriority
 	}
 };
 
+
 std::vector<Node*> Graph::findPath(Node* startNode, Node* goalNode)
 {
 	// Declarations
@@ -127,11 +128,13 @@ std::vector<Node*> Graph::findPath(Node* startNode, Node* goalNode)
 				// found a better path, so update data structures
 
 				//cost_so_far.at(nextDoor->getLabel()) = new_cost;
-				//priority = new_cost; 
+				
 				
 				cost_so_far[nextDoor->getLabel()] = new_cost;
+				priority = new_cost + Heuristic(*goalNode,*nextDoor);
+				//priority = new_cost;
 				came_from[nextDoor->getLabel()] = currentNode->getLabel();
-				frontier.push(NodeAndPriority{nextDoor, new_cost});
+				frontier.push(NodeAndPriority{nextDoor, priority});
 	
 				
 			}
@@ -182,5 +185,15 @@ float Graph::GetWeightOfConnection(Node* fromNode, Node* toNode)
 {	
 	return	cost[fromNode->getLabel()][toNode->getLabel()];
 }
+
+float Graph::Heuristic(Node goal, Node next)
+{
+	float dx = abs(next.GetPos().x - goal.GetPos().x);
+	float dy = abs(next.GetPos().y - goal.GetPos().y);
+	return 1 * (dx + dy);
+
+	//return abs(nodeA.GetPos().x - nodeB.GetPos().x) - abs(nodeA.GetPos().y - nodeB.GetPos().y);
+}
+
 
 

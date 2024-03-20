@@ -30,7 +30,7 @@ public:
 	std::vector<Node*> findPath(Node* startNode, Node* goalNode);
 
 	float GetWeightOfConnection(Node* fromNode, Node* toNode);
-
+	float Heuristic(Node goal, Node next);
 };
 
 #endif
