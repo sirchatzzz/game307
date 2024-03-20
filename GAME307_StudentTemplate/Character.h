@@ -57,7 +57,8 @@ private:
 	float attackSpeed;
 
 	Path characterPath;
-
+	Path currentPath;
+	bool patrolling;
 public:
 	Character()
 	{
@@ -105,7 +106,11 @@ public:
 
 	bool IsCharacterAtPos(Vec3 pos_);
 
-	void SetCharacterPath(Path path_) { characterPath.SetPath(path_.GetPath()); }
+	Path GetCharacterPath() { return characterPath; }
+	void SetCharacterPath(Path path_);
+	
+	Path GetCurrentPath() { return currentPath; }
+	void SetCurrentPath(Path path_) { currentPath = path_; }
 };
 
 #endif

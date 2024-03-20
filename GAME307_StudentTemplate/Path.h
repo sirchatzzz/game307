@@ -21,7 +21,7 @@ public:
 	
 	void MoveToNextNode();
 	Vec3 GetCurrentNodePosition();
-	Node* GetCurrentNode() {return currentNode;}
+	Node* GetCurrentNode() { return currentNode; }
 	bool IsPathEmpty();
 	void SetPath(std::vector<Node*> path);
 	std::vector<Node*> GetPath() { return thePath; }

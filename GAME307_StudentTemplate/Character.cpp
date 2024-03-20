@@ -56,6 +56,8 @@ bool Character::OnCreate(Scene* scene_)
 	turret->OnCreate();
 	attackSpeed = 80;
 
+	patrolling = false;
+
 	return true;
 }
 
@@ -85,12 +87,8 @@ void Character::Update(float deltaTime)
 	steering = new SteeringOutput();
 	static float time = 0;
 
-
-
 	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
-
-
 
 	//Change Orientation of Character
 	Align align;
@@ -105,10 +103,24 @@ void Character::Update(float deltaTime)
 	//Create an Arrive steering behaviour and set the parameters
 	Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
 	//Call arrive function that sets this steering behaviour to the one created in the function
-	if (characterPath.GetCurrentNode() != NULL)
+	
+	if (currentPath.GetCurrentNode() != NULL && characterPath.GetCurrentNode() != NULL)
 	{
-		*steering += *(followAPath.getSteering(&characterPath, this));
+
+		std::cout << "Current Path: " << currentPath.GetCurrentNode()->getLabel() << " Patrol Path Start Node: " << characterPath.GetCurrentNode()->getLabel() << "\n";
+		//if (!patrolling && abs(body->getPos().x) - abs(currentPath.GetCurrentNode()->GetPos().x) < 1.8f && abs(body->getPos().y) - abs(currentPath.GetCurrentNode()->GetPos().y) < 1.8f)
+		if(!patrolling && currentPath.GetCurrentNode() != characterPath.GetCurrentNode())
+		{
+			*steering += *(followAPath.getSteering(&currentPath, this));			
+		}
+		else
+		{
+			patrolling = true;
+			*steering += *(followAPath.getSteering(&characterPath, this));
+		}
+			
 	}
+	
 
 
 	//Check to see if AI is near target
@@ -244,6 +256,12 @@ Collider2D Character::GetCollider()
 	return collider;
 }
 
+
+void Character::SetCharacterPath(Path path_)
+{
+	characterPath.SetPath(path_.GetPath());
+	
+}
 
 //Update the turret object 
 void Character::UpdateTurret(float deltaTime_)

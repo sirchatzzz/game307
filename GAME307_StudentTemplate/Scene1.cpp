@@ -326,6 +326,7 @@ bool Scene1::OnCreate() {
 
 	CalculateConnectionWeights();
 	
+	
 
 	return true;
 }
@@ -536,31 +537,6 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 void Scene1::TestPathFinding()
 {
-	/*int pathIterator = 0;
-	std::vector<Node*> newPath = graph->findPath(tiles[12][1]->getNode(), tiles[1][4]->getNode());
-	Node* start = newPath[pathIterator];
-	Node* end = newPath[newPath.size() - 1];
-	Tile findTile(start, Vec3(0, 0, 0), 0, 0, this);
-	
-	for (int i = 0; i < tiles.size(); i++)
-	{
-		for (int j = 0; j < tiles[i].size(); j++)
-		{
-			Uint8 r, g, b, a;
-			r = 0;
-			g = 0;
-			b = 255;
-			a = 100;
-
-			if (tiles[i][j]->getNode() == newPath[pathIterator])
-			{
-				tiles[i][j]->setRGBA(r, g, b, a);
-
-				if (pathIterator != newPath.size() - 1)
-					pathIterator++;
-			}
-		}
-	}*/
 
 	Path newPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][22]->getNode()));
 	
@@ -589,7 +565,80 @@ void Scene1::TestPathFinding()
 
 void Scene1::SetBlinkyPath()
 {
-	patrolPath.SetPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][22]->getNode()));
+	
+
+	Uint8 r, g, b, a;
+	r = 0;
+	g = 0;
+	b = 255;
+	a = 100;
+	
+	
+
+	patrolPath.SetPath(graph->findPath(tiles[7][0]->getNode(), tiles[14][22]->getNode()));
 	blinky->SetCharacterPath(patrolPath);
+
+
+	Path newPatrolPath = blinky->GetCharacterPath().GetPath();
+	while (newPatrolPath.GetCurrentNode() != nullptr)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int j = 0; j < tiles[i].size(); j++)
+			{
+				if (tiles[i][j]->getNode() == newPatrolPath.GetCurrentNode())
+				{
+					tiles[i][j]->setRGBA(r, g, b, a);
+				}
+			}
+		}
+
+		newPatrolPath.MoveToNextNode();
+	}
+
+
+	bool breakout = false;
+	if (blinky->GetCurrentPath().GetCurrentNode() == NULL)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int j = 0; j < tiles[i].size(); j++)
+			{
+				if (abs(blinky->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f && abs(blinky->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
+				{
+					Node* blinkyNode = tiles[i][j]->getNode();
+					blinky->SetCurrentPath(graph->findPath(blinkyNode, patrolPath.GetCurrentNode()));
+					breakout = true;
+				}
+
+				if (breakout)
+					break;
+			}
+			
+			if (breakout)
+				break;
+		}
+
+		g = 255;
+		b = 0;
+
+		Path newPath = blinky->GetCurrentPath().GetPath();
+		while (newPath.GetCurrentNode() != nullptr)
+		{
+			for (int i = 0; i < tiles.size(); i++)
+			{
+				for (int j = 0; j < tiles[i].size(); j++)
+				{
+					if (tiles[i][j]->getNode() == newPath.GetCurrentNode())
+					{
+						tiles[i][j]->setRGBA(r, g, b, a);
+					}
+				}
+			}
+			
+			newPath.MoveToNextNode();
+		}
+
+	}
 
 }
