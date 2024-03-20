@@ -17,7 +17,11 @@ public:
 
 	int getLabel() { return label; }
 
-	Vec3 GetPos() { return pos; }
+	Vec3 GetPos() { 
+		if (pos == NULL) 
+			return Vec3(); 
+		return pos; 
+	}
 
 	void SetPos(Vec3 pos_) { pos = pos_; }
 

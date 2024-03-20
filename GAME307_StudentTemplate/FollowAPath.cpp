@@ -1,13 +1,28 @@
 #include "FollowAPath.h"
 
 
-SteeringOutput* FollowAPath::getSteering(Vec3 path)
+SteeringOutput* FollowAPath::getSteering(Path* path, Character* character)
 {
     Vec3 target_position;
 
-    if (!path) return nullptr;
+    if (path->GetCurrentNode() == nullptr) return nullptr;
 
-    
+    target_position = path->GetCurrentNodePosition();
 
-    return nullptr;
+    std::cout << "\n" << VMath::distance(character->getBody()->getPos(), target_position) << ", " << GetSlowRadius();
+    if(VMath::distance(character->getBody()->getPos(), target_position) <= GetSlowRadius())
+    {
+
+        // incremented for next steering request
+
+        path->MoveToNextNode();
+        if(path->GetCurrentNode() != NULL)
+            target_position = path->GetCurrentNodePosition();
+       
+    }
+
+    character->setTarget(target_position);
+
+    return Arrive::getSteering(target_position, character);
+
 }

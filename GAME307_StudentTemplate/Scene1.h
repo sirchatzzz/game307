@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Graph.h"
 #include "Path.h"
+#include "FollowAPath.h"
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -44,6 +45,7 @@ private:
 	Collider2D downOutOfBoundsColl;
 
 	Character* blinky;
+	Path patrolPath;
 
 	//Scene nodes / Graph
 	Graph* graph;
@@ -78,6 +80,7 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
+	void SetBlinkyPath();
 	
 };
 

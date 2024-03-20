@@ -16,10 +16,14 @@ private:
 public:
 
 	Path(std::vector<Node*> thePath_);
+	Path() {};
 	~Path();
-
+	
 	void MoveToNextNode();
 	Vec3 GetCurrentNodePosition();
 	Node* GetCurrentNode() {return currentNode;}
+	bool IsPathEmpty();
+	void SetPath(std::vector<Node*> path);
+	std::vector<Node*> GetPath() { return thePath; }
 };
 

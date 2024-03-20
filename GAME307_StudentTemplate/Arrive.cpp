@@ -31,7 +31,8 @@ SteeringOutput* Arrive::getSteering(Vec3 target_, Character* character_)
     //Create a velocity vector based on the direction and normalize it 
     Vec3 currentVelocity = direction;
     currentVelocity = VMath::normalize(currentVelocity);
-    currentVelocity *= currentSpeed;
+    if(currentSpeed != 0)
+        currentVelocity *= currentSpeed;
 
     //Set linear vector to be the calculated velocity subtracted by the AIs current velocity
     result->linear = currentVelocity - character_->getBody()->getVel();
@@ -42,7 +43,8 @@ SteeringOutput* Arrive::getSteering(Vec3 target_, Character* character_)
     {
 
         result->linear = VMath::normalize(result->linear);
-        result->linear *= maxAccel;
+        if(maxAccel != 0)
+            result->linear *= maxAccel;
     }
     
     //Set the angle to 0

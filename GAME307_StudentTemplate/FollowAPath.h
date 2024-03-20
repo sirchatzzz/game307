@@ -1,12 +1,17 @@
 #pragma once
 #include "Arrive.h"
 #include "Node.h"
+#include "Path.h"
+#include "Character.h"
 
 class FollowAPath : public Arrive
 {
 public:
 
-	SteeringOutput* getSteering(Vec3 path);
+	FollowAPath() : Arrive(10,10,0,2) {};
+	~FollowAPath() {};
+
+	SteeringOutput* getSteering(Path* path, Character* character);
 
 };
 

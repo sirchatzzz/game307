@@ -11,7 +11,6 @@ Path::Path(std::vector<Node*> thePath_) : currentNode(nullptr), thePath(thePath_
 
 Path::~Path()
 {
-	delete currentNode;
 	
 }
 
@@ -31,6 +30,32 @@ void Path::MoveToNextNode()
 }
 
 Vec3 Path::GetCurrentNodePosition()
-{
-	return currentNode->GetPos();
+{	
+	if (currentNode->GetPos().x != NULL)
+	{
+		return currentNode->GetPos();
+	}
+	
 }
+
+bool Path::IsPathEmpty()
+{
+	if (thePath.size() < 1)
+		return true;
+
+	return false;
+}
+
+void Path::SetPath(std::vector<Node*> path)
+{
+	if (!path.empty())
+	{
+		nodeIterator = 0;
+		thePath = path;
+		totalTiles = thePath.size() - 1;
+		currentNode = path[nodeIterator];
+	}
+	
+}
+
+

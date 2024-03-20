@@ -10,6 +10,7 @@
 #include "ShipStats.h"
 #include "Turret.h"
 #include "Projectile.h"
+#include "Path.h"
 
 using namespace std;
 
@@ -55,6 +56,8 @@ private:
 	float attackRadius;
 	float attackSpeed;
 
+	Path characterPath;
+
 public:
 	Character()
 	{
@@ -87,20 +90,8 @@ public:
 	//Getter for collider 
 	Collider2D GetCollider();
 
-	//Island Avoidance Calculations
-	void IslandAvoidance();
-	void setIslandColliders(std::vector<Collider2D> islandColliders_) { islandColliders = islandColliders_; }
-
 	//Getter for enemy stats
 	ShipStats* GetEnemyStats() { return enemyStats; }
-
-	//Setter for Tiles
-	void SetTiles(std::vector<Tiles> tiles_) { tiles = tiles_; }
-
-	//Tile Calculations
-	void CalculateTiles();
-	void PathfindTiles();
-	bool CheckForClosestTile();
 	
 	//Getter for bullets
 	std::vector<Projectile>* GetBullets() { return &bullets; }
@@ -113,6 +104,8 @@ public:
 	void FireBullet();
 
 	bool IsCharacterAtPos(Vec3 pos_);
+
+	void SetCharacterPath(Path path_) { characterPath.SetPath(path_.GetPath()); }
 };
 
 #endif

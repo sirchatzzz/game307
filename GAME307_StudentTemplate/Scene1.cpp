@@ -327,7 +327,6 @@ bool Scene1::OnCreate() {
 	CalculateConnectionWeights();
 	
 
-
 	return true;
 }
 
@@ -431,8 +430,6 @@ void Scene1::Update(const float deltaTime) {
 	ManageBullets();
 
 
-	blinky->setIslandColliders(islandColls);
-	blinky->IslandAvoidance();
 	blinky->Update(deltaTime);
 }
 
@@ -494,10 +491,10 @@ void Scene1::GetMousePOS()
 void Scene1::HandleEvents(const SDL_Event& event)
 {
 	// send events to npc's as needed
-
+	blinky->HandleEvents(event);
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
-	blinky->HandleEvents(event);
+	
 	  
 	if (event.type == SDL_KEYDOWN)
 	 {
@@ -507,18 +504,6 @@ void Scene1::HandleEvents(const SDL_Event& event)
 			toggleTileRendering = !toggleTileRendering;
 			break;
 		case SDL_SCANCODE_F3:
-			/*for (int i = 0; i < tiles.size(); i++)
-			{
-				for (int j = 0; j < tiles[i].size(); j++)
-				{
-					if (i < 10)
-						std::cout << i << "," << j << "    ";
-					else
-						std::cout << i << "," << j << "   ";
-
-				}
-				std::cout << std::endl;
-			}*/
 			std::cout << std::endl;
 
 			for (int i = 0; i < tiles.size(); i++)
@@ -535,24 +520,13 @@ void Scene1::HandleEvents(const SDL_Event& event)
 			break;
 		case SDL_SCANCODE_F4:
 
-			/*std::cout << "\nNeighbors of node #" << tiles[5][13]->getNode()->getLabel() << std::endl;
-
-			for (Node* n : graph->neighbours(tiles[5][13]->getNode()))
-			{
-
-				std::cout << "node " << n->getLabel() << " with wight of " << graph->GetWeightOfConnection(tiles[5][13]->getNode(), n) << "\n";
-			}*/
 			TestPathFinding();
-
 			break;
-
 		case SDL_SCANCODE_4:
+			SetBlinkyPath();
 
 			break;
 		case SDL_SCANCODE_3:
-			//std::cout << "BLINKY POS: " << blinky->getBody()->getPos().x << ", " << blinky->getBody()->getPos().y << "\n";
-			//tiles[4][21]->setRGBA(0, 0, 255, 100);
-
 			break;
 		 default:
 			 break;
@@ -588,7 +562,7 @@ void Scene1::TestPathFinding()
 		}
 	}*/
 
-	Path newPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][19]->getNode()));
+	Path newPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][22]->getNode()));
 	
 	Uint8 r, g, b, a;
 	r = 0;
@@ -611,6 +585,11 @@ void Scene1::TestPathFinding()
 
 		newPath.MoveToNextNode();
 	}
-	
+}
+
+void Scene1::SetBlinkyPath()
+{
+	patrolPath.SetPath(graph->findPath(tiles[13][1]->getNode(), tiles[1][22]->getNode()));
+	blinky->SetCharacterPath(patrolPath);
 
 }
