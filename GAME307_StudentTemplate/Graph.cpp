@@ -191,8 +191,6 @@ float Graph::Heuristic(Node goal, Node next)
 	float dx = abs(next.GetPos().x - goal.GetPos().x);
 	float dy = abs(next.GetPos().y - goal.GetPos().y);
 	return 1 * (dx + dy);
-
-	//return abs(nodeA.GetPos().x - nodeB.GetPos().x) - abs(nodeA.GetPos().y - nodeB.GetPos().y);
 }
 
 

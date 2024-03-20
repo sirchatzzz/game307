@@ -566,7 +566,6 @@ void Scene1::TestPathFinding()
 void Scene1::SetBlinkyPath()
 {
 	
-
 	Uint8 r, g, b, a;
 	r = 0;
 	g = 0;
