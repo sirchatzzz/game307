@@ -14,6 +14,15 @@
 
 using namespace std;
 
+enum AIState
+{
+	IDLE = 0,
+	CHASEPLAYER = 1,
+	ATTACKPLAYER = 2,
+	FINDISLAND = 3,
+	ATTACKISLAND = 4
+};
+
 
 class Character
 {
