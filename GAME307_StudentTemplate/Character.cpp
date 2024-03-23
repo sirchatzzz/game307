@@ -219,7 +219,7 @@ void Character::render(float scale)
 	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
-	turret->Render(scale / 32);
+	turret->Render(1);
 
 	for (int i = 0; i < bullets.size(); i++)
 	{

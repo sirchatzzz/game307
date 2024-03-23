@@ -183,6 +183,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
             {   
                     
                 FireBullet();
+                turret->SetTurretImage("assets/cannonShooting.png");
 
             }
         }

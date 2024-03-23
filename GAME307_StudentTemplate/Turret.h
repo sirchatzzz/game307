@@ -11,6 +11,8 @@ class Turret : public Body
 {
 protected:
     class GameManager* game;
+    SDL_Surface* turretImage;
+    int frameCounter;
 
 public:
     Turret() : Body{}
@@ -56,6 +58,7 @@ public:
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     void SetGame(GameManager* game_) { game = game_; }
+    void SetTurretImage(const char* path);
 };
 
 #endif

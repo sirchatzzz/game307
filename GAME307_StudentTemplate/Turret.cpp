@@ -1,15 +1,15 @@
 
 #include "Turret.h"
 
-bool Turret::OnCreate()
-{
-    image = IMG_Load("assets/enemyBoat4.png");
-    if (image == nullptr) {
+bool Turret::OnCreate(){
+    frameCounter = 0;
+    turretImage = IMG_Load("assets/cannonIdle.png");
+    if (turretImage == nullptr) {
         std::cerr << "Can't open the image" << std::endl;
         return false;
     }
     SDL_Renderer* renderer = game->getRenderer();
-    texture = SDL_CreateTextureFromSurface(renderer, image);
+    texture = SDL_CreateTextureFromSurface(renderer, turretImage);
     if (!texture)
     {
         std::cerr << "Can't create the texture" << std::endl;
@@ -33,8 +33,9 @@ void Turret::Render(float scale)
 
     // convert the position from game coords to screen coords
     screenCoords = projectionMatrix * pos;
-    w = image->w * scale;
-    h = image->h * scale * 2;
+
+    w = 64;
+    h = 64;
 
     // The square's x and y values represent the top left corner of
     // where SDL will draw the .png image
@@ -50,13 +51,19 @@ void Turret::Render(float scale)
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
-    
 
 }
 
 
 void Turret::Update(float deltaTime)
 {
+    ++frameCounter;
+    if (frameCounter > 30)
+    {
+        SetTurretImage("assets/cannonIdle.png");
+        frameCounter = 0;
+    }
+
     // Update position, call Update from base class
     // Note that would update velocity too, and rotation motion
 
@@ -66,4 +73,13 @@ void Turret::Update(float deltaTime)
 void Turret::resetToOrigin()
 {
     pos = Vec3(0.0f + radius, 0.0f + radius, 0.0f);
+}
+
+void Turret::SetTurretImage(const char* path)
+{
+    turretImage = IMG_Load(path);
+    SDL_Renderer* renderer = game->getRenderer();
+    SDL_Texture* newTexture;
+    newTexture = SDL_CreateTextureFromSurface(renderer, turretImage);
+    if (newTexture != nullptr) texture = newTexture;
 }
