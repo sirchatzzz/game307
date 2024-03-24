@@ -12,13 +12,13 @@ Projectile bullet2;
 
 AIState& operator+=(AIState& state, int increment) {
 	int value = static_cast<int>(state) + increment;
-	state = static_cast<AIState>(value % 5); // Ensure the value stays within the range of enum
+	state = static_cast<AIState>(value % 4); // Ensure the value stays within the range of enum
 	return state;
 }
 
 AIState& operator-=(AIState& state, int increment) {
 	int value = static_cast<int>(state) - increment;
-	state = static_cast<AIState>(value % 5); // Ensure the value stays within the range of enum
+	state = static_cast<AIState>(value % 4); // Ensure the value stays within the range of enum
 	return state;
 }
 
