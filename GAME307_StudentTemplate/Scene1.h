@@ -11,6 +11,7 @@
 #include "Graph.h"
 #include "Path.h"
 #include "FollowAPath.h"
+#include "Island.h"
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -55,6 +56,8 @@ private:
 	bool toggleTileRendering;
 	float tileWidth, tileHeight;
 	std::vector< std::vector<Tile*>> tiles;
+
+	Island* island;
 
 private:
 

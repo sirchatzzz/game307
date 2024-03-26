@@ -39,7 +39,7 @@ bool PlayerBody::OnCreate()
     collider.SetColliderActive(true);
     gearState = GearState::NEUTRAL;
 
-    playerStats = new ShipStats(50, 100, 5);
+    playerStats = new Stats(50, 100, 5);
     playerAmmo = new ShipAmmo(100,65,14);
 
     bullet = Projectile();
@@ -177,7 +177,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event)
         }
 
         //Fire Bullets
-        if (keyboard_state_array[SDL_SCANCODE_SPACE])
+        if (keyboard_state_array[SDL_SCANCODE_SPACE] && event.key.repeat == 0)
         {
             if ((playerAmmo->GetCurrentTotalAmmo() != 0 || playerAmmo->GetCurrentMagAmmo() != 0) && playerAmmo->IsReloading() != true)
             {   
@@ -365,6 +365,7 @@ void PlayerBody::FireBullet()
     bullets.push_back(bullet);
     bullets.at(bullets.size() - 1).OnCreate();
     bullets.at(bullets.size() - 1).SetPos(pos + Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0) * 0.5);
+    bullets.at(bullets.size() - 1).SetOrientation(turret->getOrientation());
     bullets.at(bullets.size() - 1).SetProjectileSpeed(10);
     bullets.at(bullets.size() - 1).SetProjectileDamage(playerStats->GetWeaponDamage());
     bullets.at(bullets.size() - 1).SetDirectionVector(Vec3(-sin(turret->getOrientation()), -cos(turret->getOrientation()), 0));

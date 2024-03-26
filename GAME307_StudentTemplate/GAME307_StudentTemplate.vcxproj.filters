@@ -53,7 +53,7 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Class</Filter>
     </ClCompile>
-    <ClCompile Include="ShipStats.cpp">
+    <ClCompile Include="Stats.cpp">
       <Filter>Class</Filter>
     </ClCompile>
     <ClCompile Include="Tiles.cpp">
@@ -68,6 +68,7 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="FollowAPath.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Island.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -128,7 +129,7 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="ShipStats.h">
+    <ClInclude Include="Stats.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Turret.h">
@@ -143,6 +144,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="FollowAPath.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Island.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

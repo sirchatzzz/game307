@@ -7,7 +7,7 @@
 #include "Steering/KinematicBody.h"
 #include "Collider2D.h"
 #include "Tiles.h"
-#include "ShipStats.h"
+#include "Stats.h"
 #include "Turret.h"
 #include "Projectile.h"
 #include "Path.h"
@@ -38,7 +38,7 @@ private:
 	bool near;
 
 	//Enemy stats 
-	ShipStats* enemyStats;
+	Stats* enemyStats;
 
 	//Turret object variable
 	class Turret* turret;
@@ -100,7 +100,7 @@ public:
 	Collider2D GetCollider();
 
 	//Getter for enemy stats
-	ShipStats* GetEnemyStats() { return enemyStats; }
+	Stats* GetEnemyStats() { return enemyStats; }
 	
 	//Getter for bullets
 	std::vector<Projectile>* GetBullets() { return &bullets; }

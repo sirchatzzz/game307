@@ -63,6 +63,7 @@ public:
     void SetGame(GameManager* game_) { game = game_; }
     void SetPos(Vec3 pos_) { pos = pos_; }
     void SetVel(Vec3 vel_) { vel = vel_; }
+    void SetOrientation(float orientation_) { orientation = orientation_; }
     void SetDirectionVector(Vec3 direction_) { direction = direction_; }
     Collider2D GetCollider();
     bool GetFiredStatus() { return shotFired; }

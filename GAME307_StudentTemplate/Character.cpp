@@ -61,7 +61,7 @@ bool Character::OnCreate(Scene* scene_)
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
-	enemyStats = new ShipStats(100, 100, 5);
+	enemyStats = new Stats(100, 100, 5);
 	turret = new Turret();
 	turret->SetGame(scene->game);
 	turret->OnCreate();

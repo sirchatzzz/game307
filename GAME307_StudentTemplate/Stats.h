@@ -1,6 +1,6 @@
 #pragma once
 
-class ShipStats
+class Stats
 {
 
 private:
@@ -11,8 +11,8 @@ private:
 
 public:
 
-	ShipStats();
-	ShipStats(float health_, float maxHealth_, float weaponDamage_);
+	Stats();
+	Stats(float health_, float maxHealth_, float weaponDamage_);
 
 	//Setters for ship stats
 	void SetHealth(float health_) { health = health_; }

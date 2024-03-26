@@ -1,6 +1,6 @@
-#include "ShipStats.h"
+#include "Stats.h"
 #include <iostream>
-ShipStats::ShipStats()
+Stats::Stats()
 {
 
 	health = 0;
@@ -11,7 +11,7 @@ ShipStats::ShipStats()
 
 }
 
-ShipStats::ShipStats(float health_, float maxHealth_, float weaponDamage_)
+Stats::Stats(float health_, float maxHealth_, float weaponDamage_)
 {
 
 	health = health_;
@@ -20,7 +20,7 @@ ShipStats::ShipStats(float health_, float maxHealth_, float weaponDamage_)
 
 }
 
-void ShipStats::TakeDamage(float damage_)
+void Stats::TakeDamage(float damage_)
 {
 
 	health -= damage_;
@@ -30,7 +30,7 @@ void ShipStats::TakeDamage(float damage_)
 
 }
 
-void ShipStats::Heal(float healthIncrease_)
+void Stats::Heal(float healthIncrease_)
 {
 
 	health += healthIncrease_;

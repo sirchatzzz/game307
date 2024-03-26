@@ -326,7 +326,12 @@ bool Scene1::OnCreate() {
 
 	CalculateConnectionWeights();
 	
-	
+	island = new Island();
+	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
+	{
+		return false;
+	}
+	island->getBody()->setPos(Vec3(10, 6, 0));
 
 	return true;
 }
@@ -352,6 +357,25 @@ void Scene1::ManageBullets()
 
 		}
 	}
+
+	//Check for player bullets hitting enemy
+	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
+	{
+
+		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(island->GetCollider()))
+		{
+
+			std::cout << "Island Hit!!" << std::endl;
+			game->getPlayer()->GetBullets()->at(i).~Projectile();
+
+			island->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+
+			auto it = game->getPlayer()->GetBullets()->begin() + i;
+			game->getPlayer()->GetBullets()->erase(it);
+
+		}
+	}
+
 
 	//Check for enemy bullets hitting player
 	for (int i = 0; i < blinky->GetBullets()->size(); i++)
@@ -432,6 +456,8 @@ void Scene1::Update(const float deltaTime) {
 
 
 	blinky->Update(deltaTime);
+
+	island->Update(deltaTime);
 }
 
 void Scene1::Render() {
@@ -466,7 +492,7 @@ void Scene1::Render() {
 	// render the player
 	game->RenderPlayer(0.5f);
 	blinky->render(0.5f);
-
+	island->render(0.5f);
 	
 	
 	

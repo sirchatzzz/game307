@@ -12,7 +12,7 @@
 #include "Body.h"
 #include "GameManager.h"
 #include "Collider2D.h"
-#include "ShipStats.h"
+#include "Stats.h"
 #include "Projectile.h"
 #include <vector>
 #include "Turret.h"
@@ -42,7 +42,7 @@ protected:
     GearState gearState;
 
     //Ship stats for player
-    ShipStats* playerStats;
+    Stats* playerStats;
     ShipAmmo* playerAmmo;
     int currentMagTemp = 0; // To hold current mag
 
@@ -104,7 +104,7 @@ public:
 
     //Getters for player stats and info
     GearState GetGearState() { return gearState; }
-    ShipStats* GetPlayerStats() { return playerStats; }
+    Stats* GetPlayerStats() { return playerStats; }
     ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
 
     //Getter for bullets
