@@ -113,6 +113,8 @@ public:
     //Function to fire bullets
     void FireBullet();
 
+    void PlayerDeath();
+
 };
 
 #endif /* PLAYERBODY_H */

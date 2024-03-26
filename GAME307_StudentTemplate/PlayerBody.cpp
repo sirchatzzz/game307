@@ -229,6 +229,8 @@ void PlayerBody::Update(float deltaTime)
     // Update position, call Update from base class
     // Note that would update velocity too, and rotation motion
 
+    if (playerStats->GetHealth() == 0) PlayerDeath();
+
     Body::Update(deltaTime);
 
     // This will ensure player body stops at edges
@@ -369,5 +371,13 @@ void PlayerBody::FireBullet()
     bullets.at(bullets.size() - 1).Update(0.1);
     bullets.at(bullets.size() - 1).SetFiredStatus(true);
     playerAmmo->DecreaseCurrentMagAmmo(1);
+
+}
+
+void PlayerBody::PlayerDeath()
+{
+
+    std::cout << "Player is Dead" << std::endl;
+    ///Add code for when player is dead, add graphic that will pop up and then the player will be taken back to the main menu
 
 }
