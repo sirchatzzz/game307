@@ -46,6 +46,8 @@ private:
 	//Bullet vector
 	class std::vector<Projectile> bullets;
 
+	SDL_Surface** spriteImages;
+	float animationCounter;
 
 	//Tile variables
 	std::vector<Tiles> tiles;
@@ -82,7 +84,7 @@ public:
 	//Base functions for each class
 	bool OnCreate(Scene* scene_);
 	void OnDestroy() {};
-	bool setImageWith(SDL_Surface* file);
+	bool setImageWith(SDL_Surface** images_, int spriteIndex_);
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
 	void render(float scale = 1.0f);
@@ -119,6 +121,9 @@ public:
 	
 	Path GetCurrentPath() { return currentPath; }
 	void SetCurrentPath(Path path_) { currentPath = path_; }
+
+	SDL_Surface** GetSpriteImages() { return spriteImages; }
+
 };
 
 #endif

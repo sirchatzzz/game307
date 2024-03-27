@@ -12,6 +12,8 @@
 #include "Path.h"
 #include "FollowAPath.h"
 #include "Island.h"
+#include "Spawner.h"
+#include <memory>
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -45,7 +47,9 @@ private:
 	Collider2D upOutOfBoundsColl;
 	Collider2D downOutOfBoundsColl;
 
+	Spawner* enemySpawner;
 	Character* blinky;
+	Character* enemy;
 	Path patrolPath;
 
 	//Scene nodes / Graph

@@ -66,7 +66,7 @@ bool Island::setImageWith(SDL_Surface* file)
 void Island::Update(float deltaTime)
 {
 	
-	std::cout << stats->GetHealth() << std::endl;
+
 }
 
 void Island::HandleEvents(const SDL_Event& event)

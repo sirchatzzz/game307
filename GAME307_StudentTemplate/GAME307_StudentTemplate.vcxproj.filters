@@ -69,6 +69,7 @@
     <ClCompile Include="FollowAPath.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Island.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -145,6 +146,8 @@
     <ClInclude Include="FollowAPath.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Island.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Spawner.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -162,5 +165,8 @@
     <Filter Include="Class\Ahmed%27s Tile">
       <UniqueIdentifier>{c5f871ee-4c5a-45ca-8cdf-e827b13be7f2}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GAME307_StudentTemplate.rc" />
   </ItemGroup>
 </Project>

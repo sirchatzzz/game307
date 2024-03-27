@@ -1,7 +1,5 @@
 #include "Scene1.h"
 
-
-
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0), waterBackground(nullptr), waterTexture(nullptr), toggleTileRendering(false){
 	window = sdlWindow_;
     game = game_;
@@ -15,6 +13,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0),
 
 	// create a NPC
 	blinky = nullptr;
+	enemySpawner = nullptr;
 }
 
 Scene1::~Scene1(){
@@ -305,12 +304,19 @@ bool Scene1::OnCreate() {
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setImageWith(enemyImage[0]))
+	if (!blinky->OnCreate(this) || !blinky->setImageWith(enemyImage,0))
 	{
 		return false;
 	}
 	blinky->getBody()->setPos(Vec3(20, 0, 0));
 	// end of character set ups
+
+	enemy = new Character();
+	enemy->OnCreate(this);
+	enemy->setImageWith(enemyImage, 0);
+	enemy->getBody()->setPos(Vec3(20, 0, 0));
+	enemySpawner = new Spawner(enemy);
+	enemySpawner->OnCreate(this);
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
@@ -435,7 +441,6 @@ void Scene1::Update(const float deltaTime) {
 	
 	//Enemy AI Targets Player
 	//blinky->setTarget(game->getPlayer()->getPos());
-	blinky->setImageWith(enemyImage[indexSelector]);
 
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
@@ -455,7 +460,9 @@ void Scene1::Update(const float deltaTime) {
 	ManageBullets();
 
 
-	blinky->Update(deltaTime);
+	//blinky->Update(deltaTime);
+
+	enemySpawner->Update(deltaTime);
 
 	island->Update(deltaTime);
 }
@@ -491,10 +498,8 @@ void Scene1::Render() {
 	
 	// render the player
 	game->RenderPlayer(0.5f);
-	blinky->render(0.5f);
 	island->render(0.5f);
-	
-	
+	enemySpawner->render(0.5f);
 	
 
 	SDL_RenderPresent(renderer);

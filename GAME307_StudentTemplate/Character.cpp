@@ -66,22 +66,23 @@ bool Character::OnCreate(Scene* scene_)
 	turret->SetGame(scene->game);
 	turret->OnCreate();
 	attackSpeed = 80;
-
+	target = Vec3();
 	patrolling = false;
-
+	animationCounter = 0;
 	return true;
 }
 
-bool Character::setImageWith(SDL_Surface* file)
+bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 {
-	SDL_Surface* image = file;
-	if (image == nullptr) {
+	spriteImages = images_;
+
+	if (spriteImages[spriteIndex_] == nullptr) {
 		std::cerr << "Can't open the image" << std::endl;
 		return false;
 	}
 	SDL_Window* window = scene->getWindow();
 	SDL_Renderer* renderer = SDL_GetRenderer(window);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, spriteImages[spriteIndex_]);
 	if (!texture)
 	{
 		std::cerr << "Can't create texture" << std::endl;
@@ -93,6 +94,12 @@ bool Character::setImageWith(SDL_Surface* file)
 
 void Character::Update(float deltaTime)
 {
+	++animationCounter;
+	if (animationCounter > 60) animationCounter = 0;
+	int indexSelector = std::round(animationCounter / 20.0f);
+
+	setImageWith(spriteImages, indexSelector);
+
 	////Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
@@ -225,7 +232,7 @@ void Character::render(float scale)
 
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
-	
+
 	collider.SetColliderBounds(square.w, square.h);
 	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
