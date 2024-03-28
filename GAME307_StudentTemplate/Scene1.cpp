@@ -315,6 +315,8 @@ bool Scene1::OnCreate() {
 	enemy->OnCreate(this);
 	enemy->setImageWith(enemyImage, 0);
 	enemy->getBody()->setPos(Vec3(20, 0, 0));
+	Stats* enemyStats = new Stats(50, 50, 10);
+	enemy->SetEnemyStats(enemyStats);
 	enemySpawner = new Spawner(enemy);
 	enemySpawner->OnCreate(this);
 
@@ -347,24 +349,27 @@ void Scene1::OnDestroy() {}
 void Scene1::ManageBullets()
 {
 	//Check for player bullets hitting enemy
-	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
-	{
 
-		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(blinky->GetCollider()))
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+	{
+		for (int j = 0; j < game->getPlayer()->GetBullets()->size(); j++)
 		{
 
-			std::cout << "Blinky Hit!!" << std::endl;
-			game->getPlayer()->GetBullets()->at(i).~Projectile();
+			if (game->getPlayer()->GetBullets()->at(j).GetCollider().CollisionMathTesting(enemySpawner->GetEnemyArr().at(i)->GetCollider()))
+			{
 
-			blinky->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+				std::cout << "Enemy Hit!!" << std::endl;
+	
+				enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
 
-			auto it = game->getPlayer()->GetBullets()->begin() + i;
-			game->getPlayer()->GetBullets()->erase(it);
+				auto it = game->getPlayer()->GetBullets()->begin() + j;
+				game->getPlayer()->GetBullets()->erase(it);
 
+			}
 		}
 	}
 
-	//Check for player bullets hitting enemy
+	//Check for player bullets hitting island //Will be switched from player to enemy later
 	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
 	{
 
@@ -372,8 +377,7 @@ void Scene1::ManageBullets()
 		{
 
 			std::cout << "Island Hit!!" << std::endl;
-			game->getPlayer()->GetBullets()->at(i).~Projectile();
-
+		
 			island->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
 
 			auto it = game->getPlayer()->GetBullets()->begin() + i;

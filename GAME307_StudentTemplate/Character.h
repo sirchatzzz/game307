@@ -69,6 +69,9 @@ private:
 	Path characterPath;
 	Path currentPath;
 	bool patrolling;
+
+	bool isDead;
+
 public:
 	Character()
 	{
@@ -103,6 +106,8 @@ public:
 
 	//Getter for enemy stats
 	Stats* GetEnemyStats() { return enemyStats; }
+
+	void SetEnemyStats(Stats* enemyStats_) { enemyStats = enemyStats_; }
 	
 	//Getter for bullets
 	std::vector<Projectile>* GetBullets() { return &bullets; }
@@ -123,7 +128,10 @@ public:
 	void SetCurrentPath(Path path_) { currentPath = path_; }
 
 	SDL_Surface** GetSpriteImages() { return spriteImages; }
+	
+	void EnemyDeath();
 
+	bool IsDead() { return isDead; }
 };
 
 #endif

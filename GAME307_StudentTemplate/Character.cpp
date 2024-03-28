@@ -61,7 +61,7 @@ bool Character::OnCreate(Scene* scene_)
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
-	enemyStats = new Stats(100, 100, 5);
+
 	turret = new Turret();
 	turret->SetGame(scene->game);
 	turret->OnCreate();
@@ -99,6 +99,8 @@ void Character::Update(float deltaTime)
 	int indexSelector = std::round(animationCounter / 20.0f);
 
 	setImageWith(spriteImages, indexSelector);
+
+	if (enemyStats->GetHealth() == 0) EnemyDeath();
 
 	////Create steering behaviour
 	SteeringOutput* steering;
@@ -363,5 +365,13 @@ bool Character::IsCharacterAtPos(Vec3 pos_)
 
 	return true;
 }
+
+void Character::EnemyDeath()
+{
+	std::cout << "Is Dead" << std::endl;
+	isDead = true;
+
+}
+
 
 
