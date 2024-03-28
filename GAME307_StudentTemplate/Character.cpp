@@ -312,15 +312,9 @@ void Character::UpdateTurret(float deltaTime_)
 	turret->setPos(body->getPos());
 
 	//Match orientation to the AI's orientation if the AI is not close enough to attack player
-	if (!checkIfNearTarget()) turret->SetOrientation(body->getOrientation());
-	//If the AI is close enough to attack then change the turret orientation to be where the player is
-	else
-	{
-		Vec3 distance = target - turret->getPos();
-		turret->SetOrientation(std::atan2(-distance.x, -distance.y));
 
-
-	}
+	Vec3 distance = target - turret->getPos();
+	turret->SetOrientation(std::atan2(-distance.x, -distance.y));
 
 
 
