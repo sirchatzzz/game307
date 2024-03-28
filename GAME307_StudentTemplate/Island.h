@@ -20,6 +20,8 @@ private:
 	//Enemy stats 
 	Stats* stats;
 
+	bool isDestroyed;
+
 public:
 	Island()
 	{
@@ -29,7 +31,7 @@ public:
 
 	~Island()
 	{
-		if (body) delete body;
+		
 	};
 
 	//Base functions for each class
@@ -48,6 +50,12 @@ public:
 
 	//Getter for enemy stats
 	Stats* GetStats() { return stats; }
+
+	bool IsDestroyed() { return isDestroyed; }
+
+	bool operator==(const Island& other) const {
+		return this->body == other.body;
+	}
 
 };
 

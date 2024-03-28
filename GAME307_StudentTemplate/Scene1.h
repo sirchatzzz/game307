@@ -11,10 +11,9 @@
 #include "Graph.h"
 #include "Path.h"
 #include "FollowAPath.h"
-#include "Island.h"
 #include "Spawner.h"
 #include <memory>
-
+#include "Island.h"
 using namespace MATH;
 class Scene1 : public Scene {
 private:
@@ -63,6 +62,7 @@ private:
 
 	Island* island;
 
+
 private:
 
 	//Creates our tile map
@@ -88,6 +88,7 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
 	void SetBlinkyPath();
+
 	
 };
 

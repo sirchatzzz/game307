@@ -96,6 +96,7 @@ void Spawner::SpawnEnemy()
 {
 	RandomizeSpawnLocation();
 	Character* newEnemy = new Character();
+	newEnemy->SetIslands(enemy->GetIslands());
 	newEnemy->OnCreate(scene);
 	newEnemy->setImageWith(enemy->GetSpriteImages(), 0);
 	newEnemy->getBody()->setPos(spawnLocation);

@@ -11,14 +11,14 @@
 #include "Turret.h"
 #include "Projectile.h"
 #include "Path.h"
-
+#include "Island.h"
 using namespace std;
 
 enum AIState
 {
 	IDLE = 0,
 	GOTOISLAND = 1,
-	ATTACKPLAYER = 2,
+	ATTACKTARGET = 2,
 	CHASEPLAYER = 3,
 };
 
@@ -33,7 +33,7 @@ private:
 	Collider2D collider;
 	Vec3 collidedTargetPosition;
 	std::vector<Collider2D> islandColliders;
-	
+
 	//Near target variables
 	bool near;
 
@@ -49,16 +49,6 @@ private:
 	SDL_Surface** spriteImages;
 	float animationCounter;
 
-	//Tile variables
-	std::vector<Tiles> tiles;
-	Tiles tile;
-	Tiles targetTile;
-	Tiles currentTile;
-	Tiles previousTile;
-	Tiles nextTile;
-	std::vector<Tiles> closeTiles;
-	bool resetTileCheck;
-
 	float targetOrientation;
 
 	//Variables to determine what and how fast an AI should execute tasks
@@ -71,6 +61,13 @@ private:
 	bool patrolling;
 
 	bool isDead;
+
+	PlayerBody targetPlayer;
+	Island targetIsland;
+
+	AIState enemyState;
+
+	std::vector<Island> islands;
 
 public:
 	Character()
@@ -93,7 +90,8 @@ public:
 	void render(float scale = 1.0f);
 
 	//Setter for target
-	void setTarget(Vec3 target_);
+	void SetTargetPlayer(PlayerBody player_) { targetPlayer = player_; }
+	PlayerBody GetTargetPlayer() { return targetPlayer; }
 
 	//Check if character is near target
 	bool checkIfNearTarget();
@@ -132,6 +130,14 @@ public:
 	void EnemyDeath();
 
 	bool IsDead() { return isDead; }
+
+	void CalculateState();
+
+	void CalculateTargetIsland();
+	void CalculateNextIsland();
+
+	void SetIslands(std::vector<Island> islands_) { islands = islands_; }
+	std::vector<Island> GetIslands() { return islands; }
 };
 
 #endif

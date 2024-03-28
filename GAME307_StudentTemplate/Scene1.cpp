@@ -311,7 +311,19 @@ bool Scene1::OnCreate() {
 	blinky->getBody()->setPos(Vec3(20, 0, 0));
 	// end of character set ups
 
+	island = new Island();
+	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
+	{
+		return false;
+	}
+
+
+	island->getBody()->setPos(Vec3(10, 6, 0));
+	std::vector<Island> islands;
+	islands.push_back(*island);
+
 	enemy = new Character();
+	enemy->SetIslands(islands);
 	enemy->OnCreate(this);
 	enemy->setImageWith(enemyImage, 0);
 	enemy->getBody()->setPos(Vec3(20, 0, 0));
@@ -333,14 +345,8 @@ bool Scene1::OnCreate() {
 	}
 
 	CalculateConnectionWeights();
-	
-	island = new Island();
-	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
-	{
-		return false;
-	}
-	island->getBody()->setPos(Vec3(10, 6, 0));
 
+	
 	return true;
 }
 
@@ -443,8 +449,6 @@ void Scene1::Update(const float deltaTime) {
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	
-	//Enemy AI Targets Player
-	//blinky->setTarget(game->getPlayer()->getPos());
 
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
@@ -463,8 +467,12 @@ void Scene1::Update(const float deltaTime) {
 
 	ManageBullets();
 
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+	{
 
-	//blinky->Update(deltaTime);
+		enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
+
+	}
 
 	enemySpawner->Update(deltaTime);
 
