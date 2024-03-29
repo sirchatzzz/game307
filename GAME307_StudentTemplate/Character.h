@@ -78,7 +78,7 @@ public:
 
 	~Character()
 	{
-
+		//if (body) delete body;
 	};
 
 	//Base functions for each class

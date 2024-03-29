@@ -322,13 +322,13 @@ bool Scene1::OnCreate() {
 	std::vector<Island> islands;
 	islands.push_back(*island);
 
-	enemy = new Character();
-	enemy->SetIslands(islands);
-	enemy->OnCreate(this);
-	enemy->setImageWith(enemyImage, 0);
-	enemy->getBody()->setPos(Vec3(20, 0, 0));
+	enemy = Character();
+	enemy.SetIslands(islands);
+	enemy.OnCreate(this);
+	enemy.setImageWith(enemyImage, 0);
+	enemy.getBody()->setPos(Vec3(20, 0, 0));
 	Stats* enemyStats = new Stats(50, 50, 10);
-	enemy->SetEnemyStats(enemyStats);
+	enemy.SetEnemyStats(enemyStats);
 	enemySpawner = new Spawner(enemy);
 	enemySpawner->OnCreate(this);
 
@@ -361,12 +361,12 @@ void Scene1::ManageBullets()
 		for (int j = 0; j < game->getPlayer()->GetBullets()->size(); j++)
 		{
 
-			if (game->getPlayer()->GetBullets()->at(j).GetCollider().CollisionMathTesting(enemySpawner->GetEnemyArr().at(i)->GetCollider()))
+			if (game->getPlayer()->GetBullets()->at(j).GetCollider().CollisionMathTesting(enemySpawner->GetEnemyArr().at(i).GetCollider()))
 			{
 
 				std::cout << "Enemy Hit!!" << std::endl;
 	
-				enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
+				enemySpawner->GetEnemyArr().at(i).GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
 
 				auto it = game->getPlayer()->GetBullets()->begin() + j;
 				game->getPlayer()->GetBullets()->erase(it);
@@ -470,7 +470,7 @@ void Scene1::Update(const float deltaTime) {
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
 
-		enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
+		enemySpawner->GetEnemyArr().at(i).SetTargetPlayer(*game->getPlayer());
 
 	}
 
