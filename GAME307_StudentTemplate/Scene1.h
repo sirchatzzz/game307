@@ -48,7 +48,7 @@ private:
 
 	Spawner* enemySpawner;
 	Character* blinky;
-	Character enemy;
+	Character* enemy;
 	Path patrolPath;
 
 	//Scene nodes / Graph

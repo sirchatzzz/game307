@@ -7,7 +7,7 @@ Spawner::Spawner()
 
 }
 
-Spawner::Spawner(Character enemy_)
+Spawner::Spawner(Character* enemy_)
 {
 	enemy = enemy_;
 }
@@ -17,7 +17,7 @@ bool Spawner::OnCreate(Scene* scene_)
 	spawnLocation = Vec3(1, 9, 0);
 	enemyCap = 6;
 	scene = scene_;
-	enemy.getBody()->setPos(spawnLocation);
+	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
 	enemyArr.push_back(enemy);
 	return true;
@@ -28,7 +28,7 @@ void Spawner::Update(float time)
 
 	for (int i = 0; i < enemyArr.size(); i++)
 	{
-		if (enemyArr.at(i).IsDead())
+		if (enemyArr.at(i)->IsDead())
 		{
 
 			auto it = enemyArr.begin() + i;
@@ -43,7 +43,7 @@ void Spawner::Update(float time)
 	for (int i = 0; i < enemyArr.size(); i++)
 	{
 
-		enemyArr.at(i).Update(time);
+		enemyArr.at(i)->Update(time);
 
 	}
 
@@ -62,7 +62,7 @@ void Spawner::render(float scale)
 	for (int i = 0; i < enemyArr.size(); i++)
 	{
 
-		enemyArr.at(i).render(scale);
+		enemyArr.at(i)->render(scale);
 
 	}
 
@@ -94,13 +94,13 @@ void Spawner::RandomizeSpawnLocation()
 void Spawner::SpawnEnemy()
 {
 	RandomizeSpawnLocation();
-	Character newEnemy = Character();
-	newEnemy.SetIslands(enemy.GetIslands());
-	newEnemy.OnCreate(scene);
-	newEnemy.setImageWith(enemy.GetSpriteImages(), 0);
-	newEnemy.getBody()->setPos(spawnLocation);
+	Character* newEnemy = new Character();
+	newEnemy->SetIslands(enemy->GetIslands());
+	newEnemy->OnCreate(scene);
+	newEnemy->setImageWith(enemy->GetSpriteImages(), 0);
+	newEnemy->getBody()->setPos(spawnLocation);
 	Stats* enemyStats = new Stats(50, 50, 10);
-	newEnemy.SetEnemyStats(enemyStats);
+	newEnemy->SetEnemyStats(enemyStats);
 	enemyArr.push_back(newEnemy);
 
 }
