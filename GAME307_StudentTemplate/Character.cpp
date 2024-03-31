@@ -88,6 +88,7 @@ void Character::Update(float deltaTime)
 	
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
 
+	//Sets the state
 	CalculateState();
 	
 	static float time = 0;
@@ -96,13 +97,34 @@ void Character::Update(float deltaTime)
 	int indexSelector = std::round(animationCounter / 20.0f);
 	setImageWith(spriteImages, indexSelector);
 
+	//Create steering behaviour
+	SteeringOutput* steering;
+	steering = new SteeringOutput();
+	
+	//Change Orientation of Character
+	Align align;
+	FollowAPath followAPath;
+
 	//Pathfind and steer to target island
 	if (enemyState == AIState::GOTOISLAND)
 	{
+		//Find the distance between the AI and its target
+		Vec3 distance = target - body->getPos();
 
+		*steering += *(align.getSteering(target, this));
 
+		//Set the radius of the target
+		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+		//Set the slow radius so the AI will begin to slow down once it enters this radius
+		float slowRadius = targetRadius + 5;
+		//Create an Arrive steering behaviour and set the parameters
+		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
 
-
+		//Call arrive function that sets this steering behaviour to the one created in the function
+		if (currentPath.GetCurrentNode() != NULL)
+		{
+			*steering += *(followAPath.getSteering(&currentPath, this));
+		}
 	}
 
 	//Pathfind and steer to target player
@@ -110,7 +132,7 @@ void Character::Update(float deltaTime)
 	{
 
 
-
+		
 
 	}
 
@@ -130,42 +152,29 @@ void Character::Update(float deltaTime)
 
 	}
 
-	//////Create steering behaviour
-	//SteeringOutput* steering;
-	//steering = new SteeringOutput();
-	//static float time = 0;
+	
 
-	////Find the distance between the AI and its target
-	//Vec3 distance = target - body->getPos();
+	
 
-	////Change Orientation of Character
-	//Align align;
-	//FollowAPath followAPath;
-	//*steering += *(align.getSteering(target, this));
+	
 
 	//time = 0;
-	////Set the radius of the target
-	//float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-	////Set the slow radius so the AI will begin to slow down once it enters this radius
-	//float slowRadius = targetRadius + 5;
-	////Create an Arrive steering behaviour and set the parameters
-	//Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-	////Call arrive function that sets this steering behaviour to the one created in the function
+	
+	
 	//
-	//if (currentPath.GetCurrentNode() != NULL && characterPath.GetCurrentNode() != NULL)
-	//{
+	
 
-	//	std::cout << "Current Path: " << currentPath.GetCurrentNode()->getLabel() << " Patrol Path Start Node: " << characterPath.GetCurrentNode()->getLabel() << "\n";
-	//	//if (!patrolling && abs(body->getPos().x) - abs(currentPath.GetCurrentNode()->GetPos().x) < 1.8f && abs(body->getPos().y) - abs(currentPath.GetCurrentNode()->GetPos().y) < 1.8f)
-	//	if(!patrolling && currentPath.GetCurrentNode() != characterPath.GetCurrentNode())
-	//	{
-	//		*steering += *(followAPath.getSteering(&currentPath, this));			
-	//	}
-	//	else
-	//	{
-	//		patrolling = true;
-	//		*steering += *(followAPath.getSteering(&characterPath, this));
-	//	}
+		//std::cout << "Current Path: " << currentPath.GetCurrentNode()->getLabel() << " Patrol Path Start Node: " << characterPath.GetCurrentNode()->getLabel() << "\n";
+		//if (!patrolling && abs(body->getPos().x) - abs(currentPath.GetCurrentNode()->GetPos().x) < 1.8f && abs(body->getPos().y) - abs(currentPath.GetCurrentNode()->GetPos().y) < 1.8f)
+		/*if(!patrolling && currentPath.GetCurrentNode() != characterPath.GetCurrentNode())
+		{
+					
+		}
+		else
+		{
+			patrolling = true;
+			*steering += *(followAPath.getSteering(&characterPath, this));
+		}*/
 	//		
 	//}
 	//
@@ -297,13 +306,6 @@ Collider2D Character::GetCollider()
 	return collider;
 }
 
-
-void Character::SetCharacterPath(Path path_)
-{
-	characterPath.SetPath(path_.GetPath());
-	
-}
-
 //Update the turret object 
 void Character::UpdateTurret(float deltaTime_)
 {
@@ -421,8 +423,6 @@ void Character::CalculateState()
 
 
 	}
-
-
 }
 
 void Character::CalculateTargetIsland()
@@ -452,7 +452,16 @@ void Character::CalculateTargetIsland()
 		}
 	}
 
+	int closesetNode = 1000;
+	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
+	{
+		if ((targetIsland.GetIslandNodes().at(i).getLabel() - currentNode->getLabel()) < closesetNode)
+		{
+			closesetNode = targetIsland.GetIslandNodes().at(i).getLabel();
+		}
+	}
 
+	targetNode->SetLabel(closesetNode);
 }
 
 void Character::CalculateNextIsland()

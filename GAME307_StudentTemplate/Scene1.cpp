@@ -283,16 +283,16 @@ bool Scene1::OnCreate() {
 
 	downOutOfBoundsColl = Collider2D(0, 1080, 2000, 5);
 	downOutOfBoundsColl.SetColliderActive(true);
-
+	
 	//Island Postions in screen coords
 	islandRect[0] = {1350, 650, 250, 300};
 	islandRect[1] = { 1300, 150, 150, 150 };
 	islandRect[2] = { 900, 600, 200, 250 };
 	islandRect[3] = { 285, 100, 200, 200 };
 	islandRect[4] = { 765, 275, 150, 150 };
-	islandRect[5] = { 385, 650, 150, 150 };
+	//islandRect[5] = { 385, 650, 150, 150 };
 	
-
+	
 	//Player Initializers
 	game->getPlayer()->setImage(playerImage[0]);
 	game->getPlayer()->setTexture(playerTexture[0]);
@@ -317,13 +317,13 @@ bool Scene1::OnCreate() {
 		return false;
 	}
 
+	
+	island->getBody()->setPos(Vec3(6,5,0));
+	islandsVector.push_back(*island);
 
-	island->getBody()->setPos(Vec3(10, 6, 0));
-	std::vector<Island> islands;
-	islands.push_back(*island);
 
 	enemy = new Character();
-	enemy->SetIslands(islands);
+	enemy->SetIslands(islandsVector);
 	enemy->OnCreate(this);
 	enemy->setImageWith(enemyImage, 0);
 	enemy->getBody()->setPos(Vec3(20, 0, 0));
@@ -449,6 +449,18 @@ void Scene1::Update(const float deltaTime) {
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	
+	//Set AI current node to each AI. So they know where they are in the tile graph ;)
+	UpdateAIPositionNodes();
+	
+	//AI Find Path
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+	{
+		if(enemySpawner->GetEnemyArr().at(i)->caculatePath)
+		{
+			enemySpawner->GetEnemyArr().at(i)->SetCurrentPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+		}
+	}
+
 
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
@@ -617,7 +629,7 @@ void Scene1::SetBlinkyPath()
 	
 	
 
-	patrolPath.SetPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
+	/*patrolPath.SetPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
 	blinky->SetCharacterPath(patrolPath);
 
 
@@ -679,6 +691,39 @@ void Scene1::SetBlinkyPath()
 			}
 			
 			newPath.MoveToNextNode();
+		}
+
+	}*/
+
+}
+
+void Scene1::UpdateAIPositionNodes()
+{
+	//Set AI Current Nodes
+	bool breakout = false;
+	for (int e = 0; e < enemySpawner->GetEnemyArr().size(); e++)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int j = 0; j < tiles[i].size(); j++)
+			{
+
+
+				if (abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f
+					&& abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
+				{
+
+					Node* blinkyNode = tiles[i][j]->getNode();
+					enemySpawner->GetEnemyArr().at(e)->SetCurrentNode(*blinkyNode);
+					breakout = true;
+				}
+
+				if (breakout)
+					break;
+			}
+
+			if (breakout)
+				break;
 		}
 
 	}

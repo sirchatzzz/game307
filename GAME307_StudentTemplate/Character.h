@@ -12,6 +12,8 @@
 #include "Projectile.h"
 #include "Path.h"
 #include "Island.h"
+#include "Node.h"
+
 using namespace std;
 
 enum AIState
@@ -56,8 +58,8 @@ private:
 	float attackRadius;
 	float attackSpeed;
 
-	Path characterPath;
 	Path currentPath;
+
 	bool patrolling;
 
 	bool isDead;
@@ -68,6 +70,16 @@ private:
 	AIState enemyState;
 
 	std::vector<Island> islands;
+
+	Node* currentNode = new Node(-1);
+	Node* targetNode = new Node(-1);
+
+public:
+
+	/// <summary>
+	/// A toggle so the scene knows if the AI is trying to calculate a new path
+	/// </summary>
+	bool caculatePath = false;
 
 public:
 	Character()
@@ -118,9 +130,6 @@ public:
 	void FireBullet();
 
 	bool IsCharacterAtPos(Vec3 pos_);
-
-	Path GetCharacterPath() { return characterPath; }
-	void SetCharacterPath(Path path_);
 	
 	Path GetCurrentPath() { return currentPath; }
 	void SetCurrentPath(Path path_) { currentPath = path_; }
@@ -138,6 +147,13 @@ public:
 
 	void SetIslands(std::vector<Island> islands_) { islands = islands_; }
 	std::vector<Island> GetIslands() { return islands; }
+
+	//Set Current Node that AI is on
+	void SetCurrentNode(Node node) { currentNode = &node; }
+
+	Node* GetCurrentNode() { return currentNode; }
+	Node* GetTargetNode() { return targetNode; }
+
 };
 
 #endif

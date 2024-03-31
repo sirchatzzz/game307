@@ -61,7 +61,7 @@ private:
 	std::vector< std::vector<Tile*>> tiles;
 
 	Island* island;
-
+	std::vector<Island> islandsVector;
 
 private:
 
@@ -89,6 +89,7 @@ public:
 	void TestPathFinding();
 	void SetBlinkyPath();
 
+	void UpdateAIPositionNodes();
 	
 };
 
