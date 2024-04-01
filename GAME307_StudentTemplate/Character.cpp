@@ -84,6 +84,8 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 
 void Character::Update(float deltaTime)
 {
+	
+
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
 	
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
@@ -124,6 +126,7 @@ void Character::Update(float deltaTime)
 		if (currentPath.GetCurrentNode() != NULL)
 		{
 			*steering += *(followAPath.getSteering(&currentPath, this));
+		
 		}
 	}
 
@@ -221,10 +224,10 @@ void Character::Update(float deltaTime)
 
 
 	////Update AI
-	//body->Update(deltaTime,steering);
+	body->Update(deltaTime,steering);
 
 	////Delete steering behaviour when finished
-	//delete steering;
+	delete steering;
 
 	//Update turret and bullets
 	UpdateTurret(deltaTime);
@@ -294,7 +297,7 @@ bool Character::checkIfNearTarget()
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
 
-	if (sqrt(distance.x * 2 + distance.y * 2 + distance.z * 2) < attackRadius) nearTarget = true;
+	if (sqrt(distance.x * distance.x + distance.y * distance.y) < attackRadius) nearTarget = true;
 	else nearTarget = false;
 
 	return nearTarget;
@@ -393,7 +396,7 @@ void Character::EnemyDeath()
 void Character::CalculateState()
 {
 	Vec3 distanceToPlayerVector = targetPlayer.getPos() - getBody()->getPos();
-	float distanceToPlayer = sqrt(distanceToPlayerVector.x * 2 + distanceToPlayerVector.y * 2 + distanceToPlayerVector.z * 2);
+	float distanceToPlayer = sqrt(distanceToPlayerVector.x * distanceToPlayerVector.x + distanceToPlayerVector.y * distanceToPlayerVector.y);
 
 
 
@@ -414,15 +417,15 @@ void Character::CalculateState()
 	}
 
 	Vec3 distanceToTargetVector = target - getBody()->getPos();
-	float distanceToTarget = sqrt(distanceToTargetVector.x * 2 + distanceToTargetVector.y * 2 + distanceToTargetVector.z * 2);
+	float distanceToTarget = sqrt(distanceToTargetVector.x * distanceToTargetVector.x + distanceToTargetVector.y * distanceToTargetVector.y);
 
 	if (distanceToTarget < attackRadius) enemyState = AIState::ATTACKTARGET;
-	else
-	{
-		if (target = targetPlayer.getPos()) enemyState = AIState::CHASEPLAYER;
+	//else
+	//{
+	//	if (target = targetPlayer.getPos()) enemyState = AIState::CHASEPLAYER;
 
 
-	}
+	//}
 }
 
 void Character::CalculateTargetIsland()
@@ -436,7 +439,7 @@ void Character::CalculateTargetIsland()
 	{
 
 		distanceVector = islands.at(i).getBody()->getPos() - getBody()->getPos();
-		float d = sqrt(distanceVector.x * 2 + distanceVector.y * 2 + distanceVector.z * 2);
+		float d = sqrt(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
 
 		if (i == 0)
 		{
@@ -455,13 +458,15 @@ void Character::CalculateTargetIsland()
 	int closesetNode = 1000;
 	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
 	{
-		if ((targetIsland.GetIslandNodes().at(i).getLabel() - currentNode->getLabel()) < closesetNode)
+		if ((targetIsland.GetIslandNodes().at(i)->getLabel() - currentNode->getLabel()) < closesetNode)
 		{
-			closesetNode = targetIsland.GetIslandNodes().at(i).getLabel();
+			closesetNode = targetIsland.GetIslandNodes().at(i)->getLabel();
 		}
 	}
 
 	targetNode->SetLabel(closesetNode);
+
+	caculatePath = true;
 }
 
 void Character::CalculateNextIsland()

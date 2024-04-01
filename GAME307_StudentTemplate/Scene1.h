@@ -47,7 +47,6 @@ private:
 	Collider2D downOutOfBoundsColl;
 
 	Spawner* enemySpawner;
-	Character* blinky;
 	Character* enemy;
 	Path patrolPath;
 

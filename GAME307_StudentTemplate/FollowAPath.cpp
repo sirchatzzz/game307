@@ -21,8 +21,6 @@ SteeringOutput* FollowAPath::getSteering(Path* path, Character* character)
        
     }
 
-    //character->setTarget(target_position);
-
     return Arrive::getSteering(target_position, character);
 
 }

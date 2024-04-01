@@ -23,7 +23,7 @@ private:
 
 	bool isDestroyed;
 
-	std::vector<Node> islandNodes;
+	std::vector<Node*> islandNodes;
 
 public:
 	Island()
@@ -60,8 +60,8 @@ public:
 		return this->body == other.body;
 	}
 
-	void AddIslandNode(Node node) { islandNodes.push_back(node); }
-	std::vector<Node> GetIslandNodes() { return islandNodes; }
+	void AddIslandNode(Node* node) { islandNodes.push_back(node); }
+	std::vector<Node*> GetIslandNodes() { return islandNodes; }
 
 
 };

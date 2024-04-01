@@ -149,7 +149,7 @@ public:
 	std::vector<Island> GetIslands() { return islands; }
 
 	//Set Current Node that AI is on
-	void SetCurrentNode(Node node) { currentNode = &node; }
+	void SetCurrentNode(Node* node) { currentNode = node; }
 
 	Node* GetCurrentNode() { return currentNode; }
 	Node* GetTargetNode() { return targetNode; }

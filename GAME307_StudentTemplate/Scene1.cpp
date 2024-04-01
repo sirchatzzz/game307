@@ -12,16 +12,12 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0),
 	graph = NULL;
 
 	// create a NPC
-	blinky = nullptr;
+
 	enemySpawner = nullptr;
 }
 
 Scene1::~Scene1(){
-	if (blinky) 
-	{
-		blinky->OnDestroy();
-		delete blinky;
-	}
+
 }
 
 void Scene1::createTiles()
@@ -298,39 +294,10 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
 
-
-
-
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
-	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setImageWith(enemyImage,0))
-	{
-		return false;
-	}
-	blinky->getBody()->setPos(Vec3(20, 0, 0));
+
 	// end of character set ups
-
-	island = new Island();
-	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
-	{
-		return false;
-	}
-
-	
-	island->getBody()->setPos(Vec3(6,5,0));
-	islandsVector.push_back(*island);
-
-
-	enemy = new Character();
-	enemy->SetIslands(islandsVector);
-	enemy->OnCreate(this);
-	enemy->setImageWith(enemyImage, 0);
-	enemy->getBody()->setPos(Vec3(20, 0, 0));
-	Stats* enemyStats = new Stats(50, 50, 10);
-	enemy->SetEnemyStats(enemyStats);
-	enemySpawner = new Spawner(enemy);
-	enemySpawner->OnCreate(this);
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
@@ -346,7 +313,38 @@ bool Scene1::OnCreate() {
 
 	CalculateConnectionWeights();
 
-	
+
+	island = new Island();
+	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
+	{
+		return false;
+	}
+
+	std::vector<Node*> islands;
+	islands.push_back(graph->getNode(105));
+	islands.push_back(graph->getNode(106));
+	islands.push_back(graph->getNode(130));
+	islands.push_back(graph->getNode(131));
+
+	island->getBody()->setPos(Vec3(6, 5, 0));
+	island->AddIslandNode(islands.at(0));
+	island->AddIslandNode(islands.at(1));
+	island->AddIslandNode(islands.at(2));
+	island->AddIslandNode(islands.at(3));
+	islandsVector.push_back(*island);
+
+	enemy = new Character();
+	enemy->SetIslands(islandsVector);
+	enemy->OnCreate(this);
+	enemy->setImageWith(enemyImage, 0);
+	enemy->getBody()->setPos(Vec3(20, 0, 0));
+	Stats* enemyStats = new Stats(50, 50, 10);
+	enemy->SetEnemyStats(enemyStats);
+	enemySpawner = new Spawner(enemy);
+	enemySpawner->OnCreate(this);
+
+
+
 	return true;
 }
 
@@ -394,7 +392,7 @@ void Scene1::ManageBullets()
 
 
 	//Check for enemy bullets hitting player
-	for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	/*for (int i = 0; i < blinky->GetBullets()->size(); i++)
 	{
 
 		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
@@ -409,7 +407,7 @@ void Scene1::ManageBullets()
 			blinky->GetBullets()->erase(it);
 
 		}
-	}
+	}*/
 
 	//Check for player bullets going off screen
 	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
@@ -427,20 +425,20 @@ void Scene1::ManageBullets()
 	}
 
 
-	//Check for enemy bullets going off screen
-	for (int i = 0; i < blinky->GetBullets()->size(); i++)
-	{
+	////Check for enemy bullets going off screen
+	//for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	//{
 
-		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
-		{
+	//	if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+	//	{
 
-			//game->getPlayer()->GetBullets()->at(i).~Projectile();
+	//		//game->getPlayer()->GetBullets()->at(i).~Projectile();
 
-			auto it = blinky->GetBullets()->begin() + i;
-			blinky->GetBullets()->erase(it);
+	//		auto it = blinky->GetBullets()->begin() + i;
+	//		blinky->GetBullets()->erase(it);
 
-		}
-	}
+	//	}
+	//}
 }
 
 
@@ -458,7 +456,9 @@ void Scene1::Update(const float deltaTime) {
 		if(enemySpawner->GetEnemyArr().at(i)->caculatePath)
 		{
 			enemySpawner->GetEnemyArr().at(i)->SetCurrentPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+			enemySpawner->GetEnemyArr().at(i)->caculatePath = false;
 		}
+
 	}
 
 
@@ -471,11 +471,6 @@ void Scene1::Update(const float deltaTime) {
 	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
 	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
 
-	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
-	{
-		std::cout << "\nBlicky Collision Detected By Player";
-		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
-	}
 
 	ManageBullets();
 
@@ -547,7 +542,6 @@ void Scene1::GetMousePOS()
 void Scene1::HandleEvents(const SDL_Event& event)
 {
 	// send events to npc's as needed
-	blinky->HandleEvents(event);
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
 	
@@ -714,7 +708,7 @@ void Scene1::UpdateAIPositionNodes()
 				{
 
 					Node* blinkyNode = tiles[i][j]->getNode();
-					enemySpawner->GetEnemyArr().at(e)->SetCurrentNode(*blinkyNode);
+					enemySpawner->GetEnemyArr().at(e)->SetCurrentNode(blinkyNode);
 					breakout = true;
 				}
 

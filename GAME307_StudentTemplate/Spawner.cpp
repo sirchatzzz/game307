@@ -15,7 +15,7 @@ Spawner::Spawner(Character* enemy_)
 bool Spawner::OnCreate(Scene* scene_)
 {
 	spawnLocation = Vec3(1, 9, 0);
-	enemyCap = 6;
+	enemyCap = 1;
 	scene = scene_;
 	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
