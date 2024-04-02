@@ -133,12 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
     <ClCompile Include="Align.cpp" />
     <ClCompile Include="Arrive.cpp" />
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collider2D.cpp" />
+    <ClCompile Include="Decision.cpp" />
+    <ClCompile Include="DecisionTreeNode.cpp" />
     <ClCompile Include="Evade.cpp" />
+    <ClCompile Include="FloatDecision.cpp" />
     <ClCompile Include="FollowAPath.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graph.cpp" />
@@ -162,12 +166,16 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="Align.h" />
     <ClInclude Include="Arrive.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collider2D.h" />
+    <ClInclude Include="Decision.h" />
+    <ClInclude Include="DecisionTreeNode.h" />
     <ClInclude Include="Evade.h" />
+    <ClInclude Include="FloatDecision.h" />
     <ClInclude Include="FollowAPath.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graph.h" />

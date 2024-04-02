@@ -154,6 +154,8 @@ public:
 	Node* GetCurrentNode() { return currentNode; }
 	Node* GetTargetNode() { return targetNode; }
 
+	void GoToTarget();
+
 };
 
 #endif

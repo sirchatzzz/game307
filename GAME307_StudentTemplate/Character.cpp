@@ -7,7 +7,9 @@
 #include <thread>
 #include <random>
 #include "FollowAPath.h"
-
+#include "Action.h"
+#include "FloatDecision.h"
+#include <functional>
 Projectile bullet2;
 
 
@@ -92,142 +94,94 @@ void Character::Update(float deltaTime)
 
 	//Sets the state
 	CalculateState();
+
+	auto functionPtr = [this]() {
+		GoToTarget();
+		};
 	
+	Action actionNode1(functionPtr);
+	Action actionNode2;
+	FloatDecision floatDecisionNode(0.0, 10.0, &actionNode1, &actionNode2);
+	floatDecisionNode.makeDecision();
+	// Handle the result accordingly
+	/*if (result == &actionNode1) {
+		actionNode1.takeAction();
+	}
+	if (result == &actionNode2) {
+		std::cout << "Action2 taken." << std::endl;
+	}*/
+
+
 	static float time = 0;
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	setImageWith(spriteImages, indexSelector);
 
-	//Create steering behaviour
-	SteeringOutput* steering;
-	steering = new SteeringOutput();
-	
-	//Change Orientation of Character
-	Align align;
-	FollowAPath followAPath;
-
-	//Pathfind and steer to target island
-	if (enemyState == AIState::GOTOISLAND)
-	{
-		//Find the distance between the AI and its target
-		Vec3 distance = target - body->getPos();
-
-		*steering += *(align.getSteering(target, this));
-
-		//Set the radius of the target
-		float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-		//Set the slow radius so the AI will begin to slow down once it enters this radius
-		float slowRadius = targetRadius + 5;
-		//Create an Arrive steering behaviour and set the parameters
-		Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-
-		//Call arrive function that sets this steering behaviour to the one created in the function
-		if (currentPath.GetCurrentNode() != NULL)
-		{
-			*steering += *(followAPath.getSteering(&currentPath, this));
-		
-		}
-	}
-
-	//Pathfind and steer to target player
-	if (enemyState == AIState::CHASEPLAYER)
-	{
-
-
-		
-
-	}
-
-	//Attack Target
-	if (enemyState == AIState::ATTACKTARGET)
-	{
-
-		time++;
-		if (time > attackSpeed)
-		{
-
-			FireBullet();
-
-				time = 0;
-		}
-
-
-	}
-
-	
-
-	
-
-	
-
-	//time = 0;
-	
-	
+	////Create steering behaviour
+	//SteeringOutput* steering;
+	//steering = new SteeringOutput();
 	//
-	
+	////Change Orientation of Character
+	//Align align;
+	//FollowAPath followAPath;
 
-		//std::cout << "Current Path: " << currentPath.GetCurrentNode()->getLabel() << " Patrol Path Start Node: " << characterPath.GetCurrentNode()->getLabel() << "\n";
-		//if (!patrolling && abs(body->getPos().x) - abs(currentPath.GetCurrentNode()->GetPos().x) < 1.8f && abs(body->getPos().y) - abs(currentPath.GetCurrentNode()->GetPos().y) < 1.8f)
-		/*if(!patrolling && currentPath.GetCurrentNode() != characterPath.GetCurrentNode())
-		{
-					
-		}
-		else
-		{
-			patrolling = true;
-			*steering += *(followAPath.getSteering(&characterPath, this));
-		}*/
-	//		
-	//}
-	//
-
-
-	////Check to see if AI is near target
-	//if (!checkIfNearTarget())
+	////Pathfind and steer to target island
+	//if (enemyState == AIState::GOTOISLAND)
 	//{
+	//	//Find the distance between the AI and its target
+	//	Vec3 distance = target - body->getPos();
+
+	//	*steering += *(align.getSteering(target, this));
+
+	//	//Set the radius of the target
+	//	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+	//	//Set the slow radius so the AI will begin to slow down once it enters this radius
+	//	float slowRadius = targetRadius + 5;
+	//	//Create an Arrive steering behaviour and set the parameters
+	//	Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
+	//	//*steering += *(arrive.getSteering(target, this));
+	//	//Call arrive function that sets this steering behaviour to the one created in the function
+	//	if (currentPath.GetCurrentNode() != NULL)
+	//	{
+	//		*steering += *(followAPath.getSteering(&currentPath, this));
 	//	
+	//	}
+	//}
+
+	////Pathfind and steer to target player
+	//if (enemyState == AIState::CHASEPLAYER)
+	//{
+
+
 	//	
 
-	//	//near = true;
-	//	
 	//}
-	//else
+
+	////Attack Target
+	//if (enemyState == AIState::ATTACKTARGET)
 	//{
-	//	//If near player then Fire
+
 	//	time++;
 	//	if (time > attackSpeed)
 	//	{
 
 	//		FireBullet();
 
-	//		time = 0;
+	//			time = 0;
 	//	}
 
-	//}
-
-	//
-	////Steering
-	//if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
-	//{
-	//
-
-	//	
-
-	//}
-	////If not steering towards target instead use path finding to patrol map
-	//else
-	//{
 
 	//}
 
 
 
-	////Update AI
-	body->Update(deltaTime,steering);
 
-	////Delete steering behaviour when finished
-	delete steering;
+	//////Update AI
+	//body->Update(deltaTime,steering);
+
+	//////Delete steering behaviour when finished
+	//delete steering;
 
 	//Update turret and bullets
 	UpdateTurret(deltaTime);
@@ -481,6 +435,14 @@ void Character::CalculateNextIsland()
 	}
 
 	CalculateTargetIsland();
+
+}
+
+void Character::GoToTarget()
+{
+
+	std::cout << getBody()->getPos().y << std::endl;
+
 
 }
 
