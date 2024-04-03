@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Steering/KinematicBody.h"
 #include "Collider2D.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -21,6 +22,8 @@ private:
 	Stats* stats;
 
 	bool isDestroyed;
+
+	std::vector<Node*> islandNodes;
 
 public:
 	Island()
@@ -56,6 +59,10 @@ public:
 	bool operator==(const Island& other) const {
 		return this->body == other.body;
 	}
+
+	void AddIslandNode(Node* node) { islandNodes.push_back(node); }
+	std::vector<Node*> GetIslandNodes() { return islandNodes; }
+
 
 };
 

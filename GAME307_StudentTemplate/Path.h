@@ -25,5 +25,7 @@ public:
 	bool IsPathEmpty();
 	void SetPath(std::vector<Node*> path);
 	std::vector<Node*> GetPath() { return thePath; }
+
+
 };
 
