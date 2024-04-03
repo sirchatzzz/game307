@@ -43,6 +43,9 @@
     <ClCompile Include="Scene1.cpp">
       <Filter>Class\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="AudioPlayer.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -92,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="Scene1.h">
       <Filter>Header\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioPlayer.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

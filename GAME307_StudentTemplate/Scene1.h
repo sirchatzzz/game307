@@ -4,6 +4,7 @@
 #include "MMath.h"
 #include "VMath.h"
 #include "Scene.h"
+#include "AudioPlayer.h"
 #include <vector>
 #include "Character.h"
 
