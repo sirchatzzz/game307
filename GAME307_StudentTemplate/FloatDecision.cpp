@@ -4,13 +4,15 @@ FloatDecision::FloatDecision()
 {
 }
 
-bool FloatDecision::testValue()
+float FloatDecision::testValue()
 {
-    return false;
+    float a;
+    checkDistance(a);
+    return a;
 }
 
 DecisionTreeNode* FloatDecision::getBranch()
 {
-    if (maxValue >= testValue() >= minValue) return trueNode;
+    if (maxValue > testValue() > minValue) return trueNode;
         else return falseNode;
 }

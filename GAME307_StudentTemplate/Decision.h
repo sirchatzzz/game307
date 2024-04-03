@@ -11,7 +11,7 @@ public:
 
 	DecisionTreeNode* makeDecision() override;
 
-	virtual bool testValue() = 0;
+	virtual float testValue() = 0;
 
 	virtual DecisionTreeNode* getBranch() = 0;
 

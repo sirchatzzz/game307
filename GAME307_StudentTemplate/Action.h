@@ -1,22 +1,22 @@
 #pragma once
 #include "DecisionTreeNode.h"
-#include <functional>
-
 
 class Action : public DecisionTreeNode
 {
 
 private:
-
-	std::function<void()> func;
+	std::function<void(Vec3)> func;
 
 public:
 
 	Action();
-	Action(std::function<void()> func_) { func = func_; }
+	Action(std::function<void(Vec3)> func_) {
+		func = func_; 
+
+	}
 
 	void takeAction() {
-		func();
+		func(Vec3());
 	}
 
 	DecisionTreeNode* makeDecision() override;

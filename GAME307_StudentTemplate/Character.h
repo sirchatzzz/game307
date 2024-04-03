@@ -140,8 +140,6 @@ public:
 
 	bool IsDead() { return isDead; }
 
-	void CalculateState();
-
 	void CalculateTargetIsland();
 	void CalculateNextIsland();
 
@@ -154,7 +152,13 @@ public:
 	Node* GetCurrentNode() { return currentNode; }
 	Node* GetTargetNode() { return targetNode; }
 
-	void GoToTarget();
+	void GoToTarget(Vec3 target_, SteeringOutput& steering_);
+	void AttackTarget(Vec3 target_);
+	float CheckDistance(Vec3 target_) {
+
+		Vec3 d = target_ - getBody()->getPos();
+		return sqrt(d.x * d.x + d.y * d.y);
+	}
 
 };
 
