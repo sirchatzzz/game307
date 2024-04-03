@@ -47,6 +47,7 @@ private:
 	Collider2D downOutOfBoundsColl;
 
 	Spawner* enemySpawner;
+	Character* blinky;
 	Character* enemy;
 	Path patrolPath;
 
@@ -54,20 +55,14 @@ private:
 	Graph* graph;
 	std::vector<Node*> sceneNodes;
 
-	Node* playerNode;
-
 	//Tile rendering objects and arrays
 	bool toggleTileRendering;
 	float tileWidth, tileHeight;
 	std::vector< std::vector<Tile*>> tiles;
 
 	Island* island;
-<<<<<<< HEAD
 	AudioPlayer audio;
 
-=======
-	std::vector<Island> islandsVector;
->>>>>>> Abay
 
 private:
 
@@ -95,7 +90,6 @@ public:
 	void TestPathFinding();
 	void SetBlinkyPath();
 
-	void UpdateAIPositionNodes();
 	
 };
 
