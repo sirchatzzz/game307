@@ -54,6 +54,8 @@ private:
 	Graph* graph;
 	std::vector<Node*> sceneNodes;
 
+	Node* playerNode;
+
 	//Tile rendering objects and arrays
 	bool toggleTileRendering;
 	float tileWidth, tileHeight;

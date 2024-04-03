@@ -102,11 +102,11 @@ void Character::Update(float deltaTime)
 
 	//Create the binded functions for each action and decision
 	auto goToIslandFunc = [this, &steering](Vec3) {
-		GoToTarget(targetIsland.getBody()->getPos(), *steering);
+		GoToIsland(targetIsland.getBody()->getPos(), *steering);
 	};
 
 	auto goToPlayerFunc = [this, &steering](Vec3) {
-		GoToTarget(targetPlayer.getPos(), *steering);
+		GoToPlayer(targetPlayer.getPos(), *steering);
 	};
 
 	auto attackIslandFunc = [this](Vec3) {
@@ -124,6 +124,7 @@ void Character::Update(float deltaTime)
 	auto checkIslandDistanceFunc = [this](Vec3) {
 		return CheckDistance(targetIsland.getBody()->getPos());
 	};
+
 
 	//Create the actions and decisions for the decision tree
 	Action goToIslandAction(goToIslandFunc);
@@ -380,10 +381,11 @@ void Character::AttackTarget(Vec3 target_)
 	}
 }
 
-void Character::GoToTarget(Vec3 target_, SteeringOutput &steering_)
+void Character::GoToIsland(Vec3 target_, SteeringOutput &steering_)
 {
+
 	//	//Find the distance between the AI and its target
-	Vec3 distance = target - body->getPos();
+	Vec3 distance = target_ - body->getPos();
 	FollowAPath followAPath;
 	//Set the radius of the target
 	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
@@ -393,13 +395,39 @@ void Character::GoToTarget(Vec3 target_, SteeringOutput &steering_)
 	Arrive arrive(body->getMaxAcceleration() / 2, body->getMaxSpeed() / 2, targetRadius, slowRadius);
 	//*steering += *(arrive.getSteering(target, this));
 	//Call arrive function that sets this steering behaviour to the one created in the function
-	if (currentPath.GetCurrentNode() != NULL)
+	if (islandPath.GetCurrentNode() != NULL)
 	{
-		steering_ += *followAPath.getSteering(&currentPath, this);
+		steering_ += *followAPath.getSteering(&islandPath, this);
 	
 	}
 
+
 	target = target_;
+
+}
+
+void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
+{
+	//	//Find the distance between the AI and its target
+	Vec3 distance = target_ - body->getPos();
+	FollowAPath followAPath;
+	//Set the radius of the target
+	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
+	//Set the slow radius so the AI will begin to slow down once it enters this radius
+	float slowRadius = targetRadius;
+	//Create an Arrive steering behaviour and set the parameters
+	Arrive arrive(body->getMaxAcceleration() / 2, body->getMaxSpeed() / 2, targetRadius, slowRadius);
+	//*steering += *(arrive.getSteering(target, this));
+	//Call arrive function that sets this steering behaviour to the one created in the function
+	if (playerPath.GetCurrentNode() != NULL)
+	{
+		steering_ += *followAPath.getSteering(&playerPath, this);
+
+	}
+
+
+	target = target_;
+
 
 }
 

@@ -9,7 +9,7 @@ SteeringOutput* FollowAPath::getSteering(Path* path, Character* character)
 
     target_position = path->GetCurrentNodePosition();
 
-    std::cout << "\n" << VMath::distance(character->getBody()->getPos(), target_position) << ", " << GetSlowRadius();
+ 
     if(VMath::distance(character->getBody()->getPos(), target_position) <= GetSlowRadius())
     {
 

@@ -446,19 +446,27 @@ void Scene1::Update(const float deltaTime) {
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
-	
+
 	//Set AI current node to each AI. So they know where they are in the tile graph ;)
 	UpdateAIPositionNodes();
+
+	static float updatePlayerNodeTime = 0;
+	updatePlayerNodeTime++;
 	
 	//AI Find Path
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
 		if(enemySpawner->GetEnemyArr().at(i)->caculatePath)
 		{
-			enemySpawner->GetEnemyArr().at(i)->SetCurrentPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+			enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
 			enemySpawner->GetEnemyArr().at(i)->caculatePath = false;
 		}
 
+		if (updatePlayerNodeTime == 120)
+		{
+			enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
+			updatePlayerNodeTime = 0;
+		}
 	}
 
 
@@ -694,9 +702,10 @@ void Scene1::SetBlinkyPath()
 void Scene1::UpdateAIPositionNodes()
 {
 	//Set AI Current Nodes
-	bool breakout = false;
+
 	for (int e = 0; e < enemySpawner->GetEnemyArr().size(); e++)
 	{
+		bool breakout = false;
 		for (int i = 0; i < tiles.size(); i++)
 		{
 			for (int j = 0; j < tiles[i].size(); j++)
@@ -706,7 +715,7 @@ void Scene1::UpdateAIPositionNodes()
 				if (abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f
 					&& abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
 				{
-
+				
 					Node* blinkyNode = tiles[i][j]->getNode();
 					enemySpawner->GetEnemyArr().at(e)->SetCurrentNode(blinkyNode);
 					breakout = true;
@@ -720,6 +729,30 @@ void Scene1::UpdateAIPositionNodes()
 				break;
 		}
 
+	}
+
+
+	bool breakout = false;
+	for (int i = 0; i < tiles.size(); i++)
+	{
+
+		for (int j = 0; j < tiles[i].size(); j++)
+		{
+			if (abs(game->getPlayer()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f
+				&& abs(game->getPlayer()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
+			{
+
+				Node* blinkyNode = tiles[i][j]->getNode();
+				playerNode = blinkyNode;
+				breakout = true;
+			}
+
+			if (breakout)
+				break;
+		}
+
+		if (breakout)
+			break;
 	}
 
 }

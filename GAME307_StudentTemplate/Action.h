@@ -5,6 +5,7 @@ class Action : public DecisionTreeNode
 {
 
 private:
+
 	std::function<void(Vec3)> func;
 
 public:
@@ -16,7 +17,9 @@ public:
 	}
 
 	void takeAction() {
-		func(Vec3());
+
+		if (func != nullptr) func(Vec3());
+
 	}
 
 	DecisionTreeNode* makeDecision() override;

@@ -2,6 +2,7 @@
 #include <functional>
 #include "VMATH.h"
 #include "SteeringOutput.h"
+#include "Path.h"
 using namespace MATH;
 class DecisionTreeNode abstract
 {

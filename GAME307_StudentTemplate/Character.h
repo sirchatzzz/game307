@@ -58,7 +58,8 @@ private:
 	float attackRadius;
 	float attackSpeed;
 
-	Path currentPath;
+	Path islandPath;
+	Path playerPath;
 
 	bool patrolling;
 
@@ -131,8 +132,11 @@ public:
 
 	bool IsCharacterAtPos(Vec3 pos_);
 	
-	Path GetCurrentPath() { return currentPath; }
-	void SetCurrentPath(Path path_) { currentPath = path_; }
+	Path GetIslandPath() { return islandPath; }
+	void SetIslandPath(Path path_) { islandPath = path_; }
+
+	Path GetPlayerPath() { return playerPath; }
+	void SetPlayerPath(Path path_) { playerPath = path_; }
 
 	SDL_Surface** GetSpriteImages() { return spriteImages; }
 	
@@ -152,7 +156,9 @@ public:
 	Node* GetCurrentNode() { return currentNode; }
 	Node* GetTargetNode() { return targetNode; }
 
-	void GoToTarget(Vec3 target_, SteeringOutput& steering_);
+	void GoToIsland(Vec3 target_, SteeringOutput& steering_);
+	void GoToPlayer(Vec3 target_, SteeringOutput& steering_);
+
 	void AttackTarget(Vec3 target_);
 	float CheckDistance(Vec3 target_) {
 

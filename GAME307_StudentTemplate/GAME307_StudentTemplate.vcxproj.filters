@@ -68,7 +68,6 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="FollowAPath.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Island.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="DecisionTreeNode.cpp">
       <Filter>DecisionMaking</Filter>
@@ -81,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="FloatDecision.cpp">
       <Filter>DecisionMaking</Filter>
+    </ClCompile>
+    <ClCompile Include="Island.cpp">
+      <Filter>Class</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
