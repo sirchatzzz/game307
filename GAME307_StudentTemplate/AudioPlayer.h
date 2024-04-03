@@ -11,6 +11,7 @@ class AudioPlayer
 {
 	std::unordered_map<int, std::string> audioList;
 	std::vector<Mix_Chunk*> audioChunks;
+	int callCounter;
 public:
 	AudioPlayer();
 	~AudioPlayer();

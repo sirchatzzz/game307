@@ -15,10 +15,9 @@ bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
 	// Configure and instantiate the body to use for the demo
-	audio.playAudio(4, 5);
-	audio.playAudio(3, 2);
 	if (!body)
 	{
+		audio.playAudio(4, 5);
 		float radius = 0.2;
 		float orientation = 0.0f;
 		float rotation = 0.0f;
@@ -73,7 +72,7 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 		return false;
 	}
 	SDL_Window* window = scene->getWindow();
-	SDL_Renderer* renderer = SDL_GetRenderer(window);
+	renderer = SDL_GetRenderer(window);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, spriteImages[spriteIndex_]);
 	if (!texture)
 	{
@@ -87,12 +86,12 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 void Character::Update(float deltaTime)
 {
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
-	
+
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
 
 
 	CalculateState();
-	
+
 	static float time = 0;
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;

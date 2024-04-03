@@ -32,6 +32,8 @@ private:
 	Vec3 target;
 	Collider2D collider;
 	Vec3 collidedTargetPosition;
+	SDL_Surface* destroyedShipImage;
+	SDL_Texture* destroyedShipTexture;
 	std::vector<Collider2D> islandColliders;
 
 	//Near target variables
@@ -67,6 +69,8 @@ private:
 	Island targetIsland;
 
 	AIState enemyState;
+
+	SDL_Renderer* renderer;
 
 	std::vector<Island> islands;
 

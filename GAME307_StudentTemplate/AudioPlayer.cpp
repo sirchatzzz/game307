@@ -25,8 +25,8 @@ AudioPlayer::~AudioPlayer()
 	Mix_Quit();
 }
 
-void AudioPlayer::playAudio(int ID, int volume)
+void AudioPlayer::playAudio(int ID,int volume)
 {
-	Mix_VolumeChunk(audioChunks[ID], volume);
-	Mix_PlayChannel(-1, audioChunks[ID], 0);
+	if(!Mix_VolumeChunk(audioChunks[ID], volume));
+	Mix_PlayChannel(ID, audioChunks[ID], 0);
 }
