@@ -231,6 +231,7 @@ bool Scene1::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 
+
 	playerImage[0] = IMG_Load("assets/playerBoat1.png");
 	playerImage[1] = IMG_Load("assets/playerBoat2.png");
 	playerImage[2] = IMG_Load("assets/playerBoat3.png");
