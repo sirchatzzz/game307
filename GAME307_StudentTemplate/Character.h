@@ -50,6 +50,7 @@ private:
 	float animationCounter;
 
 	float targetOrientation;
+	AudioPlayer audio;
 
 	//Variables to determine what and how fast an AI should execute tasks
 	float aggroRadius;

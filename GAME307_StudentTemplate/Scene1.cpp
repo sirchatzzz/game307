@@ -366,6 +366,7 @@ void Scene1::ManageBullets()
 			{
 
 				std::cout << "Enemy Hit!!" << std::endl;
+				audio.playAudio(1, 20);
 	
 				enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
 
@@ -384,6 +385,7 @@ void Scene1::ManageBullets()
 		{
 
 			std::cout << "Island Hit!!" << std::endl;
+			audio.playAudio(5, 20);
 		
 			island->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
 
@@ -402,6 +404,7 @@ void Scene1::ManageBullets()
 		{
 
 			std::cout << "Player Hit!!" << std::endl;
+			audio.playAudio(1, 20);
 			blinky->GetBullets()->at(i).~Projectile();
 
 			game->getPlayer()->GetPlayerStats()->TakeDamage(blinky->GetBullets()->at(i).GetProjectileDamage());
@@ -423,6 +426,7 @@ void Scene1::ManageBullets()
 
 			auto it = game->getPlayer()->GetBullets()->begin() + i;
 			game->getPlayer()->GetBullets()->erase(it);
+			audio.playAudio(6, 20);
 
 		}
 	}
@@ -439,6 +443,7 @@ void Scene1::ManageBullets()
 
 			auto it = blinky->GetBullets()->begin() + i;
 			blinky->GetBullets()->erase(it);
+			audio.playAudio(6, 20);
 
 		}
 	}

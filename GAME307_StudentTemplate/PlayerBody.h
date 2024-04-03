@@ -44,6 +44,7 @@ protected:
     //Ship stats for player
     Stats* playerStats;
     ShipAmmo* playerAmmo;
+    AudioPlayer audio;
     int currentMagTemp = 0; // To hold current mag
 
     //Turret object

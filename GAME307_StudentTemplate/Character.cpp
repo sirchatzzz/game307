@@ -15,6 +15,8 @@ bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
 	// Configure and instantiate the body to use for the demo
+	audio.playAudio(4, 5);
+	audio.playAudio(3, 2);
 	if (!body)
 	{
 		float radius = 0.2;
@@ -87,6 +89,7 @@ void Character::Update(float deltaTime)
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
 	
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
+
 
 	CalculateState();
 	

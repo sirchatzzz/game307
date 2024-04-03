@@ -4,7 +4,6 @@
 #include "MMath.h"
 #include "VMath.h"
 #include "Scene.h"
-#include "AudioPlayer.h"
 #include <vector>
 #include "Character.h"
 #include "Tile.h"
@@ -62,6 +61,7 @@ private:
 	std::vector< std::vector<Tile*>> tiles;
 
 	Island* island;
+	AudioPlayer audio;
 
 
 private:
