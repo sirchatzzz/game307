@@ -60,6 +60,12 @@ bool Character::OnCreate(Scene* scene_)
 	target = Vec3();
 	patrolling = false;
 	animationCounter = 0;
+
+	SDL_Window* window = scene->getWindow();
+	renderer = SDL_GetRenderer(window);
+
+	destroyedShipImage = IMG_Load("assets/boatDebris.png");
+	destroyedShipTexture = SDL_CreateTextureFromSurface(renderer, destroyedShipImage);
 	return true;
 }
 
@@ -71,8 +77,6 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 		std::cerr << "Can't open the image" << std::endl;
 		return false;
 	}
-	SDL_Window* window = scene->getWindow();
-	renderer = SDL_GetRenderer(window);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, spriteImages[spriteIndex_]);
 	if (!texture)
 	{
@@ -244,7 +248,6 @@ void Character::render(float scale)
 {
 	SDL_Renderer* renderer = scene->game->getRenderer();
 	Matrix4 projectionMatrix = scene->getProjectionMatrix();
-
 	SDL_Rect square;
 	Vec3 screenCoords;
 	int    w, h;
@@ -258,7 +261,6 @@ void Character::render(float scale)
 	square.y = static_cast<int>(screenCoords.y - 0.5f * h);
 	square.w = w;
 	square.h = h;
-
 	// Convert character orientation from radians to degrees.
 	float orientation = body->getOrientation() * 180.0f / M_PI;
 
@@ -277,7 +279,6 @@ void Character::render(float scale)
 		if (bullets.at(i).GetFiredStatus() == true) bullets.at(i).Render(0.05);
 
 	}
-
 }
 
 ///Basic function to check if the AI is near its target
