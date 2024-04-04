@@ -63,9 +63,6 @@ bool Character::OnCreate(Scene* scene_)
 
 	SDL_Window* window = scene->getWindow();
 	renderer = SDL_GetRenderer(window);
-
-	destroyedShipImage = IMG_Load("assets/boatDebris.png");
-	destroyedShipTexture = SDL_CreateTextureFromSurface(renderer, destroyedShipImage);
 	return true;
 }
 
@@ -92,7 +89,6 @@ void Character::Update(float deltaTime)
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
 
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
-
 
 	CalculateState();
 

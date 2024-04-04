@@ -1,6 +1,6 @@
 #include "Spawner.h"
 
-Spawner::Spawner()
+Spawner::Spawner() : wrecksLifetime(600)
 {
 	scene = nullptr;
 	enemyArr.clear();
@@ -20,6 +20,10 @@ bool Spawner::OnCreate(Scene* scene_)
 	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
 	enemyArr.push_back(enemy);
+
+	renderer = scene->game->getRenderer();
+	destroyedShipImage = IMG_Load("assets/boatDebris.png");
+	destroyedShipTexture = SDL_CreateTextureFromSurface(renderer, destroyedShipImage);
 	return true;
 }
 
@@ -30,6 +34,15 @@ void Spawner::Update(float time)
 	{
 		if (enemyArr.at(i)->IsDead())
 		{
+			SDL_Rect rect;
+			Matrix4 projectionMatrix = scene->getProjectionMatrix();
+			Vec3 screenCoords;
+			screenCoords = projectionMatrix * enemyArr[i]->getBody()->getPos();
+			rect.x = static_cast<int>(screenCoords.x - 0.5f * 75);
+			rect.y = static_cast<int>(screenCoords.y - 0.5f * 75);
+			rect.w = 75;
+			rect.h = 75;
+			destroyedShipsPos.push_back(rect);
 
 			auto it = enemyArr.begin() + i;
 			enemyArr.erase(it);
@@ -58,6 +71,13 @@ void Spawner::Update(float time)
 
 void Spawner::render(float scale)
 {
+	if (destroyedShipsPos.size() != 0) 
+	{
+		for (int i = 0; i < destroyedShipsPos.size(); ++i)
+		{
+			SDL_RenderCopy(renderer, destroyedShipTexture, nullptr, &destroyedShipsPos[i]);
+		}
+	}
 
 	for (int i = 0; i < enemyArr.size(); i++)
 	{
@@ -66,7 +86,13 @@ void Spawner::render(float scale)
 
 	}
 
+	if (wrecksLifetime >= 600)
+	{
+		wrecksLifetime = 0;
+		destroyedShipsPos.clear();
+	}
 
+	++wrecksLifetime;
 }
 
 void Spawner::RandomizeSpawnLocation()

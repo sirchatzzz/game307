@@ -11,6 +11,11 @@ private:
 	Character* enemy;
 	class Scene* scene;
 	Vec3 spawnLocation;
+	SDL_Texture* destroyedShipTexture;
+	SDL_Surface* destroyedShipImage;
+	std::vector<SDL_Rect> destroyedShipsPos;
+	SDL_Renderer* renderer;
+	int wrecksLifetime;
 	
 	float enemyCap;
 
