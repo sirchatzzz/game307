@@ -52,12 +52,11 @@ bool Character::OnCreate(Scene* scene_)
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
-	CalculateTargetIsland();
 
 	turret = new Turret();
 	turret->SetGame(scene->game);
 	turret->OnCreate();
-	attackSpeed = 80;
+	attackSpeed = 160;
 	target = Vec3();
 	patrolling = false;
 	animationCounter = 0;
@@ -86,10 +85,27 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 
 void Character::Update(float deltaTime)
 {
+
+	if (!calculateIsland)
+	{
+		CalculateTargetIsland();
+		calculateIsland = true;
+	}
+
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	setImageWith(spriteImages, indexSelector);
+
+	static float updatePlayerPathTime = 0;
+	updatePlayerPathTime++;
+
+	if (updatePlayerPathTime == 120)
+	{
+		caculatePlayerPath = true;
+		updatePlayerPathTime = 0;
+	}
+
 
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
 	
@@ -383,9 +399,9 @@ void Character::AttackTarget(Vec3 target_)
 
 void Character::GoToIsland(Vec3 target_, SteeringOutput &steering_)
 {
-
+	target = target_;
 	//	//Find the distance between the AI and its target
-	Vec3 distance = target_ - body->getPos();
+	Vec3 distance = target - body->getPos();
 	FollowAPath followAPath;
 	//Set the radius of the target
 	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
@@ -402,12 +418,15 @@ void Character::GoToIsland(Vec3 target_, SteeringOutput &steering_)
 	}
 
 
-	target = target_;
+
 
 }
 
 void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
 {
+
+
+	target = target_;
 	//	//Find the distance between the AI and its target
 	Vec3 distance = target_ - body->getPos();
 	FollowAPath followAPath;
@@ -426,7 +445,6 @@ void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
 	}
 
 
-	target = target_;
 
 
 }

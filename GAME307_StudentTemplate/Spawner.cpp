@@ -47,7 +47,7 @@ void Spawner::Update(float time)
 
 	}
 
-	if (spawnTime > 400)
+	if (spawnTime > 800)
 	{
 		if (enemyArr.size() < enemyCap) SpawnEnemy();
 		spawnTime = 0;

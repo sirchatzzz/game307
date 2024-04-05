@@ -313,31 +313,12 @@ bool Scene1::OnCreate() {
 
 	CalculateConnectionWeights();
 
-
-	island = new Island();
-	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
-	{
-		return false;
-	}
-
-	std::vector<Node*> islands;
-	islands.push_back(graph->getNode(105));
-	islands.push_back(graph->getNode(106));
-	islands.push_back(graph->getNode(130));
-	islands.push_back(graph->getNode(131));
-
-	island->getBody()->setPos(Vec3(6, 5, 0));
-	island->AddIslandNode(islands.at(0));
-	island->AddIslandNode(islands.at(1));
-	island->AddIslandNode(islands.at(2));
-	island->AddIslandNode(islands.at(3));
-	islandsVector.push_back(*island);
+	InitializeIslands();
 
 	enemy = new Character();
 	enemy->SetIslands(islandsVector);
 	enemy->OnCreate(this);
 	enemy->setImageWith(enemyImage, 0);
-	enemy->getBody()->setPos(Vec3(20, 0, 0));
 	Stats* enemyStats = new Stats(50, 50, 10);
 	enemy->SetEnemyStats(enemyStats);
 	enemySpawner = new Spawner(enemy);
@@ -377,12 +358,12 @@ void Scene1::ManageBullets()
 	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
 	{
 
-		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(island->GetCollider()))
+		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(island1->GetCollider()))
 		{
 
 			std::cout << "Island Hit!!" << std::endl;
 		
-			island->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+			island1->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
 
 			auto it = game->getPlayer()->GetBullets()->begin() + i;
 			game->getPlayer()->GetBullets()->erase(it);
@@ -462,10 +443,10 @@ void Scene1::Update(const float deltaTime) {
 			enemySpawner->GetEnemyArr().at(i)->caculatePath = false;
 		}
 
-		if (updatePlayerNodeTime == 120)
+		if (enemySpawner->GetEnemyArr().at(i)->caculatePlayerPath)
 		{
 			enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
-			updatePlayerNodeTime = 0;
+			enemySpawner->GetEnemyArr().at(i)->caculatePlayerPath = false;
 		}
 	}
 
@@ -491,7 +472,14 @@ void Scene1::Update(const float deltaTime) {
 
 	enemySpawner->Update(deltaTime);
 
-	island->Update(deltaTime);
+	island1->Update(deltaTime);
+	island2->Update(deltaTime);
+	island3->Update(deltaTime);
+	island4->Update(deltaTime);
+	island5->Update(deltaTime);
+	island6->Update(deltaTime);
+
+
 }
 
 void Scene1::Render() {
@@ -525,7 +513,12 @@ void Scene1::Render() {
 	
 	// render the player
 	game->RenderPlayer(0.5f);
-	island->render(0.5f);
+	island1->render(1.0f);
+	island2->render(0.5f);
+	island3->render(0.75f);
+	island4->render(0.7f);
+	island5->render(0.5f);
+	island6->render(0.5f);
 	enemySpawner->render(0.5f);
 	
 
@@ -755,4 +748,117 @@ void Scene1::UpdateAIPositionNodes()
 			break;
 	}
 
+}
+
+void Scene1::InitializeIslands()
+{
+
+	island1 = new Island();
+	island1->OnCreate(this);
+	island1->setImageWith(IMG_Load("assets/island1.png"));
+
+	std::vector<Node*> islands1;
+	islands1.push_back(graph->getNode(69));
+	islands1.push_back(graph->getNode(93));
+	islands1.push_back(graph->getNode(94));
+	islands1.push_back(graph->getNode(118));
+	islands1.push_back(graph->getNode(119));
+	islands1.push_back(graph->getNode(120));
+
+	island1->getBody()->setPos(Vec3(19, 4, 0));
+	island1->AddIslandNode(islands1.at(0));
+	island1->AddIslandNode(islands1.at(1));
+	island1->AddIslandNode(islands1.at(2));
+	island1->AddIslandNode(islands1.at(3));
+	island1->AddIslandNode(islands1.at(4));
+	island1->AddIslandNode(islands1.at(5));
+	islandsVector.push_back(*island1);
+
+
+	island2 = new Island();
+	island2->OnCreate(this);
+	island2->setImageWith(IMG_Load("assets/island2.png"));
+
+	std::vector<Node*> islands2;
+	islands2.push_back(graph->getNode(292));
+	islands2.push_back(graph->getNode(293));
+	islands2.push_back(graph->getNode(317));
+	islands2.push_back(graph->getNode(318));
+
+	island2->getBody()->setPos(Vec3(18, 11.75, 0));
+	island2->AddIslandNode(islands2.at(0));
+	island2->AddIslandNode(islands2.at(1));
+	island2->AddIslandNode(islands2.at(2));
+	island2->AddIslandNode(islands2.at(3));
+	islandsVector.push_back(*island2);
+
+	island3 = new Island();
+	island3->OnCreate(this);
+	island3->setImageWith(IMG_Load("assets/island3.png"));
+
+	std::vector<Node*> islands3;
+	islands3.push_back(graph->getNode(112));
+	islands3.push_back(graph->getNode(113));
+	islands3.push_back(graph->getNode(137));
+	islands3.push_back(graph->getNode(138));
+
+	island3->getBody()->setPos(Vec3(13, 5, 0));
+	island3->AddIslandNode(islands3.at(0));
+	island3->AddIslandNode(islands3.at(1));
+	island3->AddIslandNode(islands3.at(2));
+	island3->AddIslandNode(islands3.at(3));
+	islandsVector.push_back(*island3);
+
+	island4 = new Island();
+	island4->OnCreate(this);
+	island4->setImageWith(IMG_Load("assets/island4.png"));
+
+	std::vector<Node*> islands4;
+	islands4.push_back(graph->getNode(279));
+	islands4.push_back(graph->getNode(280));
+	islands4.push_back(graph->getNode(304));
+	islands4.push_back(graph->getNode(305));
+
+	island4->getBody()->setPos(Vec3(5, 12, 0));
+	island4->AddIslandNode(islands4.at(0));
+	island4->AddIslandNode(islands4.at(1));
+	island4->AddIslandNode(islands4.at(2));
+	island4->AddIslandNode(islands4.at(3));
+	islandsVector.push_back(*island4);
+
+	island5 = new Island();
+	island5->OnCreate(this);
+	island5->setImageWith(IMG_Load("assets/island5.png"));
+
+	std::vector<Node*> islands5;
+	islands5.push_back(graph->getNode(235));
+	islands5.push_back(graph->getNode(236));
+	islands5.push_back(graph->getNode(260));
+	islands5.push_back(graph->getNode(261));
+
+	island5->getBody()->setPos(Vec3(11, 10, 0));
+	island5->AddIslandNode(islands5.at(0));
+	island5->AddIslandNode(islands5.at(1));
+	island5->AddIslandNode(islands5.at(2));
+	island5->AddIslandNode(islands5.at(3));
+	islandsVector.push_back(*island5);
+
+	island6 = new Island();
+	island6->OnCreate(this);
+	island6->setImageWith(IMG_Load("assets/island6.png"));
+
+	std::vector<Node*> islands6;
+	islands6.push_back(graph->getNode(105));
+	islands6.push_back(graph->getNode(106));
+	islands6.push_back(graph->getNode(130));
+	islands6.push_back(graph->getNode(131));
+
+	island6->getBody()->setPos(Vec3(6, 5, 0));
+	island6->AddIslandNode(islands6.at(0));
+	island6->AddIslandNode(islands6.at(1));
+	island6->AddIslandNode(islands6.at(2));
+	island6->AddIslandNode(islands6.at(3));
+	islandsVector.push_back(*island6);
+
+	
 }

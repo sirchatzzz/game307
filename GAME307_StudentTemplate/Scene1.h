@@ -61,7 +61,12 @@ private:
 	float tileWidth, tileHeight;
 	std::vector< std::vector<Tile*>> tiles;
 
-	Island* island;
+	Island* island1;
+	Island* island2;
+	Island* island3;
+	Island* island4;
+	Island* island5;
+	Island* island6;
 	std::vector<Island> islandsVector;
 
 private:
@@ -92,6 +97,7 @@ public:
 
 	void UpdateAIPositionNodes();
 	
+	void InitializeIslands();
 };
 
 #endif
