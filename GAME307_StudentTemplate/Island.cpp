@@ -109,8 +109,8 @@ void Island::render(float scale)
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
 	
-	collider.SetColliderBounds(square.w, square.h);
-	collider.SetColliderPosition(square.x, square.y);
+	collider.SetColliderBounds(square.w - 25, square.h - 25);
+	collider.SetColliderPosition(square.x + 12, square.y + 12);
 	collider.RenderCollider(renderer);
 
 }

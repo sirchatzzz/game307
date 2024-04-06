@@ -81,12 +81,22 @@ void Scene1::CalculateConnectionWeights()
 	std::vector<Node*> islands;
 	
 	//Island[0]
-	islands.push_back(graph->getNode(69));
 	islands.push_back(graph->getNode(93));
 	islands.push_back(graph->getNode(94));
+	islands.push_back(graph->getNode(95));
+	islands.push_back(graph->getNode(96));
 	islands.push_back(graph->getNode(118));
 	islands.push_back(graph->getNode(119));
 	islands.push_back(graph->getNode(120));
+	islands.push_back(graph->getNode(121));
+	islands.push_back(graph->getNode(143));
+	islands.push_back(graph->getNode(144));
+	islands.push_back(graph->getNode(145));
+	islands.push_back(graph->getNode(146));
+	islands.push_back(graph->getNode(168));
+	islands.push_back(graph->getNode(169));
+	islands.push_back(graph->getNode(170));
+	islands.push_back(graph->getNode(171));
 
 
 	//Island[1]
@@ -96,8 +106,13 @@ void Scene1::CalculateConnectionWeights()
 	islands.push_back(graph->getNode(318));
 
 	//Island[2]
+	islands.push_back(graph->getNode(86));
+	islands.push_back(graph->getNode(87));
+	islands.push_back(graph->getNode(88));
+	islands.push_back(graph->getNode(111));
 	islands.push_back(graph->getNode(112));
 	islands.push_back(graph->getNode(113));
+	islands.push_back(graph->getNode(136));
 	islands.push_back(graph->getNode(137));
 	islands.push_back(graph->getNode(138));
 
@@ -119,7 +134,31 @@ void Scene1::CalculateConnectionWeights()
 	islands.push_back(graph->getNode(130));
 	islands.push_back(graph->getNode(131));
 
-	
+
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		for (int j = 0; j < tiles.at(i).size(); j++)
+		{
+			for (int e = 0; e < islands.size(); e++)
+			{
+
+				if (islands.at(e) == tiles.at(i).at(j)->getNode())
+				{
+
+					tiles.at(i).at(j)->setRGBA(255, 0, 0, 100);
+
+				}
+
+
+			}
+
+			
+
+
+		}
+
+
+	}
 
 
 
@@ -437,20 +476,20 @@ void Scene1::Update(const float deltaTime) {
 	//AI Find Path
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-		if(enemySpawner->GetEnemyArr().at(i)->caculatePath)
+		if(enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
 		{
 			enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
-			enemySpawner->GetEnemyArr().at(i)->caculatePath = false;
+			enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
 		}
 
-		if (enemySpawner->GetEnemyArr().at(i)->caculatePlayerPath)
+		if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
 		{
 			enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
-			enemySpawner->GetEnemyArr().at(i)->caculatePlayerPath = false;
+			enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
 		}
 	}
 
-
+	std::cout << playerNode->getLabel() << std::endl;
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
 
@@ -487,7 +526,7 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render any npc's
-	
+
 
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
@@ -504,23 +543,31 @@ void Scene1::Render() {
 		}
 	}
 
-	// render the islands
-	for (int i = 0; i < islandTexture.size(); i++)
-	{
-		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
-	}
 
-	
+
+
 	// render the player
 	game->RenderPlayer(0.5f);
-	island1->render(1.0f);
+	island1->render(0.75f);
 	island2->render(0.5f);
 	island3->render(0.75f);
-	island4->render(0.7f);
+	island4->render(0.5f);
 	island5->render(0.5f);
-	island6->render(0.5f);
+	island6->render(0.45f);
 	enemySpawner->render(0.5f);
-	
+
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		for (int j = 0; j < tiles.at(i).size(); j++)
+		{
+
+			tiles.at(i).at(j)->Render();
+
+		}
+
+
+	}
+
 
 	SDL_RenderPresent(renderer);
 
@@ -758,20 +805,29 @@ void Scene1::InitializeIslands()
 	island1->setImageWith(IMG_Load("assets/island1.png"));
 
 	std::vector<Node*> islands1;
-	islands1.push_back(graph->getNode(69));
 	islands1.push_back(graph->getNode(93));
 	islands1.push_back(graph->getNode(94));
+	islands1.push_back(graph->getNode(95));
+	islands1.push_back(graph->getNode(96));
 	islands1.push_back(graph->getNode(118));
 	islands1.push_back(graph->getNode(119));
 	islands1.push_back(graph->getNode(120));
+	islands1.push_back(graph->getNode(121));
+	islands1.push_back(graph->getNode(143));
+	islands1.push_back(graph->getNode(144));
+	islands1.push_back(graph->getNode(145));
+	islands1.push_back(graph->getNode(146));
+	islands1.push_back(graph->getNode(168));
+	islands1.push_back(graph->getNode(169));
+	islands1.push_back(graph->getNode(170));
+	islands1.push_back(graph->getNode(171));
 
-	island1->getBody()->setPos(Vec3(19, 4, 0));
-	island1->AddIslandNode(islands1.at(0));
-	island1->AddIslandNode(islands1.at(1));
-	island1->AddIslandNode(islands1.at(2));
-	island1->AddIslandNode(islands1.at(3));
-	island1->AddIslandNode(islands1.at(4));
-	island1->AddIslandNode(islands1.at(5));
+	island1->getBody()->setPos(Vec3(20, 5, 0));
+	for (int i = 0; i < islands1.size(); i++)
+	{
+		island1->AddIslandNode(islands1.at(i));
+
+	}
 	islandsVector.push_back(*island1);
 
 
@@ -785,7 +841,7 @@ void Scene1::InitializeIslands()
 	islands2.push_back(graph->getNode(317));
 	islands2.push_back(graph->getNode(318));
 
-	island2->getBody()->setPos(Vec3(18, 11.75, 0));
+	island2->getBody()->setPos(Vec3(18, 12, 0));
 	island2->AddIslandNode(islands2.at(0));
 	island2->AddIslandNode(islands2.at(1));
 	island2->AddIslandNode(islands2.at(2));
@@ -797,16 +853,22 @@ void Scene1::InitializeIslands()
 	island3->setImageWith(IMG_Load("assets/island3.png"));
 
 	std::vector<Node*> islands3;
+	islands3.push_back(graph->getNode(86));
+	islands3.push_back(graph->getNode(87));
+	islands3.push_back(graph->getNode(88));
+	islands3.push_back(graph->getNode(111));
 	islands3.push_back(graph->getNode(112));
 	islands3.push_back(graph->getNode(113));
+	islands3.push_back(graph->getNode(136));
 	islands3.push_back(graph->getNode(137));
 	islands3.push_back(graph->getNode(138));
 
-	island3->getBody()->setPos(Vec3(13, 5, 0));
-	island3->AddIslandNode(islands3.at(0));
-	island3->AddIslandNode(islands3.at(1));
-	island3->AddIslandNode(islands3.at(2));
-	island3->AddIslandNode(islands3.at(3));
+	island3->getBody()->setPos(Vec3(12.5, 4.5, 0));
+	for (int i = 0; i < islands3.size(); i++)
+	{
+		island3->AddIslandNode(islands3.at(i));
+
+	}
 	islandsVector.push_back(*island3);
 
 	island4 = new Island();
@@ -819,11 +881,13 @@ void Scene1::InitializeIslands()
 	islands4.push_back(graph->getNode(304));
 	islands4.push_back(graph->getNode(305));
 
+
 	island4->getBody()->setPos(Vec3(5, 12, 0));
 	island4->AddIslandNode(islands4.at(0));
 	island4->AddIslandNode(islands4.at(1));
 	island4->AddIslandNode(islands4.at(2));
 	island4->AddIslandNode(islands4.at(3));
+
 	islandsVector.push_back(*island4);
 
 	island5 = new Island();
@@ -858,7 +922,14 @@ void Scene1::InitializeIslands()
 	island6->AddIslandNode(islands6.at(1));
 	island6->AddIslandNode(islands6.at(2));
 	island6->AddIslandNode(islands6.at(3));
+
 	islandsVector.push_back(*island6);
 
+	islands1.clear();
+	islands2.clear();
+	islands3.clear();
+	islands4.clear();
+	islands5.clear();
+	islands6.clear();
 	
 }

@@ -12,7 +12,7 @@
 #include <functional>
 Projectile bullet2;
 
-
+bool test = false;
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
@@ -48,7 +48,7 @@ bool Character::OnCreate(Scene* scene_)
 	collider.SetColliderActive(true);
 
 	aggroRadius = 6;
-	attackRadius = 2;
+	attackRadius = 3;
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
@@ -102,7 +102,7 @@ void Character::Update(float deltaTime)
 
 	if (updatePlayerPathTime == 120)
 	{
-		caculatePlayerPath = true;
+		calculatePlayerPath = true;
 		updatePlayerPathTime = 0;
 	}
 
@@ -114,7 +114,7 @@ void Character::Update(float deltaTime)
 	//Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
-
+	//std::cout << targetNode->getLabel() << std::endl;
 
 	//Create the binded functions for each action and decision
 	auto goToIslandFunc = [this, &steering](Vec3) {
@@ -366,9 +366,15 @@ void Character::CalculateTargetIsland()
 		}
 	}
 
-	targetNode->SetLabel(closesetNode);
+	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
+	{
+		if (closesetNode == targetIsland.GetIslandNodes().at(i)->getLabel())
+		{
+			targetNode = targetIsland.GetIslandNodes().at(i);
+		}
+	}
 
-	caculatePath = true;
+	calculateIslandPath = true;
 }
 
 void Character::CalculateNextIsland()
@@ -397,8 +403,14 @@ void Character::AttackTarget(Vec3 target_)
 	}
 }
 
-void Character::GoToIsland(Vec3 target_, SteeringOutput &steering_)
+void Character::GoToIsland(Vec3 target_, SteeringOutput& steering_)
 {
+
+	if (playerPathActive)
+	{
+		calculateIslandPath = true;
+		playerPathActive = false;
+	}
 	target = target_;
 	//	//Find the distance between the AI and its target
 	Vec3 distance = target - body->getPos();
@@ -425,6 +437,11 @@ void Character::GoToIsland(Vec3 target_, SteeringOutput &steering_)
 void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
 {
 
+	playerPathActive = true;
+
+
+
+	test = true;
 
 	target = target_;
 	//	//Find the distance between the AI and its target

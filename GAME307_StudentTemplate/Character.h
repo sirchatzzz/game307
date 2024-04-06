@@ -80,8 +80,10 @@ public:
 	/// <summary>
 	/// A toggle so the scene knows if the AI is trying to calculate a new path
 	/// </summary>
-	bool caculatePath = false;
-	bool caculatePlayerPath = false;
+	bool calculateIslandPath = false;
+	bool calculatePlayerPath = false;
+	bool playerPathActive;
+
 	bool calculateIsland = false;
 
 public:
