@@ -15,7 +15,7 @@ Spawner::Spawner(Character* enemy_)
 bool Spawner::OnCreate(Scene* scene_)
 {
 	spawnLocation = Vec3(20, 1, 0);
-	enemyCap = 6;
+	enemyCap = 3;
 	scene = scene_;
 	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
@@ -35,8 +35,10 @@ void Spawner::Update(float time)
 			enemyArr.erase(it);
 		}
 
+		std::cout << enemyArr.at(i)->GetBullets()->size() << std::endl;
 	}
-
+	
+	
 
 	static float spawnTime = 0;
 	spawnTime++;
@@ -47,7 +49,7 @@ void Spawner::Update(float time)
 
 	}
 
-	if (spawnTime > 800)
+	if (spawnTime > 400)
 	{
 		if (enemyArr.size() < enemyCap) SpawnEnemy();
 		spawnTime = 0;

@@ -75,6 +75,9 @@ private:
 	Node* currentNode = new Node(-1);
 	Node* targetNode = new Node(-1);
 
+	float attackTime = 0;
+	float updatePlayerPathTime = 0;
+
 public:
 
 	/// <summary>

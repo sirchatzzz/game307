@@ -93,7 +93,6 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
-	void SetBlinkyPath();
 
 	void UpdateAIPositionNodes();
 	

@@ -8,7 +8,7 @@ class FollowAPath : public Arrive
 {
 public:
 
-	FollowAPath() : Arrive(4,4,0,0.75f) {};
+	FollowAPath() : Arrive(2,2,0,0.75f) {};
 	~FollowAPath() {};
 
 	SteeringOutput* getSteering(Path* path, Character* character);

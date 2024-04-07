@@ -91,30 +91,24 @@ void Character::Update(float deltaTime)
 		CalculateTargetIsland();
 		calculateIsland = true;
 	}
-
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	setImageWith(spriteImages, indexSelector);
 
-	static float updatePlayerPathTime = 0;
 	updatePlayerPathTime++;
-
-	if (updatePlayerPathTime == 120)
+	if (updatePlayerPathTime == 60)
 	{
 		calculatePlayerPath = true;
 		updatePlayerPathTime = 0;
 	}
 
-
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
-	
 	if (targetIsland.IsDestroyed()) CalculateNextIsland();
 
 	//Create steering behaviour
 	SteeringOutput* steering;
 	steering = new SteeringOutput();
-	//std::cout << targetNode->getLabel() << std::endl;
 
 	//Create the binded functions for each action and decision
 	auto goToIslandFunc = [this, &steering](Vec3) {
@@ -141,17 +135,16 @@ void Character::Update(float deltaTime)
 		return CheckDistance(targetIsland.getBody()->getPos());
 	};
 
-
 	//Create the actions and decisions for the decision tree
 	Action goToIslandAction(goToIslandFunc);
 	Action goToPlayerAction(goToPlayerFunc);
 	Action attackPlayerAction(attackPlayerFunc);
 	Action attackIslandAction(attackIslandFunc);
 
-	FloatDecision islandAttackDecision(0.0, attackRadius, &attackIslandAction, &goToIslandAction, checkIslandDistanceFunc);
-	FloatDecision playerAttackDecision(0.0, attackRadius, &attackPlayerAction, &goToPlayerAction, checkPlayerDistanceFunc);
+	FloatDecision islandAttackDecision(0.0, attackRadius, &attackIslandAction, &goToIslandAction, checkIslandDistanceFunc, "IslandAttack");
+	FloatDecision playerAttackDecision(0.0, attackRadius, &attackPlayerAction, &goToPlayerAction, checkPlayerDistanceFunc, "PlayerAttack");
 
-	FloatDecision aggroDecision(0.0, aggroRadius, &playerAttackDecision, &islandAttackDecision, checkPlayerDistanceFunc);
+	FloatDecision aggroDecision(0.0, aggroRadius, &playerAttackDecision, &islandAttackDecision, checkPlayerDistanceFunc, "AggroCheck");
 
 	//Start decision tree
 	aggroDecision.makeDecision();
@@ -250,15 +243,10 @@ Collider2D Character::GetCollider()
 void Character::UpdateTurret(float deltaTime_)
 {
 
-
 	turret->setPos(body->getPos());
-
 	//Match orientation to the AI's orientation if the AI is not close enough to attack player
-
 	Vec3 distance = target - turret->getPos();
 	turret->SetOrientation(std::atan2(-distance.x, -distance.y));
-
-
 
 	turret->Update(deltaTime_);
 
@@ -267,18 +255,13 @@ void Character::UpdateTurret(float deltaTime_)
 //Update bullets 
 void Character::UpdateBullets(float deltaTime_)
 {
-
 	for (int i = 0; i < bullets.size(); i++)
 	{
-
 		if (bullets.at(i).GetFiredStatus() == true)
 		{
 			bullets.at(i).Update(deltaTime_);
-
 		}
-
 	}
-
 }
 
 //Create and fire bullets
@@ -357,19 +340,16 @@ void Character::CalculateTargetIsland()
 		}
 	}
 
-	int closesetNode = 1000;
+	float closesetNode = 1000;
 	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
 	{
-		if ((targetIsland.GetIslandNodes().at(i)->getLabel() - currentNode->getLabel()) < closesetNode)
-		{
-			closesetNode = targetIsland.GetIslandNodes().at(i)->getLabel();
-		}
-	}
 
-	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
-	{
-		if (closesetNode == targetIsland.GetIslandNodes().at(i)->getLabel())
+		Vec3 distance = targetIsland.GetIslandNodes().at(i)->GetPos() - currentNode->GetPos();
+		float d = sqrt(distance.x * distance.x + distance.y * distance.y);
+
+		if (d < closesetNode)
 		{
+			closesetNode = d;
 			targetNode = targetIsland.GetIslandNodes().at(i);
 		}
 	}
@@ -394,12 +374,13 @@ void Character::CalculateNextIsland()
 
 void Character::AttackTarget(Vec3 target_)
 {
-	static float time = 0;
-	time++;
-	if (time > attackSpeed)
+	target = target_;
+
+	attackTime++;
+	if (attackTime > attackSpeed)
 	{
 		FireBullet();
-		time = 0;
+		attackTime = 0;
 	}
 }
 
@@ -412,25 +393,13 @@ void Character::GoToIsland(Vec3 target_, SteeringOutput& steering_)
 		playerPathActive = false;
 	}
 	target = target_;
-	//	//Find the distance between the AI and its target
-	Vec3 distance = target - body->getPos();
+
 	FollowAPath followAPath;
-	//Set the radius of the target
-	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-	//Set the slow radius so the AI will begin to slow down once it enters this radius
-	float slowRadius = targetRadius;
-	//Create an Arrive steering behaviour and set the parameters
-	Arrive arrive(body->getMaxAcceleration() / 2, body->getMaxSpeed() / 2, targetRadius, slowRadius);
-	//*steering += *(arrive.getSteering(target, this));
-	//Call arrive function that sets this steering behaviour to the one created in the function
 	if (islandPath.GetCurrentNode() != NULL)
 	{
 		steering_ += *followAPath.getSteering(&islandPath, this);
 	
 	}
-
-
-
 
 }
 
@@ -438,31 +407,14 @@ void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
 {
 
 	playerPathActive = true;
-
-
-
-	test = true;
-
 	target = target_;
-	//	//Find the distance between the AI and its target
-	Vec3 distance = target_ - body->getPos();
+
 	FollowAPath followAPath;
-	//Set the radius of the target
-	float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-	//Set the slow radius so the AI will begin to slow down once it enters this radius
-	float slowRadius = targetRadius;
-	//Create an Arrive steering behaviour and set the parameters
-	Arrive arrive(body->getMaxAcceleration() / 2, body->getMaxSpeed() / 2, targetRadius, slowRadius);
-	//*steering += *(arrive.getSteering(target, this));
-	//Call arrive function that sets this steering behaviour to the one created in the function
 	if (playerPath.GetCurrentNode() != NULL)
 	{
 		steering_ += *followAPath.getSteering(&playerPath, this);
 
 	}
-
-
-
 
 }
 

@@ -79,60 +79,80 @@ void Scene1::CalculateConnectionWeights()
 
 	//Stores the nodes of which the islands occupy
 	std::vector<Node*> islands;
-	
+
 	//Island[0]
-	islands.push_back(graph->getNode(93));
-	islands.push_back(graph->getNode(94));
-	islands.push_back(graph->getNode(95));
-	islands.push_back(graph->getNode(96));
-	islands.push_back(graph->getNode(118));
-	islands.push_back(graph->getNode(119));
-	islands.push_back(graph->getNode(120));
-	islands.push_back(graph->getNode(121));
-	islands.push_back(graph->getNode(143));
-	islands.push_back(graph->getNode(144));
-	islands.push_back(graph->getNode(145));
-	islands.push_back(graph->getNode(146));
-	islands.push_back(graph->getNode(168));
-	islands.push_back(graph->getNode(169));
-	islands.push_back(graph->getNode(170));
-	islands.push_back(graph->getNode(171));
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int e = 0; e < 4; e++)
+		{
+			int number = 93;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 
 	//Island[1]
-	islands.push_back(graph->getNode(292));
-	islands.push_back(graph->getNode(293));
-	islands.push_back(graph->getNode(317));
-	islands.push_back(graph->getNode(318));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 292;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[2]
-	islands.push_back(graph->getNode(86));
-	islands.push_back(graph->getNode(87));
-	islands.push_back(graph->getNode(88));
-	islands.push_back(graph->getNode(111));
-	islands.push_back(graph->getNode(112));
-	islands.push_back(graph->getNode(113));
-	islands.push_back(graph->getNode(136));
-	islands.push_back(graph->getNode(137));
-	islands.push_back(graph->getNode(138));
+	for (int i = 0; i < 3; i++)
+	{
+		for (int e = 0; e < 3; e++)
+		{
+			int number = 86;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[3]
-	islands.push_back(graph->getNode(279));
-	islands.push_back(graph->getNode(280));
-	islands.push_back(graph->getNode(304));
-	islands.push_back(graph->getNode(305));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 279;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[4]
-	islands.push_back(graph->getNode(235));
-	islands.push_back(graph->getNode(236));
-	islands.push_back(graph->getNode(260));
-	islands.push_back(graph->getNode(261));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 235;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[5]
-	islands.push_back(graph->getNode(105));
-	islands.push_back(graph->getNode(106));
-	islands.push_back(graph->getNode(130));
-	islands.push_back(graph->getNode(131));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 105;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 
 	for (int i = 0; i < tiles.size(); i++)
@@ -436,7 +456,6 @@ void Scene1::ManageBullets()
 		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
 		{
 
-			//game->getPlayer()->GetBullets()->at(i).~Projectile();
 
 			auto it = game->getPlayer()->GetBullets()->begin() + i;
 			game->getPlayer()->GetBullets()->erase(it);
@@ -445,20 +464,21 @@ void Scene1::ManageBullets()
 	}
 
 
-	////Check for enemy bullets going off screen
-	//for (int i = 0; i < blinky->GetBullets()->size(); i++)
-	//{
+	//Check for enemy bullets going off screen
+	for (int e = 0; e < enemySpawner->GetEnemyArr().size(); e++)
+	{
+		for (int i = 0; i < enemySpawner->GetEnemyArr().at(e)->GetBullets()->size(); i++)
+		{
 
-	//	if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
-	//	{
+			if (enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+			{
 
-	//		//game->getPlayer()->GetBullets()->at(i).~Projectile();
+				auto it = enemySpawner->GetEnemyArr().at(e)->GetBullets()->begin() + i;
+				enemySpawner->GetEnemyArr().at(e)->GetBullets()->erase(it);
 
-	//		auto it = blinky->GetBullets()->begin() + i;
-	//		blinky->GetBullets()->erase(it);
-
-	//	}
-	//}
+			}
+		}
+	}
 }
 
 
@@ -489,16 +509,10 @@ void Scene1::Update(const float deltaTime) {
 		}
 	}
 
-	std::cout << playerNode->getLabel() << std::endl;
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
 
 	game->getPlayer()->Update(deltaTime);
-
-
-	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
-	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
-
 
 	ManageBullets();
 
@@ -525,9 +539,6 @@ void Scene1::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	// render any npc's
-
-
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
 
@@ -542,8 +553,6 @@ void Scene1::Render() {
 			}
 		}
 	}
-
-
 
 
 	// render the player
@@ -568,10 +577,9 @@ void Scene1::Render() {
 
 	}
 
-
 	SDL_RenderPresent(renderer);
 
-	//islandColls[5].RenderCollider(renderer);
+
 
 }
 
@@ -621,7 +629,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 			TestPathFinding();
 			break;
 		case SDL_SCANCODE_4:
-			SetBlinkyPath();
+
 
 			break;
 		case SDL_SCANCODE_3:
@@ -660,84 +668,6 @@ void Scene1::TestPathFinding()
 	}
 }
 
-void Scene1::SetBlinkyPath()
-{
-	
-	Uint8 r, g, b, a;
-	r = 0;
-	g = 0;
-	b = 255;
-	a = 100;
-	
-	
-
-	/*patrolPath.SetPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
-	blinky->SetCharacterPath(patrolPath);
-
-
-	Path newPatrolPath = blinky->GetCharacterPath().GetPath();
-	while (newPatrolPath.GetCurrentNode() != nullptr)
-	{
-		for (int i = 0; i < tiles.size(); i++)
-		{
-			for (int j = 0; j < tiles[i].size(); j++)
-			{
-				if (tiles[i][j]->getNode() == newPatrolPath.GetCurrentNode())
-				{
-					tiles[i][j]->setRGBA(r, g, b, a);
-				}
-			}
-		}
-
-		newPatrolPath.MoveToNextNode();
-	}
-
-
-	bool breakout = false;
-	if (blinky->GetCurrentPath().GetCurrentNode() == NULL)
-	{
-		for (int i = 0; i < tiles.size(); i++)
-		{
-			for (int j = 0; j < tiles[i].size(); j++)
-			{
-				if (abs(blinky->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f && abs(blinky->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
-				{
-					Node* blinkyNode = tiles[i][j]->getNode();
-					blinky->SetCurrentPath(graph->findPath(blinkyNode, patrolPath.GetCurrentNode()));
-					breakout = true;
-				}
-
-				if (breakout)
-					break;
-			}
-			
-			if (breakout)
-				break;
-		}
-
-		g = 255;
-		b = 0;
-
-		Path newPath = blinky->GetCurrentPath().GetPath();
-		while (newPath.GetCurrentNode() != nullptr)
-		{
-			for (int i = 0; i < tiles.size(); i++)
-			{
-				for (int j = 0; j < tiles[i].size(); j++)
-				{
-					if (tiles[i][j]->getNode() == newPath.GetCurrentNode())
-					{
-						tiles[i][j]->setRGBA(r, g, b, a);
-					}
-				}
-			}
-			
-			newPath.MoveToNextNode();
-		}
-
-	}*/
-
-}
 
 void Scene1::UpdateAIPositionNodes()
 {
@@ -799,132 +729,152 @@ void Scene1::UpdateAIPositionNodes()
 
 void Scene1::InitializeIslands()
 {
-
+	////Island 1
 	island1 = new Island();
 	island1->OnCreate(this);
 	island1->setImageWith(IMG_Load("assets/island1.png"));
 
 	std::vector<Node*> islands1;
-	islands1.push_back(graph->getNode(93));
-	islands1.push_back(graph->getNode(94));
-	islands1.push_back(graph->getNode(95));
-	islands1.push_back(graph->getNode(96));
-	islands1.push_back(graph->getNode(118));
-	islands1.push_back(graph->getNode(119));
-	islands1.push_back(graph->getNode(120));
-	islands1.push_back(graph->getNode(121));
-	islands1.push_back(graph->getNode(143));
-	islands1.push_back(graph->getNode(144));
-	islands1.push_back(graph->getNode(145));
-	islands1.push_back(graph->getNode(146));
-	islands1.push_back(graph->getNode(168));
-	islands1.push_back(graph->getNode(169));
-	islands1.push_back(graph->getNode(170));
-	islands1.push_back(graph->getNode(171));
+	for (int i = 0; i < 4; i++)
+	{
+		for (int e = 0; e < 4; e++)
+		{
+			int number = 93;
+			islands1.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 	island1->getBody()->setPos(Vec3(20, 5, 0));
 	for (int i = 0; i < islands1.size(); i++)
 	{
 		island1->AddIslandNode(islands1.at(i));
-
 	}
+
 	islandsVector.push_back(*island1);
 
 
+	////Island 2
 	island2 = new Island();
 	island2->OnCreate(this);
 	island2->setImageWith(IMG_Load("assets/island2.png"));
 
 	std::vector<Node*> islands2;
-	islands2.push_back(graph->getNode(292));
-	islands2.push_back(graph->getNode(293));
-	islands2.push_back(graph->getNode(317));
-	islands2.push_back(graph->getNode(318));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 292;
+			islands2.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 	island2->getBody()->setPos(Vec3(18, 12, 0));
-	island2->AddIslandNode(islands2.at(0));
-	island2->AddIslandNode(islands2.at(1));
-	island2->AddIslandNode(islands2.at(2));
-	island2->AddIslandNode(islands2.at(3));
+	for (int i = 0; i < islands2.size(); i++)
+	{
+		island2->AddIslandNode(islands2.at(i));
+	}
+
 	islandsVector.push_back(*island2);
 
+
+	////Island 3
 	island3 = new Island();
 	island3->OnCreate(this);
 	island3->setImageWith(IMG_Load("assets/island3.png"));
 
 	std::vector<Node*> islands3;
-	islands3.push_back(graph->getNode(86));
-	islands3.push_back(graph->getNode(87));
-	islands3.push_back(graph->getNode(88));
-	islands3.push_back(graph->getNode(111));
-	islands3.push_back(graph->getNode(112));
-	islands3.push_back(graph->getNode(113));
-	islands3.push_back(graph->getNode(136));
-	islands3.push_back(graph->getNode(137));
-	islands3.push_back(graph->getNode(138));
+	for (int i = 0; i < 3; i++)
+	{
+		for (int e = 0; e < 3; e++)
+		{
+			int number = 86;
+			islands3.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 	island3->getBody()->setPos(Vec3(12.5, 4.5, 0));
 	for (int i = 0; i < islands3.size(); i++)
 	{
 		island3->AddIslandNode(islands3.at(i));
-
 	}
+
 	islandsVector.push_back(*island3);
 
+
+	////Island 4
 	island4 = new Island();
 	island4->OnCreate(this);
 	island4->setImageWith(IMG_Load("assets/island4.png"));
 
 	std::vector<Node*> islands4;
-	islands4.push_back(graph->getNode(279));
-	islands4.push_back(graph->getNode(280));
-	islands4.push_back(graph->getNode(304));
-	islands4.push_back(graph->getNode(305));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 279;
+			islands4.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 
 	island4->getBody()->setPos(Vec3(5, 12, 0));
-	island4->AddIslandNode(islands4.at(0));
-	island4->AddIslandNode(islands4.at(1));
-	island4->AddIslandNode(islands4.at(2));
-	island4->AddIslandNode(islands4.at(3));
+	for (int i = 0; i < islands4.size(); i++)
+	{
+		island4->AddIslandNode(islands4.at(i));
+	}
 
 	islandsVector.push_back(*island4);
 
+
+	////Island 5
 	island5 = new Island();
 	island5->OnCreate(this);
 	island5->setImageWith(IMG_Load("assets/island5.png"));
 
 	std::vector<Node*> islands5;
-	islands5.push_back(graph->getNode(235));
-	islands5.push_back(graph->getNode(236));
-	islands5.push_back(graph->getNode(260));
-	islands5.push_back(graph->getNode(261));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 235;
+			islands5.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 	island5->getBody()->setPos(Vec3(11, 10, 0));
-	island5->AddIslandNode(islands5.at(0));
-	island5->AddIslandNode(islands5.at(1));
-	island5->AddIslandNode(islands5.at(2));
-	island5->AddIslandNode(islands5.at(3));
+	for (int i = 0; i < islands5.size(); i++)
+	{
+		island5->AddIslandNode(islands5.at(i));
+	}
+
 	islandsVector.push_back(*island5);
 
+
+	////Island 6
 	island6 = new Island();
 	island6->OnCreate(this);
 	island6->setImageWith(IMG_Load("assets/island6.png"));
 
 	std::vector<Node*> islands6;
-	islands6.push_back(graph->getNode(105));
-	islands6.push_back(graph->getNode(106));
-	islands6.push_back(graph->getNode(130));
-	islands6.push_back(graph->getNode(131));
+	//Island[5]
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 105;
+			islands6.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
 
 	island6->getBody()->setPos(Vec3(6, 5, 0));
-	island6->AddIslandNode(islands6.at(0));
-	island6->AddIslandNode(islands6.at(1));
-	island6->AddIslandNode(islands6.at(2));
-	island6->AddIslandNode(islands6.at(3));
+	for (int i = 0; i < islands6.size(); i++)
+	{
+		island6->AddIslandNode(islands6.at(i));
+	}
 
 	islandsVector.push_back(*island6);
 
+	//Delete Nodes
 	islands1.clear();
 	islands2.clear();
 	islands3.clear();
