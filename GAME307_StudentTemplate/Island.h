@@ -16,6 +16,8 @@ private:
 	class Scene* scene;
 
 	Collider2D collider;
+	SDL_Texture* texture;
+	SDL_Surface* destroyedTexture;
 
 	//Enemy stats 
 	Stats* stats;
@@ -41,6 +43,7 @@ public:
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
 	void render(float scale = 1.0f);
+	void SetDestroyedTexture(SDL_Surface* texture) { destroyedTexture = texture; }
 
 	//Getter for body 
 	Body* getBody() { return body; }

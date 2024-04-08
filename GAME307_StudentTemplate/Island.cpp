@@ -53,7 +53,7 @@ bool Island::setImageWith(SDL_Surface* file)
 	}
 	SDL_Window* window = scene->getWindow();
 	SDL_Renderer* renderer = SDL_GetRenderer(window);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+	texture = SDL_CreateTextureFromSurface(renderer, image);
 	if (!texture)
 	{
 		std::cerr << "Can't create texture" << std::endl;
@@ -65,8 +65,7 @@ bool Island::setImageWith(SDL_Surface* file)
 
 void Island::Update(float deltaTime)
 {
-	
-
+	if (stats->GetHealth() == 0) body->setTexture(texture);
 }
 
 void Island::HandleEvents(const SDL_Event& event)
