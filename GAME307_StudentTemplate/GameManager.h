@@ -1,12 +1,12 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
+#pragma once
 #include <SDL.h>
 #include <iostream>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
 #include "PlayerBody.h"
-
 
 class GameManager {
 private:
@@ -44,6 +44,7 @@ public:
     void LoadScene( int i );
     void handleEvents();
     bool ValidateCurrentScene();
+	Scene* GetScene() { return currentScene; }
     
 };
 #endif

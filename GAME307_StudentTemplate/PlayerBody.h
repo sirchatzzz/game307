@@ -19,7 +19,6 @@
 
 //UI Headers
 #include "NumbersUI.h"
-#include "UIElement.h"
 
 //Enum for gear states
 enum GearState {
@@ -36,6 +35,8 @@ class Projectile;
 
 class PlayerBody : public Body
 {
+private:
+
 protected:
     class GameManager* game;
 

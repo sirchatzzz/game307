@@ -68,7 +68,21 @@ private:
 	Island* island;
 	std::vector<Island> islandsVector;
 
-	
+	//UI Elements
+	UIElement* backgroundUI = new UIElement("Background", "Assets/UI Assets/UI_Background.png", Vec3(2, 0.8, 0), 1, 0);
+	UIElement* reverseWhiteUI = new UIElement("Reverse White UI", "Assets/UI Assets/GearSelector/r.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* reverseRedUI = new UIElement("Reverse Red UI", "Assets/UI Assets/GearSelector/r-red.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* parkWhiteUI = new UIElement("Park White UI", "Assets/UI Assets/GearSelector/p.png", Vec3(1.25, 0.8, 0), 0.5 / 10, 0);
+	UIElement* parkRedUI = new UIElement("Park Red UI", "Assets/UI Assets/GearSelector/p-red.png", Vec3(1.25, 0.8, 0), 0.5 / 10, 0);
+	UIElement* neutralWhiteUI = new UIElement("Neutral White UI", "Assets/UI Assets/GearSelector/n.png", Vec3(1.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* neutralRedUI = new UIElement("Neutral Red UI", "Assets/UI Assets/GearSelector/n-red.png", Vec3(1.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* oneWhiteUI = new UIElement("First Gear White UI", "Assets/UI Assets/GearSelector/1.png", Vec3(2.25, 0.8, 0), 0.5 / 10, 0);
+	UIElement* oneRedUI = new UIElement("First Gear Red UI", "Assets/UI Assets/GearSelector/1-red.png", Vec3(2.25, 0.8, 0), 0.5 / 10, 0);
+	UIElement* twoWhiteUI = new UIElement("Second Gear White UI", "Assets/UI Assets/GearSelector/2.png", Vec3(2.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* twoRedUI = new UIElement("Second Gear Red UI", "Assets/UI Assets/GearSelector/2-red.png", Vec3(2.75, 0.8, 0), 0.5 / 10, 0);
+	UIElement* threeWhiteUI = new UIElement("Third Gear White UI", "Assets/UI Assets/GearSelector/3.png", Vec3(3.25, 0.8, 0), 0.5 / 10, 0);
+	UIElement* threeRedUI = new UIElement("Third Gear Red UI", "Assets/UI Assets/GearSelector/3-red.png", Vec3(3.25, 0.8, 0), 0.5 / 10, 0);
+
 
 private:
 

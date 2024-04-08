@@ -344,7 +344,20 @@ bool Scene1::OnCreate() {
 	enemySpawner = new Spawner(enemy);
 	enemySpawner->OnCreate(this);
 
-
+	//UI Elements
+	backgroundUI->OnCreate(this);
+	reverseWhiteUI->OnCreate(this);
+	reverseRedUI->OnCreate(this);
+	parkWhiteUI->OnCreate(this);
+	parkRedUI->OnCreate(this);
+	neutralWhiteUI->OnCreate(this);
+	neutralRedUI->OnCreate(this);
+	oneWhiteUI->OnCreate(this);
+	oneRedUI->OnCreate(this);
+	twoWhiteUI->OnCreate(this);
+	twoRedUI->OnCreate(this);
+	threeWhiteUI->OnCreate(this);
+	threeRedUI->OnCreate(this);
 	return true;
 }
 
@@ -528,6 +541,71 @@ void Scene1::Render() {
 	island->render(0.5f);
 	enemySpawner->render(0.5f);
 	
+	//UI Rendering
+	backgroundUI->Render();
+	
+	//Gear Selection UI
+	switch(game->getPlayer()->GetGearState())
+	{
+	case GearState::REVERSE:
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		reverseRedUI->Render();
+		break;
+	case GearState::PARK:
+		reverseWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		parkRedUI->Render();
+		break;
+	case GearState::NEUTRAL:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		neutralRedUI->Render();
+		break;
+	case GearState::DRIVE1:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneRedUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		break;
+	case GearState::DRIVE2:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoRedUI->Render();
+		threeWhiteUI->Render();
+		break;
+	case GearState::DRIVE3:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeRedUI->Render();
+		break;
+	default:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+	}
+
+	
+
 	SDL_RenderPresent(renderer);
 
 	//islandColls[5].RenderCollider(renderer);
