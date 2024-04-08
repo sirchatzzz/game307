@@ -100,10 +100,10 @@ void PlayerBody::Render(float scale)
     turret->Render(scale / 32);
 
     Vec3 ammoUIPos;
-    ammoUIPos = projectionMatrix * Vec3(2, 10, 0);
+    ammoUIPos = projectionMatrix * Vec3(3.75, 0.8, 0);
 
     if(playerAmmo->GetCurrentMagAmmo() < 10)
-        ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), 0, 0);
+        ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), ammoUIPos.x, ammoUIPos.y);
     else
         ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), ammoUIPos.x, ammoUIPos.y);
 

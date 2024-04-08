@@ -121,7 +121,7 @@ void NumbersUI::Render(SDL_Renderer* renderer_, float scale, int number, float s
 
 		selectNumber(renderer, scale, ones, screenX_, screenY_);
 		//Screen Coords - move number to right
-		screenX += 50;
+		screenX += 25;
 		selectNumber(renderer, scale, tens, screenX, screenY_);
 	}
 	else if (number < 1000)
