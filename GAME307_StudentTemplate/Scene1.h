@@ -67,7 +67,7 @@ private:
 	Island* island4;
 	Island* island5;
 	Island* island6;
-	std::vector<Island> islandsVector;
+	std::vector<Island*> islandsVector;
 
 private:
 

@@ -63,6 +63,19 @@ bool Character::OnCreate(Scene* scene_)
 	return true;
 }
 
+void Character::OnDestroy()
+{
+	if (turret != nullptr) turret->OnDestroy();
+
+	bullets.clear();
+
+	delete currentNode;
+	delete targetNode;
+	delete enemyStats;
+	delete body;
+
+}
+
 bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 {
 	spriteImages = images_;
@@ -104,7 +117,7 @@ void Character::Update(float deltaTime)
 	}
 
 	if (enemyStats->GetHealth() == 0) EnemyDeath();
-	if (targetIsland.IsDestroyed()) CalculateNextIsland();
+	if (targetIslandDestroyed) CalculateNextIsland();
 
 	//Create steering behaviour
 	SteeringOutput* steering;
@@ -355,6 +368,7 @@ void Character::CalculateTargetIsland()
 	}
 
 	calculateIslandPath = true;
+	targetIslandDestroyed = false;
 }
 
 void Character::CalculateNextIsland()

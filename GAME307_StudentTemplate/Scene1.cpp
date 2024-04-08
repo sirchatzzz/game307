@@ -375,7 +375,13 @@ bool Scene1::OnCreate() {
 	InitializeIslands();
 
 	enemy = new Character();
-	enemy->SetIslands(islandsVector);
+
+	for (int i = 0; i < islandsVector.size(); i++)
+	{
+		enemy->SetIslands(*islandsVector.at(i));
+
+	}
+
 	enemy->OnCreate(this);
 	enemy->setImageWith(enemyImage, 0);
 	Stats* enemyStats = new Stats(50, 50, 10);
@@ -388,7 +394,28 @@ bool Scene1::OnCreate() {
 	return true;
 }
 
-void Scene1::OnDestroy() {}
+void Scene1::OnDestroy() {
+
+
+
+	enemySpawner->OnDestroy();
+
+	for (int i = 0; i < islandsVector.size(); i++)
+	{
+		islandsVector.at(i)->OnDestroy();
+	}
+	islandsVector.clear();
+
+	delete playerNode;
+	tiles.clear();
+	delete graph;
+	sceneNodes.clear();
+
+	game->getPlayer()->OnDestroy();
+
+	delete this;
+
+}
 
 void Scene1::ManageBullets()
 {
@@ -413,41 +440,51 @@ void Scene1::ManageBullets()
 		}
 	}
 
-	//Check for player bullets hitting island //Will be switched from player to enemy later
-	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
+	//Check for enemy bullets hitting island
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-
-		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(island1->GetCollider()))
+		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 		{
+			bool breakout = false;
+			for (int e = 0; e < islandsVector.size(); e++)
+			{
+				if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(islandsVector.at(e)->GetCollider()))
+				{
 
-			std::cout << "Island Hit!!" << std::endl;
-		
-			island1->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+					std::cout << "Island Hit!!" << std::endl;
 
-			auto it = game->getPlayer()->GetBullets()->begin() + i;
-			game->getPlayer()->GetBullets()->erase(it);
+					islandsVector.at(e)->GetStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
+					auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+					enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+					breakout = true;
+				}
+				if (breakout)
+					break;
+			}
 		}
 	}
 
 
 	//Check for enemy bullets hitting player
-	/*for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-
-		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 		{
 
-			std::cout << "Player Hit!!" << std::endl;
-			blinky->GetBullets()->at(i).~Projectile();
+			if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+			{
 
-			game->getPlayer()->GetPlayerStats()->TakeDamage(blinky->GetBullets()->at(i).GetProjectileDamage());
+				std::cout << "Player Hit!!" << std::endl;
 
-			auto it = blinky->GetBullets()->begin() + i;
-			blinky->GetBullets()->erase(it);
+				game->getPlayer()->GetPlayerStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
+				auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+				enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+
+			}
 		}
-	}*/
+	}
 
 	//Check for player bullets going off screen
 	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
@@ -525,13 +562,21 @@ void Scene1::Update(const float deltaTime) {
 
 	enemySpawner->Update(deltaTime);
 
-	island1->Update(deltaTime);
-	island2->Update(deltaTime);
-	island3->Update(deltaTime);
-	island4->Update(deltaTime);
-	island5->Update(deltaTime);
-	island6->Update(deltaTime);
+	for (int i = 0; i < islandsVector.size(); i++)
+	{
 
+		islandsVector.at(i)->Update(deltaTime);
+
+		for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
+		{
+			if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+			{
+				if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+			}
+
+		}
+
+	}
 
 }
 
@@ -750,7 +795,7 @@ void Scene1::InitializeIslands()
 		island1->AddIslandNode(islands1.at(i));
 	}
 
-	islandsVector.push_back(*island1);
+	islandsVector.push_back(island1);
 
 
 	////Island 2
@@ -774,7 +819,7 @@ void Scene1::InitializeIslands()
 		island2->AddIslandNode(islands2.at(i));
 	}
 
-	islandsVector.push_back(*island2);
+	islandsVector.push_back(island2);
 
 
 	////Island 3
@@ -798,7 +843,7 @@ void Scene1::InitializeIslands()
 		island3->AddIslandNode(islands3.at(i));
 	}
 
-	islandsVector.push_back(*island3);
+	islandsVector.push_back(island3);
 
 
 	////Island 4
@@ -823,7 +868,7 @@ void Scene1::InitializeIslands()
 		island4->AddIslandNode(islands4.at(i));
 	}
 
-	islandsVector.push_back(*island4);
+	islandsVector.push_back(island4);
 
 
 	////Island 5
@@ -847,7 +892,7 @@ void Scene1::InitializeIslands()
 		island5->AddIslandNode(islands5.at(i));
 	}
 
-	islandsVector.push_back(*island5);
+	islandsVector.push_back(island5);
 
 
 	////Island 6
@@ -872,7 +917,7 @@ void Scene1::InitializeIslands()
 		island6->AddIslandNode(islands6.at(i));
 	}
 
-	islandsVector.push_back(*island6);
+	islandsVector.push_back(island6);
 
 	//Delete Nodes
 	islands1.clear();

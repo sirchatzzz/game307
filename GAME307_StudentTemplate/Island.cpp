@@ -44,6 +44,16 @@ bool Island::OnCreate(Scene* scene_)
 	return true;
 }
 
+void Island::OnDestroy()
+{
+	delete stats;
+
+	islandNodes.clear();
+
+	delete body;
+
+}
+
 bool Island::setImageWith(SDL_Surface* file)
 {
 	SDL_Surface* image = file;
@@ -66,6 +76,10 @@ bool Island::setImageWith(SDL_Surface* file)
 void Island::Update(float deltaTime)
 {
 	
+	if (stats->GetHealth() == 0)
+	{
+		IslandDeath();
+	}
 
 }
 
@@ -118,5 +132,15 @@ void Island::render(float scale)
 Collider2D Island::GetCollider()
 {
 	return collider;
+}
+
+void Island::IslandDeath()
+{
+	//Implement animation for island death
+
+
+
+
+	isDestroyed = true;
 }
 
