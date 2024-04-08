@@ -70,6 +70,8 @@ private:
 
 	//UI Elements
 	UIElement* backgroundUI = new UIElement("Background", "Assets/UI Assets/UI_Background.png", Vec3(2, 0.8, 0), 1, 0);
+	UIElement* ammoUI = new UIElement("Ammo UI", "Assets/UI Assets/ammo_ui.png", Vec3(4, 0.8, 0), 1, 0);
+	UIElement* ammoBackgroundUI = new UIElement("Ammo Background UI", "Assets/UI Assets/ammo_background.png", Vec3(4.35, 0.8, 0), 1, 0);
 
 	//Gear Selection UI
 	UIElement* reverseWhiteUI = new UIElement("Reverse White UI", "Assets/UI Assets/GearSelector/r.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);

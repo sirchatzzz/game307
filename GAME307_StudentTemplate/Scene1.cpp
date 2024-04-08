@@ -346,6 +346,8 @@ bool Scene1::OnCreate() {
 
 	//UI Elements
 	backgroundUI->OnCreate(this);
+	ammoUI->OnCreate(this);
+	ammoBackgroundUI->OnCreate(this);
 	reverseWhiteUI->OnCreate(this);
 	reverseRedUI->OnCreate(this);
 	parkWhiteUI->OnCreate(this);
@@ -395,6 +397,8 @@ void Scene1::OnDestroy() {
 
 	//UI Elements
 	delete backgroundUI;
+	delete ammoUI;
+	delete ammoBackgroundUI;
 	delete reverseWhiteUI;
 	delete reverseWhiteUI;
 	delete parkWhiteUI;
@@ -592,7 +596,9 @@ void Scene1::Render() {
 	
 	//UI Rendering
 	backgroundUI->Render();
-	
+	ammoBackgroundUI->Render();
+	ammoUI->Render();
+
 	//Gear Selection UI
 	switch(game->getPlayer()->GetGearState())
 	{
