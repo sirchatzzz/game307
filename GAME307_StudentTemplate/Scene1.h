@@ -15,7 +15,10 @@
 #include "Spawner.h"
 #include <memory>
 #include "Island.h"
+#include "UIElement.h"
+
 using namespace MATH;
+
 class Scene1 : public Scene {
 private:
 	float animationCounter;
@@ -64,6 +67,8 @@ private:
 
 	Island* island;
 	std::vector<Island> islandsVector;
+
+	
 
 private:
 

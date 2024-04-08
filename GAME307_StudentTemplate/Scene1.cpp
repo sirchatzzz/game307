@@ -345,7 +345,6 @@ bool Scene1::OnCreate() {
 	enemySpawner->OnCreate(this);
 
 
-
 	return true;
 }
 
@@ -529,7 +528,6 @@ void Scene1::Render() {
 	island->render(0.5f);
 	enemySpawner->render(0.5f);
 	
-
 	SDL_RenderPresent(renderer);
 
 	//islandColls[5].RenderCollider(renderer);

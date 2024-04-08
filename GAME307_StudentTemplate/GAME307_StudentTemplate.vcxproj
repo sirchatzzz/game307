@@ -77,6 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\GameDev\MathLibrary\include;C:\GameDev\SDL\include;$(SolutionDir)\GAME307_StudentTemplate;$(SolutionDir)\GAME307_StudentTemplate\Steering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,6 +164,7 @@
     <ClCompile Include="Tiles.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -199,6 +201,7 @@
     <ClInclude Include="Tiles.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Turret.h" />
+    <ClInclude Include="UIElement.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />
