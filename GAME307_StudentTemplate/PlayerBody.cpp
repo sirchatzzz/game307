@@ -50,6 +50,8 @@ bool PlayerBody::OnCreate()
     turret->SetGame(game);
     turret->OnCreate();
 
+    ammoUI.OnCreate(game->getRenderer());
+
     return true;
 }
 
@@ -96,6 +98,7 @@ void PlayerBody::Render(float scale)
     }
 
     turret->Render(scale / 32);
+    ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), 1, 12);
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)

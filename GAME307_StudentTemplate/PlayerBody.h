@@ -17,6 +17,10 @@
 #include <vector>
 #include "Turret.h"
 
+//UI Headers
+#include "NumbersUI.h"
+#include "UIElement.h"
+
 //Enum for gear states
 enum GearState {
 
@@ -52,6 +56,7 @@ protected:
     //Bullet vector
     class std::vector<Projectile> bullets;
 
+    NumbersUI ammoUI;
 
 public:
     PlayerBody() : Body{}
