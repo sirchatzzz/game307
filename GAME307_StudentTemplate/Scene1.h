@@ -70,6 +70,8 @@ private:
 
 	//UI Elements
 	UIElement* backgroundUI = new UIElement("Background", "Assets/UI Assets/UI_Background.png", Vec3(2, 0.8, 0), 1, 0);
+
+	//Gear Selection UI
 	UIElement* reverseWhiteUI = new UIElement("Reverse White UI", "Assets/UI Assets/GearSelector/r.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
 	UIElement* reverseRedUI = new UIElement("Reverse Red UI", "Assets/UI Assets/GearSelector/r-red.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
 	UIElement* parkWhiteUI = new UIElement("Park White UI", "Assets/UI Assets/GearSelector/p.png", Vec3(1.25, 0.8, 0), 0.5 / 10, 0);

@@ -361,7 +361,56 @@ bool Scene1::OnCreate() {
 	return true;
 }
 
-void Scene1::OnDestroy() {}
+void Scene1::OnDestroy() {
+	
+	for (int i = 0; i < 4; i++)
+	{
+		SDL_FreeSurface(enemyImage[i]);
+		SDL_FreeSurface(playerImage[i]);
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		SDL_DestroyTexture(playerTexture[i]);
+		SDL_DestroyTexture(enemyTexture[i]);
+	}
+	
+	for (int i = 0; i < islandImage.size(); i++)
+	{
+		SDL_FreeSurface(islandImage.at(i));
+	}
+
+	for (int i = 0; i < islandTexture.size(); i++)
+	{
+		SDL_DestroyTexture(islandTexture.at(i));
+	}
+
+	SDL_FreeSurface(waterBackground);
+	SDL_DestroyTexture(waterTexture);
+
+	delete playerNode;
+	delete graph;
+	delete enemy;
+	delete enemySpawner;
+
+	//UI Elements
+	delete backgroundUI;
+	delete reverseWhiteUI;
+	delete reverseWhiteUI;
+	delete parkWhiteUI;
+	delete parkRedUI;
+	delete neutralWhiteUI;
+	delete neutralRedUI;
+	delete oneWhiteUI;
+	delete oneRedUI;
+	delete twoWhiteUI;
+	delete twoRedUI;
+	delete threeWhiteUI;
+	delete threeRedUI;
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+}
 
 void Scene1::ManageBullets()
 {
