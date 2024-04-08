@@ -17,177 +17,89 @@ NumbersUI::NumbersUI()
 
 }
 
-void NumbersUI::OnCreate(SDL_Renderer* renderer_, bool RoundorZombieUI)
+void NumbersUI::OnCreate(SDL_Renderer* renderer_)
 {
-	
-	if (RoundorZombieUI)
-	{
-		//Load imageOne 
-		imageOne = IMG_Load("Assets/UI/HUD/level number/1.png");
-		renderer = renderer_;
-		textureOne = SDL_CreateTextureFromSurface(renderer, imageOne);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageOne image" << std::endl;
 
-		}
+	//Load imageOne 
+	imageOne = IMG_Load("Assets/UI Assets/Numbers/1.png");
+	renderer = renderer_;
+	textureOne = SDL_CreateTextureFromSurface(renderer, imageOne);
+	if (imageOne == nullptr) {
+		std::cerr << "Can't open the imageOne image" << std::endl;
 
-		//Load imageTwo
-		imageTwo = IMG_Load("Assets/UI/HUD/level number/2.png");
-		textureTwo = SDL_CreateTextureFromSurface(renderer, imageTwo);
-		if (imageTwo == nullptr) {
-			std::cerr << "Can't open the imageTwo image" << std::endl;
-
-		}
-
-		//Load imageThree 
-		imageThree = IMG_Load("Assets/UI/HUD/level number/3.png");
-		textureThree = SDL_CreateTextureFromSurface(renderer, imageThree);
-		if (imageThree == nullptr) {
-			std::cerr << "Can't open the imageThree image" << std::endl;
-
-		}
-
-		//Load imageFour
-		imageFour = IMG_Load("Assets/UI/HUD/level number/4.png");
-		textureFour = SDL_CreateTextureFromSurface(renderer, imageFour);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageFour image" << std::endl;
-
-		}
-
-		//Load imageFive
-		imageFive = IMG_Load("Assets/UI/HUD/level number/5.png");
-		textureFive = SDL_CreateTextureFromSurface(renderer, imageFive);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageFive image" << std::endl;
-
-		}
-
-		//Load imageSix 
-		imageSix = IMG_Load("Assets/UI/HUD/level number/6.png");
-		textureSix = SDL_CreateTextureFromSurface(renderer, imageSix);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageSix image" << std::endl;
-
-		}
-
-		//Load imageSeven 
-		imageSeven = IMG_Load("Assets/UI/HUD/level number/7.png");
-		textureSeven = SDL_CreateTextureFromSurface(renderer, imageSeven);
-		if (imageSeven == nullptr) {
-			std::cerr << "Can't open the imageSeven image" << std::endl;
-
-		}
-
-		//Load imageEight 
-		imageEight = IMG_Load("Assets/UI/HUD/level number/8.png");
-		textureEight = SDL_CreateTextureFromSurface(renderer, imageEight);
-		if (imageEight == nullptr) {
-			std::cerr << "Can't open the textureEight image" << std::endl;
-
-		}
-
-		//Load imageNine 
-		imageNine = IMG_Load("Assets/UI/HUD/level number/9.png");
-		textureNine = SDL_CreateTextureFromSurface(renderer, imageNine);
-		if (imageNine == nullptr) {
-			std::cerr << "Can't open the imageNine image" << std::endl;
-
-		}
-
-		//Load imageZero 
-		imageZero = IMG_Load("Assets/UI/HUD/level number/0.png");
-		textureZero = SDL_CreateTextureFromSurface(renderer, imageZero);
-		if (imageZero == nullptr) {
-			std::cerr << "Can't open the imageZero image" << std::endl;
-
-		}
-	}
-	else
-	{
-		//Load imageOne 
-		imageOne = IMG_Load("Assets/UI/HUD/level number/health1.png");
-		renderer = renderer_;
-		textureOne = SDL_CreateTextureFromSurface(renderer, imageOne);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageOne image" << std::endl;
-
-		}
-
-		//Load imageTwo
-		imageTwo = IMG_Load("Assets/UI/HUD/level number/health2.png");
-		textureTwo = SDL_CreateTextureFromSurface(renderer, imageTwo);
-		if (imageTwo == nullptr) {
-			std::cerr << "Can't open the imageTwo image" << std::endl;
-
-		}
-
-		//Load imageThree 
-		imageThree = IMG_Load("Assets/UI/HUD/level number/health3.png");
-		textureThree = SDL_CreateTextureFromSurface(renderer, imageThree);
-		if (imageThree == nullptr) {
-			std::cerr << "Can't open the imageThree image" << std::endl;
-
-		}
-
-		//Load imageFour
-		imageFour = IMG_Load("Assets/UI/HUD/level number/health4.png");
-		textureFour = SDL_CreateTextureFromSurface(renderer, imageFour);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageFour image" << std::endl;
-
-		}
-
-		//Load imageFive
-		imageFive = IMG_Load("Assets/UI/HUD/level number/health5.png");
-		textureFive = SDL_CreateTextureFromSurface(renderer, imageFive);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageFive image" << std::endl;
-
-		}
-
-		//Load imageSix 
-		imageSix = IMG_Load("Assets/UI/HUD/level number/health6.png");
-		textureSix = SDL_CreateTextureFromSurface(renderer, imageSix);
-		if (imageOne == nullptr) {
-			std::cerr << "Can't open the imageSix image" << std::endl;
-
-		}
-
-		//Load imageSeven 
-		imageSeven = IMG_Load("Assets/UI/HUD/level number/health7.png");
-		textureSeven = SDL_CreateTextureFromSurface(renderer, imageSeven);
-		if (imageSeven == nullptr) {
-			std::cerr << "Can't open the imageSeven image" << std::endl;
-
-		}
-
-		//Load imageEight 
-		imageEight = IMG_Load("Assets/UI/HUD/level number/health8.png");
-		textureEight = SDL_CreateTextureFromSurface(renderer, imageEight);
-		if (imageEight == nullptr) {
-			std::cerr << "Can't open the textureEight image" << std::endl;
-
-		}
-
-		//Load imageNine 
-		imageNine = IMG_Load("Assets/UI/HUD/level number/health9.png");
-		textureNine = SDL_CreateTextureFromSurface(renderer, imageNine);
-		if (imageNine == nullptr) {
-			std::cerr << "Can't open the imageNine image" << std::endl;
-
-		}
-
-		//Load imageZero 
-		imageZero = IMG_Load("Assets/UI/HUD/level number/health0.png");
-		textureZero = SDL_CreateTextureFromSurface(renderer, imageZero);
-		if (imageZero == nullptr) {
-			std::cerr << "Can't open the imageZero image" << std::endl;
-
-		}
 	}
 
-	
+	//Load imageTwo
+	imageTwo = IMG_Load("Assets/UI Assets/Numbers/2.png");
+	textureTwo = SDL_CreateTextureFromSurface(renderer, imageTwo);
+	if (imageTwo == nullptr) {
+		std::cerr << "Can't open the imageTwo image" << std::endl;
+
+	}
+
+	//Load imageThree 
+	imageThree = IMG_Load("Assets/UI Assets/Numbers/3.png");
+	textureThree = SDL_CreateTextureFromSurface(renderer, imageThree);
+	if (imageThree == nullptr) {
+		std::cerr << "Can't open the imageThree image" << std::endl;
+
+	}
+
+	//Load imageFour
+	imageFour = IMG_Load("Assets/UI Assets/Numbers/4.png");
+	textureFour = SDL_CreateTextureFromSurface(renderer, imageFour);
+	if (imageOne == nullptr) {
+		std::cerr << "Can't open the imageFour image" << std::endl;
+
+	}
+
+	//Load imageFive
+	imageFive = IMG_Load("Assets/UI Assets/Numbers/5.png");
+	textureFive = SDL_CreateTextureFromSurface(renderer, imageFive);
+	if (imageOne == nullptr) {
+		std::cerr << "Can't open the imageFive image" << std::endl;
+
+	}
+
+	//Load imageSix 
+	imageSix = IMG_Load("Assets/UI Assets/Numbers/6.png");
+	textureSix = SDL_CreateTextureFromSurface(renderer, imageSix);
+	if (imageOne == nullptr) {
+		std::cerr << "Can't open the imageSix image" << std::endl;
+
+	}
+
+	//Load imageSeven 
+	imageSeven = IMG_Load("Assets/UI Assets/Numbers/7.png");
+	textureSeven = SDL_CreateTextureFromSurface(renderer, imageSeven);
+	if (imageSeven == nullptr) {
+		std::cerr << "Can't open the imageSeven image" << std::endl;
+
+	}
+
+	//Load imageEight 
+	imageEight = IMG_Load("Assets/UI Assets/Numbers/8.png");
+	textureEight = SDL_CreateTextureFromSurface(renderer, imageEight);
+	if (imageEight == nullptr) {
+		std::cerr << "Can't open the textureEight image" << std::endl;
+
+	}
+
+	//Load imageNine 
+	imageNine = IMG_Load("Assets/UI Assets/Numbers/9.png");
+	textureNine = SDL_CreateTextureFromSurface(renderer, imageNine);
+	if (imageNine == nullptr) {
+		std::cerr << "Can't open the imageNine image" << std::endl;
+
+	}
+
+	//Load imageZero 
+	imageZero = IMG_Load("Assets/UI Assets/Numbers/0.png");
+	textureZero = SDL_CreateTextureFromSurface(renderer, imageZero);
+	if (imageZero == nullptr) {
+		std::cerr << "Can't open the imageZero image" << std::endl;
+
+	}
 	
 }
 

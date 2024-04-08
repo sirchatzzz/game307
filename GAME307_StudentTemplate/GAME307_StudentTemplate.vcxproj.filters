@@ -98,6 +98,7 @@
       <Filter>Class</Filter>
     </ClCompile>
     <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="NumbersUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -206,6 +207,7 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="UIElement.h" />
+    <ClInclude Include="NumbersUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

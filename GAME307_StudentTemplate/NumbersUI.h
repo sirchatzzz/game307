@@ -1,6 +1,7 @@
 /*
 * Programmer:		Ahmed Hammoud
-* Date:				March, 2023
+* Created Date:		March, 2023
+* Added In:			April, 2024
 */
 #pragma once
 
@@ -50,7 +51,7 @@ public:
 	/// </summary>
 	/// <param name="renderer_"></param>
 	/// <param name="RoundorZombieUI"></param>
-	void OnCreate(SDL_Renderer* renderer_, bool RoundorZombieUI);
+	void OnCreate(SDL_Renderer* renderer_);
 
 	/// <summary>
 	/// Logic for rendering numbers to the screen 

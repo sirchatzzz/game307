@@ -32,7 +32,7 @@ private:
 public:
 
 	/// <summary>
-	/// 
+	/// Basic UI Constructor.
 	/// </summary>
 	/// <param name="name_"></param>
 	/// <param name="file"></param>
@@ -44,10 +44,23 @@ public:
 	UIElement(std::string name_, const char* file, Vec3 position_, float scale_, float orientation_, int row_ = -1, int col_ = -1);
 	~UIElement();
 
+	/// <summary>
+	/// Loads the Image and Textures
+	/// </summary>
+	/// <param name="scene_"></param>
+	/// <returns></returns>
 	bool OnCreate(Scene* scene_);
 
+	/// <summary>
+	/// Selects Sprite (Not Functional)
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
 	void SelectSprite(int x, int y);
 
+	/// <summary>
+	/// Renders the image
+	/// </summary>
 	void Render();
 };
 
