@@ -360,6 +360,27 @@ bool Scene1::OnCreate() {
 	twoRedUI->OnCreate(this);
 	threeWhiteUI->OnCreate(this);
 	threeRedUI->OnCreate(this);
+
+	heartOne->OnCreate(this);
+	heartOneBorder->OnCreate(this);
+	heartOneBG->OnCreate(this);
+
+	heartTwo->OnCreate(this);
+	heartTwoBorder->OnCreate(this);
+	heartTwoBG->OnCreate(this);
+
+	heartThree->OnCreate(this);
+	heartThreeBorder->OnCreate(this);
+	heartThreeBG->OnCreate(this);
+
+	heartFour->OnCreate(this);
+	heartFourBorder->OnCreate(this);
+	heartFourBG->OnCreate(this);
+
+	heartFive->OnCreate(this);
+	heartFiveBorder->OnCreate(this);
+	heartFiveBG->OnCreate(this);
+
 	return true;
 }
 
@@ -411,6 +432,26 @@ void Scene1::OnDestroy() {
 	delete twoRedUI;
 	delete threeWhiteUI;
 	delete threeRedUI;
+
+	delete heartOne;
+	delete heartOneBorder;
+	delete heartOneBG;
+
+	delete heartTwo;
+	delete heartTwoBorder;
+	delete heartTwoBG;
+
+	delete heartThree;
+	delete heartThreeBorder;
+	delete heartThreeBG;
+
+	delete heartFour;
+	delete heartFourBorder;
+	delete heartFourBG;
+
+	delete heartFive;
+	delete heartFiveBorder;
+	delete heartFiveBG;
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
@@ -588,16 +629,65 @@ void Scene1::Render() {
 		SDL_RenderCopy(renderer, islandTexture[i], nullptr, &islandRect[i]);
 	}
 
+	//UI Rendering
+	backgroundUI->Render();
+	ammoBackgroundUI->Render();
+	ammoUI->Render();
+
+	//Hearts (health) Border/Background
+	heartOneBorder->Render();
+	heartOneBG->Render();
+	heartTwoBorder->Render();
+	heartTwoBG->Render();
+	heartThreeBorder->Render();
+	heartThreeBG->Render();
+	heartFourBorder->Render();
+	heartFourBG->Render();
+	heartFiveBorder->Render();
+	heartFiveBG->Render();
+
+	//Player Health heart rendering
+	int playerHealth = game->getPlayer()->GetPlayerStats()->GetHealth();
+	switch (playerHealth)
+	{
+	case 50:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		heartFour->Render();
+		heartFive->Render();
+		break;
+	case 40:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		heartFour->Render();
+		break;
+	case 30:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		break;
+	case 20:
+		heartOne->Render();
+		heartTwo->Render();
+		break;
+	case 10:
+		heartOne->Render();
+		break;
+	}
+		
 	
+	
+
+	
+
 	// render the player
 	game->RenderPlayer(0.5f);
 	island->render(0.5f);
 	enemySpawner->render(0.5f);
 	
-	//UI Rendering
-	backgroundUI->Render();
-	ammoBackgroundUI->Render();
-	ammoUI->Render();
+	
 
 	//Gear Selection UI
 	switch(game->getPlayer()->GetGearState())

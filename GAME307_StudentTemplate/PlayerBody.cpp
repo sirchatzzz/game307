@@ -39,7 +39,7 @@ bool PlayerBody::OnCreate()
     collider.SetColliderActive(true);
     gearState = GearState::NEUTRAL;
 
-    playerStats = new Stats(50, 100, 5);
+    playerStats = new Stats(40, 50, 5);
     playerAmmo = new ShipAmmo(100,65,14);
 
     bullet = Projectile();

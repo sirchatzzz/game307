@@ -73,6 +73,29 @@ private:
 	UIElement* ammoUI = new UIElement("Ammo UI", "Assets/UI Assets/ammo_ui.png", Vec3(4, 0.8, 0), 1, 0);
 	UIElement* ammoBackgroundUI = new UIElement("Ammo Background UI", "Assets/UI Assets/ammo_background.png", Vec3(4.35, 0.8, 0), 1, 0);
 
+	//Player Health UI
+	UIElement* heartOne = new UIElement("HeartOne", "Assets/UI Assets/Heart/heart.png", Vec3(0.5, 1.7, 0), 1.5, 0);
+	UIElement* heartOneBorder = new UIElement("Heart One Border", "Assets/UI Assets/Heart/border.png", Vec3(0.5, 1.7, 0), 1.5, 0);
+	UIElement* heartOneBG = new UIElement("Heart one Backround", "Assets/UI Assets/Heart/background.png", Vec3(0.5, 1.7, 0), 1.5, 0);
+
+	UIElement* heartTwo = new UIElement("HeartTwo", "Assets/UI Assets/Heart/heart.png", Vec3(1, 1.7, 0), 1.5, 0);
+	UIElement* heartTwoBorder = new UIElement("Heart Two Border", "Assets/UI Assets/Heart/border.png", Vec3(1, 1.7, 0), 1.5, 0);
+	UIElement* heartTwoBG = new UIElement("Heart Two Backround", "Assets/UI Assets/Heart/background.png", Vec3(1, 1.7, 0), 1.5, 0);
+
+
+	UIElement* heartThree = new UIElement("HeartThree", "Assets/UI Assets/Heart/heart.png", Vec3(1.5, 1.7, 0), 1.5, 0);
+	UIElement* heartThreeBorder = new UIElement("Heart three Border", "Assets/UI Assets/Heart/border.png", Vec3(1.5, 1.7, 0), 1.5, 0);
+	UIElement* heartThreeBG = new UIElement("Heart three Backround", "Assets/UI Assets/Heart/background.png", Vec3(1.5, 1.7, 0), 1.5, 0);
+
+	UIElement* heartFour = new UIElement("HeartFour", "Assets/UI Assets/Heart/heart.png", Vec3(2, 1.7, 0), 1.5, 0);
+	UIElement* heartFourBorder = new UIElement("Heart four Border", "Assets/UI Assets/Heart/border.png", Vec3(2, 1.7, 0), 1.5, 0);
+	UIElement* heartFourBG = new UIElement("Heart four Backround", "Assets/UI Assets/Heart/background.png", Vec3(2, 1.7, 0), 1.5, 0);
+
+	UIElement* heartFive = new UIElement("HeartFive", "Assets/UI Assets/Heart/heart.png", Vec3(2.5, 1.7, 0), 1.5, 0);
+	UIElement* heartFiveBorder = new UIElement("Heart five Border", "Assets/UI Assets/Heart/border.png", Vec3(2.5, 1.7, 0), 1.5, 0);
+	UIElement* heartFiveBG = new UIElement("Heart five Backround", "Assets/UI Assets/Heart/background.png", Vec3(2.5, 1.7, 0), 1.5, 0);
+
+
 	//Gear Selection UI
 	UIElement* reverseWhiteUI = new UIElement("Reverse White UI", "Assets/UI Assets/GearSelector/r.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
 	UIElement* reverseRedUI = new UIElement("Reverse Red UI", "Assets/UI Assets/GearSelector/r-red.png", Vec3(0.75, 0.8, 0), 0.5 / 10, 0);
