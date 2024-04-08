@@ -90,6 +90,7 @@ public:
     
     //Base functions for each class
     bool OnCreate();
+    void OnDestroy();
     void Render( float scale = 1.0f );
     void HandleEvents( const SDL_Event& event );
     void Update( float deltaTime );

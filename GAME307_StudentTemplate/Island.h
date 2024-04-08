@@ -18,7 +18,7 @@ private:
 
 	Collider2D collider;
 
-	//Enemy stats 
+	//Island stats 
 	Stats* stats;
 
 	bool isDestroyed;
@@ -39,7 +39,7 @@ public:
 
 	//Base functions for each class
 	bool OnCreate(Scene* scene_);
-	void OnDestroy() {};
+	void OnDestroy();
 	bool setImageWith(SDL_Surface* file);
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
@@ -51,8 +51,10 @@ public:
 	//Getter for collider 
 	Collider2D GetCollider();
 
-	//Getter for enemy stats
+	//Getter for island stats
 	Stats* GetStats() { return stats; }
+
+	void IslandDeath();
 
 	bool IsDestroyed() { return isDestroyed; }
 

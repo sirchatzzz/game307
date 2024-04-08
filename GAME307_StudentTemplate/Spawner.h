@@ -20,7 +20,7 @@ public:
 	Spawner(Character* enemy_);
 	
 	bool OnCreate(Scene* scene_);
-	void OnDestroy() { delete scene; };
+	void OnDestroy();
 
 	void Update(float time);
 	void render(float scale = 1.0f);

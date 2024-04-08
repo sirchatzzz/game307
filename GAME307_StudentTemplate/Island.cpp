@@ -44,6 +44,16 @@ bool Island::OnCreate(Scene* scene_)
 	return true;
 }
 
+void Island::OnDestroy()
+{
+	delete stats;
+
+	islandNodes.clear();
+
+	delete body;
+
+}
+
 bool Island::setImageWith(SDL_Surface* file)
 {
 	SDL_Surface* image = file;
@@ -66,6 +76,10 @@ bool Island::setImageWith(SDL_Surface* file)
 void Island::Update(float deltaTime)
 {
 	
+	if (stats->GetHealth() == 0)
+	{
+		IslandDeath();
+	}
 
 }
 
@@ -109,8 +123,8 @@ void Island::render(float scale)
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
 	
-	collider.SetColliderBounds(square.w, square.h);
-	collider.SetColliderPosition(square.x, square.y);
+	collider.SetColliderBounds(square.w - 25, square.h - 25);
+	collider.SetColliderPosition(square.x + 12, square.y + 12);
 	collider.RenderCollider(renderer);
 
 }
@@ -118,5 +132,15 @@ void Island::render(float scale)
 Collider2D Island::GetCollider()
 {
 	return collider;
+}
+
+void Island::IslandDeath()
+{
+	//Implement animation for island death
+
+
+
+
+	isDestroyed = true;
 }
 
