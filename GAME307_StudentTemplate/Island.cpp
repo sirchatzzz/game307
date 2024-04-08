@@ -46,12 +46,14 @@ bool Island::OnCreate(Scene* scene_)
 
 bool Island::setImageWith(SDL_Surface* file)
 {
+
 	SDL_Surface* image = file;
 	if (image == nullptr) {
 		std::cerr << "Can't open the image" << std::endl;
 		return false;
 	}
 	SDL_Window* window = scene->getWindow();
+	SDL_Texture* texture;
 	SDL_Renderer* renderer = SDL_GetRenderer(window);
 	texture = SDL_CreateTextureFromSurface(renderer, image);
 	if (!texture)
@@ -65,7 +67,6 @@ bool Island::setImageWith(SDL_Surface* file)
 
 void Island::Update(float deltaTime)
 {
-	if (stats->GetHealth() == 0) body->setTexture(texture);
 }
 
 void Island::HandleEvents(const SDL_Event& event)
@@ -112,6 +113,12 @@ void Island::render(float scale)
 	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
+}
+
+void Island::SetDestroyedTexture(const char* path)
+{
+	SDL_Surface* surface = IMG_Load(path);
+	setImageWith(surface);
 }
 
 Collider2D Island::GetCollider()
