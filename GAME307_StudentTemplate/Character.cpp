@@ -7,17 +7,18 @@
 #include <thread>
 #include <random>
 #include "FollowAPath.h"
-
+#include "Action.h"
+#include "FloatDecision.h"
+#include <functional>
 Projectile bullet2;
 
-
+bool test = false;
 bool Character::OnCreate(Scene* scene_)
 {
 	scene = scene_;
 	// Configure and instantiate the body to use for the demo
 	if (!body)
 	{
-		audio.playAudio(4, 5);
 		float radius = 0.2;
 		float orientation = 0.0f;
 		float rotation = 0.0f;
@@ -46,24 +47,33 @@ bool Character::OnCreate(Scene* scene_)
 
 	collider.SetColliderActive(true);
 
-	aggroRadius = 4;
-	attackRadius = 2;
+	aggroRadius = 6;
+	attackRadius = 3;
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
-	CalculateTargetIsland();
 
 	turret = new Turret();
 	turret->SetGame(scene->game);
 	turret->OnCreate();
-	attackSpeed = 80;
+	attackSpeed = 160;
 	target = Vec3();
 	patrolling = false;
 	animationCounter = 0;
-
-	SDL_Window* window = scene->getWindow();
-	renderer = SDL_GetRenderer(window);
 	return true;
+}
+
+void Character::OnDestroy()
+{
+	if (turret != nullptr) turret->OnDestroy();
+
+	bullets.clear();
+
+	delete currentNode;
+	delete targetNode;
+	delete enemyStats;
+	delete body;
+
 }
 
 bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
@@ -74,6 +84,8 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 		std::cerr << "Can't open the image" << std::endl;
 		return false;
 	}
+	SDL_Window* window = scene->getWindow();
+	SDL_Renderer* renderer = SDL_GetRenderer(window);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, spriteImages[spriteIndex_]);
 	if (!texture)
 	{
@@ -86,138 +98,79 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 
 void Character::Update(float deltaTime)
 {
-	if (enemyStats->GetHealth() == 0) EnemyDeath();
 
-	if (targetIsland.IsDestroyed()) CalculateNextIsland();
-
-	CalculateState();
-
-	static float time = 0;
+	if (!calculateIsland)
+	{
+		CalculateTargetIsland();
+		calculateIsland = true;
+	}
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
 	setImageWith(spriteImages, indexSelector);
 
-	//Pathfind and steer to target island
-	if (enemyState == AIState::GOTOISLAND)
+	updatePlayerPathTime++;
+	if (updatePlayerPathTime == 60)
 	{
-
-
-
-
+		calculatePlayerPath = true;
+		updatePlayerPathTime = 0;
 	}
 
-	//Pathfind and steer to target player
-	if (enemyState == AIState::CHASEPLAYER)
-	{
+	if (enemyStats->GetHealth() == 0) EnemyDeath();
+	if (targetIslandDestroyed) CalculateNextIsland();
 
+	//Create steering behaviour
+	SteeringOutput* steering;
+	steering = new SteeringOutput();
 
+	//Create the binded functions for each action and decision
+	auto goToIslandFunc = [this, &steering](Vec3) {
+		GoToIsland(targetIsland.getBody()->getPos(), *steering);
+	};
 
+	auto goToPlayerFunc = [this, &steering](Vec3) {
+		GoToPlayer(targetPlayer.getPos(), *steering);
+	};
 
-	}
+	auto attackIslandFunc = [this](Vec3) {
+		AttackTarget(targetIsland.getBody()->getPos());
+	};
 
-	//Attack Target
-	if (enemyState == AIState::ATTACKTARGET)
-	{
+	auto attackPlayerFunc = [this](Vec3) {
+		AttackTarget(targetPlayer.getPos());
+	};
+	
+	auto checkPlayerDistanceFunc = [this](Vec3) {
+		return CheckDistance(targetPlayer.getPos());
+	};
 
-		time++;
-		if (time > attackSpeed)
-		{
+	auto checkIslandDistanceFunc = [this](Vec3) {
+		return CheckDistance(targetIsland.getBody()->getPos());
+	};
 
-			FireBullet();
+	//Create the actions and decisions for the decision tree
+	Action goToIslandAction(goToIslandFunc);
+	Action goToPlayerAction(goToPlayerFunc);
+	Action attackPlayerAction(attackPlayerFunc);
+	Action attackIslandAction(attackIslandFunc);
 
-				time = 0;
-		}
+	FloatDecision islandAttackDecision(0.0, attackRadius, &attackIslandAction, &goToIslandAction, checkIslandDistanceFunc, "IslandAttack");
+	FloatDecision playerAttackDecision(0.0, attackRadius, &attackPlayerAction, &goToPlayerAction, checkPlayerDistanceFunc, "PlayerAttack");
 
+	FloatDecision aggroDecision(0.0, aggroRadius, &playerAttackDecision, &islandAttackDecision, checkPlayerDistanceFunc, "AggroCheck");
 
-	}
-
-	//////Create steering behaviour
-	//SteeringOutput* steering;
-	//steering = new SteeringOutput();
-	//static float time = 0;
-
-	////Find the distance between the AI and its target
-	//Vec3 distance = target - body->getPos();
+	//Start decision tree
+	aggroDecision.makeDecision();
 
 	////Change Orientation of Character
-	//Align align;
-	//FollowAPath followAPath;
-	//*steering += *(align.getSteering(target, this));
+	Align align;
+	*steering += *(align.getSteering(target, this));
 
-	//time = 0;
-	////Set the radius of the target
-	//float targetRadius = sqrt(pow(distance.x, 2) + pow(distance.y, 2));
-	////Set the slow radius so the AI will begin to slow down once it enters this radius
-	//float slowRadius = targetRadius + 5;
-	////Create an Arrive steering behaviour and set the parameters
-	//Arrive arrive(body->getMaxAcceleration(), body->getMaxSpeed(), targetRadius, slowRadius);
-	////Call arrive function that sets this steering behaviour to the one created in the function
-	//
-	//if (currentPath.GetCurrentNode() != NULL && characterPath.GetCurrentNode() != NULL)
-	//{
+	//////Update AI
+	body->Update(deltaTime,steering);
 
-	//	std::cout << "Current Path: " << currentPath.GetCurrentNode()->getLabel() << " Patrol Path Start Node: " << characterPath.GetCurrentNode()->getLabel() << "\n";
-	//	//if (!patrolling && abs(body->getPos().x) - abs(currentPath.GetCurrentNode()->GetPos().x) < 1.8f && abs(body->getPos().y) - abs(currentPath.GetCurrentNode()->GetPos().y) < 1.8f)
-	//	if(!patrolling && currentPath.GetCurrentNode() != characterPath.GetCurrentNode())
-	//	{
-	//		*steering += *(followAPath.getSteering(&currentPath, this));			
-	//	}
-	//	else
-	//	{
-	//		patrolling = true;
-	//		*steering += *(followAPath.getSteering(&characterPath, this));
-	//	}
-	//		
-	//}
-	//
-
-
-	////Check to see if AI is near target
-	//if (!checkIfNearTarget())
-	//{
-	//	
-	//	
-
-	//	//near = true;
-	//	
-	//}
-	//else
-	//{
-	//	//If near player then Fire
-	//	time++;
-	//	if (time > attackSpeed)
-	//	{
-
-	//		FireBullet();
-
-	//		time = 0;
-	//	}
-
-	//}
-
-	//
-	////Steering
-	//if (sqrt(distance.x * distance.x + distance.y * distance.y) < aggroRadius)
-	//{
-	//
-
-	//	
-
-	//}
-	////If not steering towards target instead use path finding to patrol map
-	//else
-	//{
-
-	//}
-
-
-
-	////Update AI
-	//body->Update(deltaTime,steering);
-
-	////Delete steering behaviour when finished
-	//delete steering;
+	//////Delete steering behaviour when finished
+	delete steering;
 
 	//Update turret and bullets
 	UpdateTurret(deltaTime);
@@ -244,6 +197,7 @@ void Character::render(float scale)
 {
 	SDL_Renderer* renderer = scene->game->getRenderer();
 	Matrix4 projectionMatrix = scene->getProjectionMatrix();
+
 	SDL_Rect square;
 	Vec3 screenCoords;
 	int    w, h;
@@ -257,6 +211,7 @@ void Character::render(float scale)
 	square.y = static_cast<int>(screenCoords.y - 0.5f * h);
 	square.w = w;
 	square.h = h;
+
 	// Convert character orientation from radians to degrees.
 	float orientation = body->getOrientation() * 180.0f / M_PI;
 
@@ -275,6 +230,7 @@ void Character::render(float scale)
 		if (bullets.at(i).GetFiredStatus() == true) bullets.at(i).Render(0.05);
 
 	}
+
 }
 
 ///Basic function to check if the AI is near its target
@@ -284,7 +240,7 @@ bool Character::checkIfNearTarget()
 	Vec3 distance = target - body->getPos();
 	bool nearTarget;
 
-	if (sqrt(distance.x * 2 + distance.y * 2 + distance.z * 2) < attackRadius) nearTarget = true;
+	if (sqrt(distance.x * distance.x + distance.y * distance.y) < attackRadius) nearTarget = true;
 	else nearTarget = false;
 
 	return nearTarget;
@@ -296,26 +252,14 @@ Collider2D Character::GetCollider()
 	return collider;
 }
 
-
-void Character::SetCharacterPath(Path path_)
-{
-	characterPath.SetPath(path_.GetPath());
-	
-}
-
 //Update the turret object 
 void Character::UpdateTurret(float deltaTime_)
 {
 
-
 	turret->setPos(body->getPos());
-
 	//Match orientation to the AI's orientation if the AI is not close enough to attack player
-
 	Vec3 distance = target - turret->getPos();
 	turret->SetOrientation(std::atan2(-distance.x, -distance.y));
-
-
 
 	turret->Update(deltaTime_);
 
@@ -324,18 +268,13 @@ void Character::UpdateTurret(float deltaTime_)
 //Update bullets 
 void Character::UpdateBullets(float deltaTime_)
 {
-
 	for (int i = 0; i < bullets.size(); i++)
 	{
-
 		if (bullets.at(i).GetFiredStatus() == true)
 		{
 			bullets.at(i).Update(deltaTime_);
-
 		}
-
 	}
-
 }
 
 //Create and fire bullets
@@ -387,43 +326,6 @@ void Character::EnemyDeath()
 
 }
 
-void Character::CalculateState()
-{
-	Vec3 distanceToPlayerVector = targetPlayer.getPos() - getBody()->getPos();
-	float distanceToPlayer = sqrt(distanceToPlayerVector.x * 2 + distanceToPlayerVector.y * 2 + distanceToPlayerVector.z * 2);
-
-
-
-	if (distanceToPlayer > aggroRadius)
-	{
-
-		enemyState = AIState::GOTOISLAND;
-		target = targetIsland.getBody()->getPos();
-
-
-	}
-
-	if (distanceToPlayer < aggroRadius)
-	{
-		enemyState = AIState::CHASEPLAYER;
-		target = targetPlayer.getPos();
-
-	}
-
-	Vec3 distanceToTargetVector = target - getBody()->getPos();
-	float distanceToTarget = sqrt(distanceToTargetVector.x * 2 + distanceToTargetVector.y * 2 + distanceToTargetVector.z * 2);
-
-	if (distanceToTarget < attackRadius) enemyState = AIState::ATTACKTARGET;
-	else
-	{
-		if (target = targetPlayer.getPos()) enemyState = AIState::CHASEPLAYER;
-
-
-	}
-
-
-}
-
 void Character::CalculateTargetIsland()
 {
 
@@ -435,7 +337,7 @@ void Character::CalculateTargetIsland()
 	{
 
 		distanceVector = islands.at(i).getBody()->getPos() - getBody()->getPos();
-		float d = sqrt(distanceVector.x * 2 + distanceVector.y * 2 + distanceVector.z * 2);
+		float d = sqrt(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
 
 		if (i == 0)
 		{
@@ -451,7 +353,22 @@ void Character::CalculateTargetIsland()
 		}
 	}
 
+	float closesetNode = 1000;
+	for (int i = 0; i < targetIsland.GetIslandNodes().size(); i++)
+	{
 
+		Vec3 distance = targetIsland.GetIslandNodes().at(i)->GetPos() - currentNode->GetPos();
+		float d = sqrt(distance.x * distance.x + distance.y * distance.y);
+
+		if (d < closesetNode)
+		{
+			closesetNode = d;
+			targetNode = targetIsland.GetIslandNodes().at(i);
+		}
+	}
+
+	calculateIslandPath = true;
+	targetIslandDestroyed = false;
 }
 
 void Character::CalculateNextIsland()
@@ -466,6 +383,52 @@ void Character::CalculateNextIsland()
 	}
 
 	CalculateTargetIsland();
+
+}
+
+void Character::AttackTarget(Vec3 target_)
+{
+	target = target_;
+
+	attackTime++;
+	if (attackTime > attackSpeed)
+	{
+		FireBullet();
+		attackTime = 0;
+	}
+}
+
+void Character::GoToIsland(Vec3 target_, SteeringOutput& steering_)
+{
+
+	if (playerPathActive)
+	{
+		calculateIslandPath = true;
+		playerPathActive = false;
+	}
+	target = target_;
+
+	FollowAPath followAPath;
+	if (islandPath.GetCurrentNode() != NULL)
+	{
+		steering_ += *followAPath.getSteering(&islandPath, this);
+	
+	}
+
+}
+
+void Character::GoToPlayer(Vec3 target_, SteeringOutput& steering_)
+{
+
+	playerPathActive = true;
+	target = target_;
+
+	FollowAPath followAPath;
+	if (playerPath.GetCurrentNode() != NULL)
+	{
+		steering_ += *followAPath.getSteering(&playerPath, this);
+
+	}
 
 }
 

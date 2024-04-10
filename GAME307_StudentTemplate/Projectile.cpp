@@ -45,8 +45,6 @@ void Projectile::Render(float scale)
         float    w, h;
 
         // convert the position from game coords to screen coords
-
-        //crashes here, no clue why
         screenCoords = projectionMatrix * pos;
         w = image->w * scale;
         h = image->h * scale;

@@ -12,16 +12,12 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_): animationCounter(0),
 	graph = NULL;
 
 	// create a NPC
-	blinky = nullptr;
+
 	enemySpawner = nullptr;
 }
 
 Scene1::~Scene1(){
-	if (blinky) 
-	{
-		blinky->OnDestroy();
-		delete blinky;
-	}
+
 }
 
 void Scene1::createTiles()
@@ -83,47 +79,106 @@ void Scene1::CalculateConnectionWeights()
 
 	//Stores the nodes of which the islands occupy
 	std::vector<Node*> islands;
-	
+
 	//Island[0]
-	islands.push_back(graph->getNode(69));
-	islands.push_back(graph->getNode(93));
-	islands.push_back(graph->getNode(94));
-	islands.push_back(graph->getNode(118));
-	islands.push_back(graph->getNode(119));
-	islands.push_back(graph->getNode(120));
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int e = 0; e < 4; e++)
+		{
+			int number = 93;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 
 	//Island[1]
-	islands.push_back(graph->getNode(292));
-	islands.push_back(graph->getNode(293));
-	islands.push_back(graph->getNode(317));
-	islands.push_back(graph->getNode(318));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 292;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[2]
-	islands.push_back(graph->getNode(112));
-	islands.push_back(graph->getNode(113));
-	islands.push_back(graph->getNode(137));
-	islands.push_back(graph->getNode(138));
+	for (int i = 0; i < 3; i++)
+	{
+		for (int e = 0; e < 3; e++)
+		{
+			int number = 86;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[3]
-	islands.push_back(graph->getNode(279));
-	islands.push_back(graph->getNode(280));
-	islands.push_back(graph->getNode(304));
-	islands.push_back(graph->getNode(305));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 279;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[4]
-	islands.push_back(graph->getNode(235));
-	islands.push_back(graph->getNode(236));
-	islands.push_back(graph->getNode(260));
-	islands.push_back(graph->getNode(261));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 235;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
+
+
+		}
+	}
 
 	//Island[5]
-	islands.push_back(graph->getNode(105));
-	islands.push_back(graph->getNode(106));
-	islands.push_back(graph->getNode(130));
-	islands.push_back(graph->getNode(131));
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 105;
+			islands.push_back(graph->getNode(number + e + (25 * i)));
 
-	
+
+		}
+	}
+
+
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		for (int j = 0; j < tiles.at(i).size(); j++)
+		{
+			for (int e = 0; e < islands.size(); e++)
+			{
+
+				if (islands.at(e) == tiles.at(i).at(j)->getNode())
+				{
+
+					tiles.at(i).at(j)->setRGBA(255, 0, 0, 100);
+
+				}
+
+
+			}
+
+			
+
+
+		}
+
+
+	}
 
 
 
@@ -223,7 +278,6 @@ void Scene1::CalculateConnectionWeights()
 bool Scene1::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
-	audio.playAudio(3, 2);
 	
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
@@ -285,54 +339,25 @@ bool Scene1::OnCreate() {
 
 	downOutOfBoundsColl = Collider2D(0, 1080, 2000, 5);
 	downOutOfBoundsColl.SetColliderActive(true);
-
+	
 	//Island Postions in screen coords
 	islandRect[0] = {1350, 650, 250, 300};
 	islandRect[1] = { 1300, 150, 150, 150 };
 	islandRect[2] = { 900, 600, 200, 250 };
 	islandRect[3] = { 285, 100, 200, 200 };
 	islandRect[4] = { 765, 275, 150, 150 };
-	islandRect[5] = { 385, 650, 150, 150 };
+	//islandRect[5] = { 385, 650, 150, 150 };
 	
-
+	
 	//Player Initializers
 	game->getPlayer()->setImage(playerImage[0]);
 	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
 
-
-
-
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
-	blinky = new Character();
-	if (!blinky->OnCreate(this) || !blinky->setImageWith(enemyImage,0))
-	{
-		return false;
-	}
-	blinky->getBody()->setPos(Vec3(20, 0, 0));
+
 	// end of character set ups
-
-	island = new Island();
-	if (!island->OnCreate(this) || !island->setImageWith(IMG_Load("assets/island6.png")))
-	{
-		return false;
-	}
-
-
-	island->getBody()->setPos(Vec3(10, 6, 0));
-	std::vector<Island> islands;
-	islands.push_back(*island);
-
-	enemy = new Character();
-	enemy->SetIslands(islands);
-	enemy->OnCreate(this);
-	enemy->setImageWith(enemyImage, 0);
-	enemy->getBody()->setPos(Vec3(20, 0, 0));
-	Stats* enemyStats = new Stats(50, 50, 10);
-	enemy->SetEnemyStats(enemyStats);
-	enemySpawner = new Spawner(enemy);
-	enemySpawner->OnCreate(this);
 
 	game->getPlayer()->GetCollider().collFlagChange(false);
 
@@ -505,7 +530,6 @@ void Scene1::ManageBullets()
 			{
 
 				std::cout << "Enemy Hit!!" << std::endl;
-				audio.playAudio(1, 20);
 	
 				enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
 
@@ -516,41 +540,49 @@ void Scene1::ManageBullets()
 		}
 	}
 
-	//Check for player bullets hitting island //Will be switched from player to enemy later
-	for (int i = 0; i < game->getPlayer()->GetBullets()->size(); i++)
+	//Check for enemy bullets hitting island
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-
-		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(island->GetCollider()))
+		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 		{
+			bool breakout = false;
+			for (int e = 0; e < islandsVector.size(); e++)
+			{
+				if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(islandsVector.at(e)->GetCollider()))
+				{
 
-			std::cout << "Island Hit!!" << std::endl;
-			audio.playAudio(5, 20);
-		
-			island->GetStats()->TakeDamage(game->getPlayer()->GetBullets()->at(i).GetProjectileDamage());
+					std::cout << "Island Hit!!" << std::endl;
 
-			auto it = game->getPlayer()->GetBullets()->begin() + i;
-			game->getPlayer()->GetBullets()->erase(it);
+					islandsVector.at(e)->GetStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
+					auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+					enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+					breakout = true;
+				}
+				if (breakout)
+					break;
+			}
 		}
 	}
 
 
 	//Check for enemy bullets hitting player
-	for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-
-		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 		{
 
-			std::cout << "Player Hit!!" << std::endl;
-			audio.playAudio(1, 20);
-			blinky->GetBullets()->at(i).~Projectile();
+			if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+			{
 
-			game->getPlayer()->GetPlayerStats()->TakeDamage(blinky->GetBullets()->at(i).GetProjectileDamage());
+				std::cout << "Player Hit!!" << std::endl;
 
-			auto it = blinky->GetBullets()->begin() + i;
-			blinky->GetBullets()->erase(it);
+				game->getPlayer()->GetPlayerStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
+				auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+				enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+
+			}
 		}
 	}
 
@@ -561,29 +593,27 @@ void Scene1::ManageBullets()
 		if (game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || game->getPlayer()->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
 		{
 
-			//game->getPlayer()->GetBullets()->at(i).~Projectile();
 
 			auto it = game->getPlayer()->GetBullets()->begin() + i;
 			game->getPlayer()->GetBullets()->erase(it);
-			audio.playAudio(6, 20);
 
 		}
 	}
 
 
 	//Check for enemy bullets going off screen
-	for (int i = 0; i < blinky->GetBullets()->size(); i++)
+	for (int e = 0; e < enemySpawner->GetEnemyArr().size(); e++)
 	{
-
-		if (blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || blinky->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+		for (int i = 0; i < enemySpawner->GetEnemyArr().at(e)->GetBullets()->size(); i++)
 		{
 
-			//game->getPlayer()->GetBullets()->at(i).~Projectile();
+			if (enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(leftOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(rightOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(upOutOfBoundsColl) || enemySpawner->GetEnemyArr().at(e)->GetBullets()->at(i).GetCollider().CollisionMathTesting(downOutOfBoundsColl))
+			{
 
-			auto it = blinky->GetBullets()->begin() + i;
-			blinky->GetBullets()->erase(it);
-			audio.playAudio(6, 20);
+				auto it = enemySpawner->GetEnemyArr().at(e)->GetBullets()->begin() + i;
+				enemySpawner->GetEnemyArr().at(e)->GetBullets()->erase(it);
 
+			}
 		}
 	}
 }
@@ -593,22 +623,33 @@ void Scene1::Update(const float deltaTime) {
 	++animationCounter;
 	if (animationCounter > 60) animationCounter = 0;
 	int indexSelector = std::round(animationCounter / 20.0f);
+
+	//Set AI current node to each AI. So they know where they are in the tile graph ;)
+	UpdateAIPositionNodes();
+
+	static float updatePlayerNodeTime = 0;
+	updatePlayerNodeTime++;
 	
+	//AI Find Path
+	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+	{
+		if(enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
+		{
+			enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+			enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
+		}
+
+		if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
+		{
+			enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
+			enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
+		}
+	}
 
 	game->getPlayer()->setImage(playerImage[indexSelector]);
 	game->getPlayer()->setTexture(playerTexture[indexSelector]);
 
 	game->getPlayer()->Update(deltaTime);
-
-
-	//game->getPlayer()->GetCollider().CollisionCheckWithDebugMessages(blinky->GetCollider());
-	//game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider());
-
-	if (game->getPlayer()->GetCollider().CollisionMathTesting(blinky->GetCollider()))
-	{
-		std::cout << "\nBlicky Collision Detected By Player";
-		game->getPlayer()->GetPlayerStats()->TakeDamage(1);
-	}
 
 	ManageBullets();
 
@@ -621,15 +662,27 @@ void Scene1::Update(const float deltaTime) {
 
 	enemySpawner->Update(deltaTime);
 
-	island->Update(deltaTime);
+	for (int i = 0; i < islandsVector.size(); i++)
+	{
+
+		islandsVector.at(i)->Update(deltaTime);
+
+		for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
+		{
+			if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+			{
+				if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+			}
+
+		}
+
+	}
+
 }
 
 void Scene1::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-
-	// render any npc's
-	
 
 	// render the background
 	SDL_RenderCopy(renderer, waterTexture, nullptr, nullptr);
@@ -779,7 +832,7 @@ void Scene1::Render() {
 
 	SDL_RenderPresent(renderer);
 
-	//islandColls[5].RenderCollider(renderer);
+
 
 }
 
@@ -798,7 +851,6 @@ void Scene1::GetMousePOS()
 void Scene1::HandleEvents(const SDL_Event& event)
 {
 	// send events to npc's as needed
-	blinky->HandleEvents(event);
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
 	
@@ -830,7 +882,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 			TestPathFinding();
 			break;
 		case SDL_SCANCODE_4:
-			SetBlinkyPath();
+
 
 			break;
 		case SDL_SCANCODE_3:
@@ -869,81 +921,218 @@ void Scene1::TestPathFinding()
 	}
 }
 
-void Scene1::SetBlinkyPath()
+
+void Scene1::UpdateAIPositionNodes()
 {
-	
-	Uint8 r, g, b, a;
-	r = 0;
-	g = 0;
-	b = 255;
-	a = 100;
-	
-	
+	//Set AI Current Nodes
 
-	patrolPath.SetPath(graph->findPath(tiles[14][0]->getNode(), tiles[1][22]->getNode()));
-	blinky->SetCharacterPath(patrolPath);
-
-
-	Path newPatrolPath = blinky->GetCharacterPath().GetPath();
-	while (newPatrolPath.GetCurrentNode() != nullptr)
+	for (int e = 0; e < enemySpawner->GetEnemyArr().size(); e++)
 	{
+		bool breakout = false;
 		for (int i = 0; i < tiles.size(); i++)
 		{
 			for (int j = 0; j < tiles[i].size(); j++)
 			{
-				if (tiles[i][j]->getNode() == newPatrolPath.GetCurrentNode())
+
+
+				if (abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f
+					&& abs(enemySpawner->GetEnemyArr().at(e)->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
 				{
-					tiles[i][j]->setRGBA(r, g, b, a);
-				}
-			}
-		}
-
-		newPatrolPath.MoveToNextNode();
-	}
-
-
-	bool breakout = false;
-	if (blinky->GetCurrentPath().GetCurrentNode() == NULL)
-	{
-		for (int i = 0; i < tiles.size(); i++)
-		{
-			for (int j = 0; j < tiles[i].size(); j++)
-			{
-				if (abs(blinky->getBody()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f && abs(blinky->getBody()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
-				{
+				
 					Node* blinkyNode = tiles[i][j]->getNode();
-					blinky->SetCurrentPath(graph->findPath(blinkyNode, patrolPath.GetCurrentNode()));
+					enemySpawner->GetEnemyArr().at(e)->SetCurrentNode(blinkyNode);
 					breakout = true;
 				}
 
 				if (breakout)
 					break;
 			}
-			
+
 			if (breakout)
 				break;
 		}
 
-		g = 255;
-		b = 0;
-
-		Path newPath = blinky->GetCurrentPath().GetPath();
-		while (newPath.GetCurrentNode() != nullptr)
-		{
-			for (int i = 0; i < tiles.size(); i++)
-			{
-				for (int j = 0; j < tiles[i].size(); j++)
-				{
-					if (tiles[i][j]->getNode() == newPath.GetCurrentNode())
-					{
-						tiles[i][j]->setRGBA(r, g, b, a);
-					}
-				}
-			}
-			
-			newPath.MoveToNextNode();
-		}
-
 	}
 
+
+	bool breakout = false;
+	for (int i = 0; i < tiles.size(); i++)
+	{
+
+		for (int j = 0; j < tiles[i].size(); j++)
+		{
+			if (abs(game->getPlayer()->getPos().x) - abs(tiles[i][j]->GetPos().x) < 1.8f
+				&& abs(game->getPlayer()->getPos().y) - abs(tiles[i][j]->GetPos().y) < 1.8f)
+			{
+
+				Node* blinkyNode = tiles[i][j]->getNode();
+				playerNode = blinkyNode;
+				breakout = true;
+			}
+
+			if (breakout)
+				break;
+		}
+
+		if (breakout)
+			break;
+	}
+
+}
+
+void Scene1::InitializeIslands()
+{
+	////Island 1
+	island1 = new Island();
+	island1->OnCreate(this);
+	island1->setImageWith(IMG_Load("assets/island1.png"));
+
+	std::vector<Node*> islands1;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int e = 0; e < 4; e++)
+		{
+			int number = 93;
+			islands1.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+	island1->getBody()->setPos(Vec3(20, 5, 0));
+	for (int i = 0; i < islands1.size(); i++)
+	{
+		island1->AddIslandNode(islands1.at(i));
+	}
+
+	islandsVector.push_back(island1);
+
+
+	////Island 2
+	island2 = new Island();
+	island2->OnCreate(this);
+	island2->setImageWith(IMG_Load("assets/island2.png"));
+
+	std::vector<Node*> islands2;
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 292;
+			islands2.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+	island2->getBody()->setPos(Vec3(18, 12, 0));
+	for (int i = 0; i < islands2.size(); i++)
+	{
+		island2->AddIslandNode(islands2.at(i));
+	}
+
+	islandsVector.push_back(island2);
+
+
+	////Island 3
+	island3 = new Island();
+	island3->OnCreate(this);
+	island3->setImageWith(IMG_Load("assets/island3.png"));
+
+	std::vector<Node*> islands3;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int e = 0; e < 3; e++)
+		{
+			int number = 86;
+			islands3.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+	island3->getBody()->setPos(Vec3(12.5, 4.5, 0));
+	for (int i = 0; i < islands3.size(); i++)
+	{
+		island3->AddIslandNode(islands3.at(i));
+	}
+
+	islandsVector.push_back(island3);
+
+
+	////Island 4
+	island4 = new Island();
+	island4->OnCreate(this);
+	island4->setImageWith(IMG_Load("assets/island4.png"));
+
+	std::vector<Node*> islands4;
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 279;
+			islands4.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+
+	island4->getBody()->setPos(Vec3(5, 12, 0));
+	for (int i = 0; i < islands4.size(); i++)
+	{
+		island4->AddIslandNode(islands4.at(i));
+	}
+
+	islandsVector.push_back(island4);
+
+
+	////Island 5
+	island5 = new Island();
+	island5->OnCreate(this);
+	island5->setImageWith(IMG_Load("assets/island5.png"));
+
+	std::vector<Node*> islands5;
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 235;
+			islands5.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+	island5->getBody()->setPos(Vec3(11, 10, 0));
+	for (int i = 0; i < islands5.size(); i++)
+	{
+		island5->AddIslandNode(islands5.at(i));
+	}
+
+	islandsVector.push_back(island5);
+
+
+	////Island 6
+	island6 = new Island();
+	island6->OnCreate(this);
+	island6->setImageWith(IMG_Load("assets/island6.png"));
+
+	std::vector<Node*> islands6;
+	//Island[5]
+	for (int i = 0; i < 2; i++)
+	{
+		for (int e = 0; e < 2; e++)
+		{
+			int number = 105;
+			islands6.push_back(graph->getNode(number + e + (25 * i)));
+		}
+	}
+
+	island6->getBody()->setPos(Vec3(6, 5, 0));
+	for (int i = 0; i < islands6.size(); i++)
+	{
+		island6->AddIslandNode(islands6.at(i));
+	}
+
+	islandsVector.push_back(island6);
+
+	//Delete Nodes
+	islands1.clear();
+	islands2.clear();
+	islands3.clear();
+	islands4.clear();
+	islands5.clear();
+	islands6.clear();
+	
 }

@@ -1,6 +1,6 @@
 #include "Spawner.h"
 
-Spawner::Spawner() : wrecksLifetime(600)
+Spawner::Spawner()
 {
 	scene = nullptr;
 	enemyArr.clear();
@@ -14,17 +14,26 @@ Spawner::Spawner(Character* enemy_)
 
 bool Spawner::OnCreate(Scene* scene_)
 {
-	spawnLocation = Vec3(1, 9, 0);
-	enemyCap = 6;
+	spawnLocation = Vec3(20, 1, 0);
+	enemyCap = 1;
 	scene = scene_;
 	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
 	enemyArr.push_back(enemy);
-
-	renderer = scene->game->getRenderer();
-	destroyedShipImage = IMG_Load("assets/boatDebris.png");
-	destroyedShipTexture = SDL_CreateTextureFromSurface(renderer, destroyedShipImage);
 	return true;
+}
+
+void Spawner::OnDestroy()
+{
+	for (int i = 0; i < enemyArr.size(); i++)
+	{
+		enemyArr.at(i)->OnDestroy();
+
+	}
+
+	enemyArr.clear();
+	delete this;
+
 }
 
 void Spawner::Update(float time)
@@ -34,22 +43,15 @@ void Spawner::Update(float time)
 	{
 		if (enemyArr.at(i)->IsDead())
 		{
-			SDL_Rect rect;
-			Matrix4 projectionMatrix = scene->getProjectionMatrix();
-			Vec3 screenCoords;
-			screenCoords = projectionMatrix * enemyArr[i]->getBody()->getPos();
-			rect.x = static_cast<int>(screenCoords.x - 0.5f * 75);
-			rect.y = static_cast<int>(screenCoords.y - 0.5f * 75);
-			rect.w = 75;
-			rect.h = 75;
-			destroyedShipsPos.push_back(rect);
 
 			auto it = enemyArr.begin() + i;
 			enemyArr.erase(it);
 		}
 
+		
 	}
-
+	
+	
 
 	static float spawnTime = 0;
 	spawnTime++;
@@ -71,13 +73,6 @@ void Spawner::Update(float time)
 
 void Spawner::render(float scale)
 {
-	if (destroyedShipsPos.size() != 0) 
-	{
-		for (int i = 0; i < destroyedShipsPos.size(); ++i)
-		{
-			SDL_RenderCopy(renderer, destroyedShipTexture, nullptr, &destroyedShipsPos[i]);
-		}
-	}
 
 	for (int i = 0; i < enemyArr.size(); i++)
 	{
@@ -86,13 +81,7 @@ void Spawner::render(float scale)
 
 	}
 
-	if (wrecksLifetime >= 600)
-	{
-		wrecksLifetime = 0;
-		destroyedShipsPos.clear();
-	}
 
-	++wrecksLifetime;
 }
 
 void Spawner::RandomizeSpawnLocation()
@@ -121,7 +110,10 @@ void Spawner::SpawnEnemy()
 {
 	RandomizeSpawnLocation();
 	Character* newEnemy = new Character();
-	newEnemy->SetIslands(enemy->GetIslands());
+	for (int i = 0; i < enemy->GetIslands().size(); i++)
+	{
+		newEnemy->SetIslands(enemy->GetIslands().at(i));
+	}
 	newEnemy->OnCreate(scene);
 	newEnemy->setImageWith(enemy->GetSpriteImages(), 0);
 	newEnemy->getBody()->setPos(spawnLocation);

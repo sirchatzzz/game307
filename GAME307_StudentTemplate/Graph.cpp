@@ -150,14 +150,14 @@ std::vector<Node*> Graph::findPath(Node* startNode, Node* goalNode)
 			if (lineCounter++ > 24)
 			{
 				lineCounter = 0;
-				std::cout << "\n";
+				//std::cout << "\n";
 			}
-			std::cout << came_from[i] << " -> ";
+			//std::cout << came_from[i] << " -> ";
 			lineCounter++;
 		}
 	}
 	
-	std::cout << "\n\n";
+	//std::cout << "\n\n";
 
 	
 	// Follow the breadcrumbs in came_from to produce path
@@ -174,9 +174,9 @@ std::vector<Node*> Graph::findPath(Node* startNode, Node* goalNode)
 
 	for (int i = 0; i < path.size(); i++)
 	{
-		std::cout << path[i]->getLabel() << " -> ";
+		//std::cout << path[i]->getLabel() << " -> ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	return path;
 }

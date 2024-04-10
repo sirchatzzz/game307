@@ -49,7 +49,6 @@ protected:
     //Ship stats for player
     Stats* playerStats;
     ShipAmmo* playerAmmo;
-    AudioPlayer audio;
     int currentMagTemp = 0; // To hold current mag
 
     //Turret object
@@ -97,6 +96,7 @@ public:
     
     //Base functions for each class
     bool OnCreate();
+    void OnDestroy();
     void Render( float scale = 1.0f );
     void HandleEvents( const SDL_Event& event );
     void Update( float deltaTime );

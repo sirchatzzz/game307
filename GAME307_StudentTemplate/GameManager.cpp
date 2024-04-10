@@ -116,6 +116,9 @@ void GameManager::Run() {
 		/// Keep the event loop running at a proper rate
 		SDL_Delay(timer->GetSleepTime(60)); ///60 frames per sec
 	}
+
+    if (!isRunning) OnDestroy();
+
 }
 
 void GameManager::handleEvents()
@@ -169,7 +172,7 @@ GameManager::~GameManager() {}
 void GameManager::OnDestroy(){
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
-	if (currentScene) delete currentScene;
+    currentScene->OnDestroy(); 
 }
 
 float GameManager::getSceneHeight()
