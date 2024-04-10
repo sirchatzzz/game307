@@ -21,12 +21,13 @@ UIElement::UIElement(std::string name_, const char* file, Vec3 position_, float 
 
 UIElement::~UIElement()
 {
-	SDL_FreeSurface(image);
+	if(image)
+		SDL_FreeSurface(image);
 	SDL_DestroyTexture(texture);
 
-	delete scene;
 
 	flagOnCreate = false;
+
 }
 
 bool UIElement::LoadImage()

@@ -464,7 +464,7 @@ void Scene1::OnDestroy() {
 	delete ammoUI;
 	delete ammoBackgroundUI;
 	delete reverseWhiteUI;
-	delete reverseWhiteUI;
+	delete reverseRedUI;
 	delete parkWhiteUI;
 	delete parkRedUI;
 	delete neutralWhiteUI;
