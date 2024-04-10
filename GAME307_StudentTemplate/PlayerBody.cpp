@@ -39,7 +39,7 @@ bool PlayerBody::OnCreate()
     collider.SetColliderActive(true);
     gearState = GearState::NEUTRAL;
 
-    playerStats = new Stats(50, 100, 5);
+    playerStats = new Stats(40, 50, 5);
     playerAmmo = new ShipAmmo(100,65,14);
 
     bullet = Projectile();
@@ -49,6 +49,8 @@ bool PlayerBody::OnCreate()
     turret = new Turret();
     turret->SetGame(game);
     turret->OnCreate();
+
+    ammoUI.OnCreate(game->getRenderer());
 
     return true;
 }
@@ -106,6 +108,16 @@ void PlayerBody::Render(float scale)
     }
 
     turret->Render(scale / 32);
+
+    Vec3 ammoUIPos;
+    ammoUIPos = projectionMatrix * Vec3(4.2, 1.10, 0);
+
+    if(playerAmmo->GetCurrentMagAmmo() < 10)
+        ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), ammoUIPos.x, ammoUIPos.y);
+    else
+        ammoUI.Render(game->getRenderer(), 0.2, playerAmmo->GetCurrentMagAmmo(), ammoUIPos.x, ammoUIPos.y);
+
+
 }
 
 void PlayerBody::HandleEvents(const SDL_Event& event)

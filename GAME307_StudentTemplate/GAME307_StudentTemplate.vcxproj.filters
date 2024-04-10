@@ -46,7 +46,6 @@
     <ClCompile Include="Align.cpp">
       <Filter>Class</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Evade.cpp">
       <Filter>Class</Filter>
     </ClCompile>
@@ -65,10 +64,6 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Class\Ahmed%27s Tile</Filter>
     </ClCompile>
-    <ClCompile Include="Graph.cpp" />
-    <ClCompile Include="FollowAPath.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="DecisionTreeNode.cpp">
       <Filter>DecisionMaking</Filter>
     </ClCompile>
@@ -84,6 +79,26 @@
     <ClCompile Include="Island.cpp">
       <Filter>Class</Filter>
     </ClCompile>
+    <ClCompile Include="AudioPlayer.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowAPath.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Class</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="NumbersUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -137,7 +152,6 @@
     <ClInclude Include="Align.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h" />
     <ClInclude Include="Tiles.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -156,12 +170,6 @@
     <ClInclude Include="Tile.h">
       <Filter>Class\Ahmed%27s Tile</Filter>
     </ClInclude>
-    <ClInclude Include="Graph.h" />
-    <ClInclude Include="FollowAPath.h" />
-    <ClInclude Include="Path.h" />
-    <ClInclude Include="Island.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Spawner.h" />
     <ClInclude Include="DecisionTreeNode.h">
       <Filter>DecisionMaking</Filter>
     </ClInclude>
@@ -174,6 +182,32 @@
     <ClInclude Include="FloatDecision.h">
       <Filter>DecisionMaking</Filter>
     </ClInclude>
+    <ClInclude Include="AudioPlayer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowAPath.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Island.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="NumbersUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

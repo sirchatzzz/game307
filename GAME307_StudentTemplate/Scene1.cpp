@@ -390,14 +390,114 @@ bool Scene1::OnCreate() {
 	enemySpawner = new Spawner(enemy);
 	enemySpawner->OnCreate(this);
 
+	//UI Elements
+	backgroundUI->OnCreate(this);
+	ammoUI->OnCreate(this);
+	ammoBackgroundUI->OnCreate(this);
+	reverseWhiteUI->OnCreate(this);
+	reverseRedUI->OnCreate(this);
+	parkWhiteUI->OnCreate(this);
+	parkRedUI->OnCreate(this);
+	neutralWhiteUI->OnCreate(this);
+	neutralRedUI->OnCreate(this);
+	oneWhiteUI->OnCreate(this);
+	oneRedUI->OnCreate(this);
+	twoWhiteUI->OnCreate(this);
+	twoRedUI->OnCreate(this);
+	threeWhiteUI->OnCreate(this);
+	threeRedUI->OnCreate(this);
 
+	heartOne->OnCreate(this);
+	heartOneBorder->OnCreate(this);
+	heartOneBG->OnCreate(this);
+
+	heartTwo->OnCreate(this);
+	heartTwoBorder->OnCreate(this);
+	heartTwoBG->OnCreate(this);
+
+	heartThree->OnCreate(this);
+	heartThreeBorder->OnCreate(this);
+	heartThreeBG->OnCreate(this);
+
+	heartFour->OnCreate(this);
+	heartFourBorder->OnCreate(this);
+	heartFourBG->OnCreate(this);
+
+	heartFive->OnCreate(this);
+	heartFiveBorder->OnCreate(this);
+	heartFiveBG->OnCreate(this);
 
 	return true;
 }
 
 void Scene1::OnDestroy() {
 
+	for (int i = 0; i < 4; i++)
+	{
+		SDL_FreeSurface(enemyImage[i]);
+		SDL_FreeSurface(playerImage[i]);
+	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		SDL_DestroyTexture(playerTexture[i]);
+		SDL_DestroyTexture(enemyTexture[i]);
+	}
+	
+	for (int i = 0; i < islandImage.size(); i++)
+	{
+		SDL_FreeSurface(islandImage.at(i));
+	}
+
+	for (int i = 0; i < islandTexture.size(); i++)
+	{
+		SDL_DestroyTexture(islandTexture.at(i));
+	}
+
+	SDL_FreeSurface(waterBackground);
+	SDL_DestroyTexture(waterTexture);
+
+	delete graph;
+
+	//UI Elements
+	delete backgroundUI;
+	delete ammoUI;
+	delete ammoBackgroundUI;
+	delete reverseWhiteUI;
+	delete reverseRedUI;
+	delete parkWhiteUI;
+	delete parkRedUI;
+	delete neutralWhiteUI;
+	delete neutralRedUI;
+	delete oneWhiteUI;
+	delete oneRedUI;
+	delete twoWhiteUI;
+	delete twoRedUI;
+	delete threeWhiteUI;
+	delete threeRedUI;
+
+	delete heartOne;
+	delete heartOneBorder;
+	delete heartOneBG;
+
+	delete heartTwo;
+	delete heartTwoBorder;
+	delete heartTwoBG;
+
+	delete heartThree;
+	delete heartThreeBorder;
+	delete heartThreeBG;
+
+	delete heartFour;
+	delete heartFourBorder;
+	delete heartFourBG;
+
+	delete heartFive;
+	delete heartFiveBorder;
+	delete heartFiveBG;
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 
 	enemySpawner->OnDestroy();
 
@@ -409,7 +509,6 @@ void Scene1::OnDestroy() {
 
 	delete playerNode;
 	tiles.clear();
-	delete graph;
 	sceneNodes.clear();
 
 	game->getPlayer()->OnDestroy();
@@ -609,7 +708,54 @@ void Scene1::Render() {
 		}
 	}
 
+	//UI Rendering
+	backgroundUI->Render();
+	ammoBackgroundUI->Render();
+	ammoUI->Render();
 
+	//Hearts (health) Border/Background
+	heartOneBorder->Render();
+	heartOneBG->Render();
+	heartTwoBorder->Render();
+	heartTwoBG->Render();
+	heartThreeBorder->Render();
+	heartThreeBG->Render();
+	heartFourBorder->Render();
+	heartFourBG->Render();
+	heartFiveBorder->Render();
+	heartFiveBG->Render();
+
+	//Player Health heart rendering
+	int playerHealth = game->getPlayer()->GetPlayerStats()->GetHealth();
+	switch (playerHealth)
+	{
+	case 50:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		heartFour->Render();
+		heartFive->Render();
+		break;
+	case 40:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		heartFour->Render();
+		break;
+	case 30:
+		heartOne->Render();
+		heartTwo->Render();
+		heartThree->Render();
+		break;
+	case 20:
+		heartOne->Render();
+		heartTwo->Render();
+		break;
+	case 10:
+		heartOne->Render();
+		break;
+	}
+	
 	// render the player
 	game->RenderPlayer(0.5f);
 	island1->render(0.75f);
@@ -618,7 +764,68 @@ void Scene1::Render() {
 	island4->render(0.5f);
 	island5->render(0.5f);
 	island6->render(0.45f);
-	enemySpawner->render(0.5f);
+	enemySpawner->render(0.5f);		
+
+	//Gear Selection UI
+	switch(game->getPlayer()->GetGearState())
+	{
+	case GearState::REVERSE:
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		reverseRedUI->Render();
+		break;
+	case GearState::PARK:
+		reverseWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		parkRedUI->Render();
+		break;
+	case GearState::NEUTRAL:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		neutralRedUI->Render();
+		break;
+	case GearState::DRIVE1:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneRedUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+		break;
+	case GearState::DRIVE2:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoRedUI->Render();
+		threeWhiteUI->Render();
+		break;
+	case GearState::DRIVE3:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeRedUI->Render();
+		break;
+	default:
+		reverseWhiteUI->Render();
+		parkWhiteUI->Render();
+		neutralWhiteUI->Render();
+		oneWhiteUI->Render();
+		twoWhiteUI->Render();
+		threeWhiteUI->Render();
+	}
+
 
 	for (int i = 0; i < tiles.size(); i++)
 	{
