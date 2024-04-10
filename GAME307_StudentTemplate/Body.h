@@ -3,6 +3,7 @@
 
 #include "MMath.h"
 #include "VMath.h"
+#include <AudioPlayer.h>
 #include <SDL.h>
 #include <SDL_image.h>
 

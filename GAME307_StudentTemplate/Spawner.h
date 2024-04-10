@@ -11,6 +11,11 @@ private:
 	Character* enemy;
 	class Scene* scene;
 	Vec3 spawnLocation;
+	SDL_Texture* destroyedShipTexture;
+	SDL_Surface* destroyedShipImage;
+	std::vector<SDL_Rect> destroyedShipsPos;
+	SDL_Renderer* renderer;
+	int wrecksLifetime;
 	
 	float enemyCap;
 
@@ -20,7 +25,7 @@ public:
 	Spawner(Character* enemy_);
 	
 	bool OnCreate(Scene* scene_);
-	void OnDestroy();
+	void OnDestroy() { delete scene; };
 
 	void Update(float time);
 	void render(float scale = 1.0f);

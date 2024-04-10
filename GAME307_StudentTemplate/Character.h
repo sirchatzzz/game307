@@ -12,8 +12,6 @@
 #include "Projectile.h"
 #include "Path.h"
 #include "Island.h"
-#include "Node.h"
-
 using namespace std;
 
 enum AIState
@@ -52,15 +50,15 @@ private:
 	float animationCounter;
 
 	float targetOrientation;
+	AudioPlayer audio;
 
 	//Variables to determine what and how fast an AI should execute tasks
 	float aggroRadius;
 	float attackRadius;
 	float attackSpeed;
 
-	Path islandPath;
-	Path playerPath;
-
+	Path characterPath;
+	Path currentPath;
 	bool patrolling;
 
 	bool isDead;
@@ -70,24 +68,9 @@ private:
 
 	AIState enemyState;
 
+	SDL_Renderer* renderer;
+
 	std::vector<Island> islands;
-
-	Node* currentNode = new Node(-1);
-	Node* targetNode = new Node(-1);
-
-	float attackTime = 0;
-	float updatePlayerPathTime = 0;
-
-public:
-
-	/// <summary>
-	/// A toggle so the scene knows if the AI is trying to calculate a new path
-	/// </summary>
-	bool calculateIslandPath = false;
-	bool calculatePlayerPath = false;
-	bool playerPathActive;
-	bool targetIslandDestroyed = false;
-	bool calculateIsland = false;
 
 public:
 	Character()
@@ -103,7 +86,7 @@ public:
 
 	//Base functions for each class
 	bool OnCreate(Scene* scene_);
-	void OnDestroy();
+	void OnDestroy() {};
 	bool setImageWith(SDL_Surface** images_, int spriteIndex_);
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
@@ -138,12 +121,12 @@ public:
 	void FireBullet();
 
 	bool IsCharacterAtPos(Vec3 pos_);
-	
-	Path GetIslandPath() { return islandPath; }
-	void SetIslandPath(Path path_) { islandPath = path_; }
 
-	Path GetPlayerPath() { return playerPath; }
-	void SetPlayerPath(Path path_) { playerPath = path_; }
+	Path GetCharacterPath() { return characterPath; }
+	void SetCharacterPath(Path path_);
+	
+	Path GetCurrentPath() { return currentPath; }
+	void SetCurrentPath(Path path_) { currentPath = path_; }
 
 	SDL_Surface** GetSpriteImages() { return spriteImages; }
 	
@@ -151,29 +134,13 @@ public:
 
 	bool IsDead() { return isDead; }
 
+	void CalculateState();
+
 	void CalculateTargetIsland();
 	void CalculateNextIsland();
-	Island GetTargetIsland() { return targetIsland; }
 
-	void SetIslands(Island island_) { islands.push_back(island_); }
+	void SetIslands(std::vector<Island> islands_) { islands = islands_; }
 	std::vector<Island> GetIslands() { return islands; }
-
-	//Set Current Node that AI is on
-	void SetCurrentNode(Node* node) { currentNode = node; }
-
-	Node* GetCurrentNode() { return currentNode; }
-	Node* GetTargetNode() { return targetNode; }
-
-	void GoToIsland(Vec3 target_, SteeringOutput& steering_);
-	void GoToPlayer(Vec3 target_, SteeringOutput& steering_);
-
-	void AttackTarget(Vec3 target_);
-	float CheckDistance(Vec3 target_) {
-
-		Vec3 d = target_ - getBody()->getPos();
-		return sqrt(d.x * d.x + d.y * d.y);
-	}
-
 };
 
 #endif
