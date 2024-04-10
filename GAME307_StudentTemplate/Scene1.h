@@ -65,8 +65,13 @@ private:
 	float tileWidth, tileHeight;
 	std::vector< std::vector<Tile*>> tiles;
 
-	Island* island;
-	std::vector<Island> islandsVector;
+	Island* island1;
+	Island* island2;
+	Island* island3;
+	Island* island4;
+	Island* island5;
+	Island* island6;
+	std::vector<Island*> islandsVector;
 
 	//UI Elements
 	UIElement* backgroundUI = new UIElement("Background", "Assets/UI Assets/UI_Background.png", Vec3(2, 0.8, 0), 1, 0);
@@ -135,10 +140,10 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
-	void SetBlinkyPath();
 
 	void UpdateAIPositionNodes();
 	
+	void InitializeIslands();
 };
 
 #endif

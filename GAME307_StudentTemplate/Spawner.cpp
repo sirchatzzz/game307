@@ -14,13 +14,26 @@ Spawner::Spawner(Character* enemy_)
 
 bool Spawner::OnCreate(Scene* scene_)
 {
-	spawnLocation = Vec3(1, 9, 0);
-	enemyCap = 5;
+	spawnLocation = Vec3(20, 1, 0);
+	enemyCap = 1;
 	scene = scene_;
 	enemy->getBody()->setPos(spawnLocation);
 	enemyArr.reserve(25);
 	enemyArr.push_back(enemy);
 	return true;
+}
+
+void Spawner::OnDestroy()
+{
+	for (int i = 0; i < enemyArr.size(); i++)
+	{
+		enemyArr.at(i)->OnDestroy();
+
+	}
+
+	enemyArr.clear();
+	delete this;
+
 }
 
 void Spawner::Update(float time)
@@ -35,8 +48,10 @@ void Spawner::Update(float time)
 			enemyArr.erase(it);
 		}
 
+		
 	}
-
+	
+	
 
 	static float spawnTime = 0;
 	spawnTime++;
@@ -95,7 +110,10 @@ void Spawner::SpawnEnemy()
 {
 	RandomizeSpawnLocation();
 	Character* newEnemy = new Character();
-	newEnemy->SetIslands(enemy->GetIslands());
+	for (int i = 0; i < enemy->GetIslands().size(); i++)
+	{
+		newEnemy->SetIslands(enemy->GetIslands().at(i));
+	}
 	newEnemy->OnCreate(scene);
 	newEnemy->setImageWith(enemy->GetSpriteImages(), 0);
 	newEnemy->getBody()->setPos(spawnLocation);

@@ -55,6 +55,16 @@ bool PlayerBody::OnCreate()
     return true;
 }
 
+void PlayerBody::OnDestroy()
+{
+    turret->OnDestroy();
+    bullets.clear();
+    delete playerStats;
+    delete playerAmmo;
+
+    delete this;
+}
+
 void PlayerBody::Render(float scale)
 {
     // This is why we need game in the constructore, to get the renderer, etc.

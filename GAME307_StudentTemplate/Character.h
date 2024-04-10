@@ -75,12 +75,19 @@ private:
 	Node* currentNode = new Node(-1);
 	Node* targetNode = new Node(-1);
 
+	float attackTime = 0;
+	float updatePlayerPathTime = 0;
+
 public:
 
 	/// <summary>
 	/// A toggle so the scene knows if the AI is trying to calculate a new path
 	/// </summary>
-	bool caculatePath = false;
+	bool calculateIslandPath = false;
+	bool calculatePlayerPath = false;
+	bool playerPathActive;
+	bool targetIslandDestroyed = false;
+	bool calculateIsland = false;
 
 public:
 	Character()
@@ -96,7 +103,7 @@ public:
 
 	//Base functions for each class
 	bool OnCreate(Scene* scene_);
-	void OnDestroy() {};
+	void OnDestroy();
 	bool setImageWith(SDL_Surface** images_, int spriteIndex_);
 	void Update(float time);
 	void HandleEvents(const SDL_Event& event);
@@ -146,8 +153,9 @@ public:
 
 	void CalculateTargetIsland();
 	void CalculateNextIsland();
+	Island GetTargetIsland() { return targetIsland; }
 
-	void SetIslands(std::vector<Island> islands_) { islands = islands_; }
+	void SetIslands(Island island_) { islands.push_back(island_); }
 	std::vector<Island> GetIslands() { return islands; }
 
 	//Set Current Node that AI is on
