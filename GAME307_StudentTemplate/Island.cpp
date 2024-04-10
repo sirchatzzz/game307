@@ -44,26 +44,18 @@ bool Island::OnCreate(Scene* scene_)
 	return true;
 }
 
-void Island::OnDestroy()
-{
-	delete stats;
-
-	islandNodes.clear();
-
-	delete body;
-
-}
-
 bool Island::setImageWith(SDL_Surface* file)
 {
+
 	SDL_Surface* image = file;
 	if (image == nullptr) {
 		std::cerr << "Can't open the image" << std::endl;
 		return false;
 	}
 	SDL_Window* window = scene->getWindow();
+	SDL_Texture* texture;
 	SDL_Renderer* renderer = SDL_GetRenderer(window);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+	texture = SDL_CreateTextureFromSurface(renderer, image);
 	if (!texture)
 	{
 		std::cerr << "Can't create texture" << std::endl;
@@ -75,12 +67,6 @@ bool Island::setImageWith(SDL_Surface* file)
 
 void Island::Update(float deltaTime)
 {
-	
-	if (stats->GetHealth() == 0)
-	{
-		IslandDeath();
-	}
-
 }
 
 void Island::HandleEvents(const SDL_Event& event)
@@ -123,24 +109,20 @@ void Island::render(float scale)
 	SDL_RenderCopyEx(renderer, body->getTexture(), nullptr, &square,
 		orientation, nullptr, SDL_FLIP_NONE);
 	
-	collider.SetColliderBounds(square.w - 25, square.h - 25);
-	collider.SetColliderPosition(square.x + 12, square.y + 12);
+	collider.SetColliderBounds(square.w, square.h);
+	collider.SetColliderPosition(square.x, square.y);
 	collider.RenderCollider(renderer);
 
+}
+
+void Island::SetDestroyedTexture(const char* path)
+{
+	SDL_Surface* surface = IMG_Load(path);
+	setImageWith(surface);
 }
 
 Collider2D Island::GetCollider()
 {
 	return collider;
-}
-
-void Island::IslandDeath()
-{
-	//Implement animation for island death
-
-
-
-
-	isDestroyed = true;
 }
 

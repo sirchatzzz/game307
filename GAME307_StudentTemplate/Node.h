@@ -23,13 +23,9 @@ public:
 		return pos; 
 	}
 
-	void SetLabel(int newLabel) { label = newLabel; }
-
 	void SetPos(Vec3 pos_) { pos = pos_; }
 
 	void Print();
-
-
 };
 
 #endif 

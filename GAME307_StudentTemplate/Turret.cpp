@@ -20,12 +20,6 @@ bool Turret::OnCreate(){
     return true;
 }
 
-void Turret::OnDestroy()
-{
-
-    delete this;
-}
-
 void Turret::Render(float scale)
 {
     // This is why we need game in the constructore, to get the renderer, etc.

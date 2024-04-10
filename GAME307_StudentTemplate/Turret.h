@@ -52,7 +52,6 @@ public:
     // use the base class versions of getters
 
     bool OnCreate();
-    void OnDestroy();
     void Render( float scale = 1.0f );
 
     void Update( float deltaTime );

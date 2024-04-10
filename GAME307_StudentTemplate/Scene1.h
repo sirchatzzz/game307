@@ -4,7 +4,6 @@
 #include "MMath.h"
 #include "VMath.h"
 #include "Scene.h"
-#include "AudioPlayer.h"
 #include <vector>
 #include "Character.h"
 #include "Tile.h"
@@ -51,6 +50,7 @@ private:
 	Collider2D downOutOfBoundsColl;
 
 	Spawner* enemySpawner;
+	Character* blinky;
 	Character* enemy;
 	Path patrolPath;
 
@@ -58,20 +58,14 @@ private:
 	Graph* graph;
 	std::vector<Node*> sceneNodes;
 
-	Node* playerNode;
-
 	//Tile rendering objects and arrays
 	bool toggleTileRendering;
 	float tileWidth, tileHeight;
 	std::vector< std::vector<Tile*>> tiles;
 
-	Island* island1;
-	Island* island2;
-	Island* island3;
-	Island* island4;
-	Island* island5;
-	Island* island6;
-	std::vector<Island*> islandsVector;
+	Island* island;
+	AudioPlayer audio;
+
 
 	//UI Elements
 	UIElement* backgroundUI = new UIElement("Background", "Assets/UI Assets/UI_Background.png", Vec3(2, 0.8, 0), 1, 0);
@@ -140,10 +134,9 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	void TestPathFinding();
+	void SetBlinkyPath();
 
-	void UpdateAIPositionNodes();
 	
-	void InitializeIslands();
 };
 
 #endif
