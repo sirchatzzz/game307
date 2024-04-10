@@ -424,19 +424,22 @@ void Scene1::ManageBullets()
 
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-		for (int j = 0; j < game->getPlayer()->GetBullets()->size(); j++)
+		if (enemySpawner->GetEnemyArr().at(i) != nullptr)
 		{
-
-			if (game->getPlayer()->GetBullets()->at(j).GetCollider().CollisionMathTesting(enemySpawner->GetEnemyArr().at(i)->GetCollider()))
+			for (int j = 0; j < game->getPlayer()->GetBullets()->size(); j++)
 			{
 
-				std::cout << "Enemy Hit!!" << std::endl;
-	
-				enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
+				if (game->getPlayer()->GetBullets()->at(j).GetCollider().CollisionMathTesting(enemySpawner->GetEnemyArr().at(i)->GetCollider()))
+				{
 
-				auto it = game->getPlayer()->GetBullets()->begin() + j;
-				game->getPlayer()->GetBullets()->erase(it);
+					std::cout << "Enemy Hit!!" << std::endl;
 
+					enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->TakeDamage(game->getPlayer()->GetBullets()->at(j).GetProjectileDamage());
+
+					auto it = game->getPlayer()->GetBullets()->begin() + j;
+					game->getPlayer()->GetBullets()->erase(it);
+
+				}
 			}
 		}
 	}
@@ -444,24 +447,27 @@ void Scene1::ManageBullets()
 	//Check for enemy bullets hitting island
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
+		if (enemySpawner->GetEnemyArr().at(i) != nullptr)
 		{
-			bool breakout = false;
-			for (int e = 0; e < islandsVector.size(); e++)
+			for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 			{
-				if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(islandsVector.at(e)->GetCollider()))
+				bool breakout = false;
+				for (int e = 0; e < islandsVector.size(); e++)
 				{
+					if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(islandsVector.at(e)->GetCollider()))
+					{
 
-					std::cout << "Island Hit!!" << std::endl;
+						std::cout << "Island Hit!!" << std::endl;
 
-					islandsVector.at(e)->GetStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
+						islandsVector.at(e)->GetStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
-					auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
-					enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
-					breakout = true;
+						auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+						enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+						breakout = true;
+					}
+					if (breakout)
+						break;
 				}
-				if (breakout)
-					break;
 			}
 		}
 	}
@@ -470,19 +476,22 @@ void Scene1::ManageBullets()
 	//Check for enemy bullets hitting player
 	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 	{
-		for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
+		if (enemySpawner->GetEnemyArr().at(i) != nullptr)
 		{
-
-			if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+			for (int j = 0; j < enemySpawner->GetEnemyArr().at(i)->GetBullets()->size(); j++)
 			{
 
-				std::cout << "Player Hit!!" << std::endl;
+				if (enemySpawner->GetEnemyArr().at(i)->GetBullets()->at(j).GetCollider().CollisionMathTesting(game->getPlayer()->GetCollider()))
+				{
 
-				game->getPlayer()->GetPlayerStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
+					std::cout << "Player Hit!!" << std::endl;
 
-				auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
-				enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+					game->getPlayer()->GetPlayerStats()->TakeDamage(enemySpawner->GetEnemyArr().at(i)->GetEnemyStats()->GetWeaponDamage());
 
+					auto it = enemySpawner->GetEnemyArr().at(i)->GetBullets()->begin() + j;
+					enemySpawner->GetEnemyArr().at(i)->GetBullets()->erase(it);
+
+				}
 			}
 		}
 	}
