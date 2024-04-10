@@ -52,7 +52,7 @@ private:
 
 	Spawner* enemySpawner;
 	Character* enemy;
-	Path patrolPath;
+
 
 	//Scene nodes / Graph
 	Graph* graph;
