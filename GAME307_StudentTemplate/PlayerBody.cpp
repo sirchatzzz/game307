@@ -399,7 +399,7 @@ void PlayerBody::FireBullet()
 
 void PlayerBody::PlayerDeath()
 {
-
+    isDead = true;
     std::cout << "Player is Dead" << std::endl;
     ///Add code for when player is dead, add graphic that will pop up and then the player will be taken back to the main menu
 

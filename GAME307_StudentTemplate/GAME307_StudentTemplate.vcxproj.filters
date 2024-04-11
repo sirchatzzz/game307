@@ -99,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="NumbersUI.cpp" />
+    <ClCompile Include="Scene2.cpp">
+      <Filter>Class\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrive.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="NumbersUI.h" />
+    <ClInclude Include="Scene2.h">
+      <Filter>Header\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "Scene1.h"
+#include "Scene2.h"
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -173,6 +174,7 @@ void GameManager::OnDestroy(){
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
     currentScene->OnDestroy(); 
+    getPlayer()->OnDestroy();
 }
 
 float GameManager::getSceneHeight()
@@ -201,16 +203,20 @@ void GameManager::LoadScene( int i )
 {
     // cleanup of current scene before loading anothe one
     currentScene->OnDestroy();
-    delete currentScene;
+    
     switch ( i )
     {
         case 1:
             currentScene = new Scene1( windowPtr->GetSDL_Window(), this);
             break;
+        case 2:
+            currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
+            break;
         default:
             currentScene = new Scene1( windowPtr->GetSDL_Window(), this );
             break;
     }
+
     // using ValidateCurrentScene() to safely run OnCreate
     if (!ValidateCurrentScene())
     {

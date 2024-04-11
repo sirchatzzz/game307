@@ -59,6 +59,8 @@ protected:
 
     NumbersUI ammoUI;
 
+    bool isDead = false;
+
 public:
     PlayerBody() : Body{}
     {
@@ -122,6 +124,10 @@ public:
 
     void PlayerDeath();
 
+    bool IsDead() { return isDead; }
+    void SetIsDead(bool isDead_) { isDead = isDead_; }
+    
+    void SetPlayerHealth(float health_) { playerStats->SetHealth(health_); }
 };
 
 #endif /* PLAYERBODY_H */

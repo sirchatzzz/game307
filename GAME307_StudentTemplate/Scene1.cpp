@@ -353,7 +353,7 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setImage(playerImage[0]);
 	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
-
+	game->getPlayer()->setPos(Vec3(9,7,0));
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 
@@ -427,6 +427,9 @@ bool Scene1::OnCreate() {
 	heartFiveBorder->OnCreate(this);
 	heartFiveBG->OnCreate(this);
 
+	game->getPlayer()->SetIsDead(false);
+	game->getPlayer()->SetPlayerHealth(50);
+
 	return true;
 }
 
@@ -496,8 +499,6 @@ void Scene1::OnDestroy() {
 	delete heartFiveBorder;
 	delete heartFiveBG;
 
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
 
 	enemySpawner->OnDestroy();
 
@@ -511,7 +512,7 @@ void Scene1::OnDestroy() {
 	tiles.clear();
 	sceneNodes.clear();
 
-	game->getPlayer()->OnDestroy();
+	//game->getPlayer()->OnDestroy();
 
 	delete this;
 
@@ -629,64 +630,70 @@ void Scene1::ManageBullets()
 
 
 void Scene1::Update(const float deltaTime) {
-	++animationCounter;
-	if (animationCounter > 60) animationCounter = 0;
-	int indexSelector = std::round(animationCounter / 20.0f);
 
-	//Set AI current node to each AI. So they know where they are in the tile graph ;)
-	UpdateAIPositionNodes();
+	bool isDead = game->getPlayer()->IsDead();
+	if (isDead) game->LoadScene(2);
 
-	static float updatePlayerNodeTime = 0;
-	updatePlayerNodeTime++;
-	
-	//AI Find Path
-	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+	if (!isDead)
 	{
-		if(enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
+		++animationCounter;
+		if (animationCounter > 60) animationCounter = 0;
+		int indexSelector = std::round(animationCounter / 20.0f);
+
+		//Set AI current node to each AI. So they know where they are in the tile graph ;)
+		UpdateAIPositionNodes();
+
+		static float updatePlayerNodeTime = 0;
+		updatePlayerNodeTime++;
+
+		//AI Find Path
+		for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 		{
-			enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
-			enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
-		}
-
-		if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
-		{
-			enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
-			enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
-		}
-	}
-
-	game->getPlayer()->setImage(playerImage[indexSelector]);
-	game->getPlayer()->setTexture(playerTexture[indexSelector]);
-
-	game->getPlayer()->Update(deltaTime);
-
-	ManageBullets();
-
-	for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
-	{
-
-		enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
-
-	}
-
-	enemySpawner->Update(deltaTime);
-
-	for (int i = 0; i < islandsVector.size(); i++)
-	{
-
-		islandsVector.at(i)->Update(deltaTime);
-
-		for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
-		{
-			if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+			if (enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
 			{
-				if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+				enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+				enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
+			}
+
+			if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
+			{
+				enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
+				enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
+			}
+		}
+
+		game->getPlayer()->setImage(playerImage[indexSelector]);
+		game->getPlayer()->setTexture(playerTexture[indexSelector]);
+
+		game->getPlayer()->Update(deltaTime);
+
+		ManageBullets();
+
+		for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+		{
+
+			enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
+
+		}
+
+		enemySpawner->Update(deltaTime);
+
+		for (int i = 0; i < islandsVector.size(); i++)
+		{
+
+			islandsVector.at(i)->Update(deltaTime);
+
+			for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
+			{
+				if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+				{
+					if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+				}
+
 			}
 
 		}
-
 	}
-
 }
 
 void Scene1::Render() {
