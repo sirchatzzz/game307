@@ -12,8 +12,9 @@ private:
 	class Scene* scene;
 	Vec3 spawnLocation;
 	
+	std::vector<Vec3> spawnLocations;
 	float enemyCap;
-
+	float spawnTime = 0;
 public:
 
 	Spawner();

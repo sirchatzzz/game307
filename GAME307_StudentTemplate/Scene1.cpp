@@ -636,62 +636,95 @@ void Scene1::Update(const float deltaTime) {
 
 	if (!isDead)
 	{
-		++animationCounter;
-		if (animationCounter > 60) animationCounter = 0;
-		int indexSelector = std::round(animationCounter / 20.0f);
+		bool islandsDead = checkIslandsHealths();
+		if (islandsDead) game->LoadScene(2);
 
-		//Set AI current node to each AI. So they know where they are in the tile graph ;)
-		UpdateAIPositionNodes();
-
-		static float updatePlayerNodeTime = 0;
-		updatePlayerNodeTime++;
-
-		//AI Find Path
-		for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+		if (!islandsDead)
 		{
-			if (enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
+			++animationCounter;
+			if (animationCounter > 60) animationCounter = 0;
+			int indexSelector = std::round(animationCounter / 20.0f);
+
+			//Set AI current node to each AI. So they know where they are in the tile graph ;)
+			UpdateAIPositionNodes();
+
+			static float updatePlayerNodeTime = 0;
+			updatePlayerNodeTime++;
+
+			//AI Find Path
+			for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
 			{
-				enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
-				enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
-			}
-
-			if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
-			{
-				enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
-				enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
-			}
-		}
-
-		game->getPlayer()->setImage(playerImage[indexSelector]);
-		game->getPlayer()->setTexture(playerTexture[indexSelector]);
-
-		game->getPlayer()->Update(deltaTime);
-
-		ManageBullets();
-
-		for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
-		{
-
-			enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
-
-		}
-
-		enemySpawner->Update(deltaTime);
-
-		for (int i = 0; i < islandsVector.size(); i++)
-		{
-
-			islandsVector.at(i)->Update(deltaTime);
-
-			for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
-			{
-				if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+				if (enemySpawner->GetEnemyArr().at(i)->calculateIslandPath)
 				{
-					if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+					enemySpawner->GetEnemyArr().at(i)->SetIslandPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), enemySpawner->GetEnemyArr().at(i)->GetTargetNode()));
+					enemySpawner->GetEnemyArr().at(i)->calculateIslandPath = false;
+				}
+
+				if (enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath)
+				{
+					enemySpawner->GetEnemyArr().at(i)->SetPlayerPath(graph->findPath(enemySpawner->GetEnemyArr().at(i)->GetCurrentNode(), playerNode));
+					enemySpawner->GetEnemyArr().at(i)->calculatePlayerPath = false;
+				}
+			}
+
+			if (hitIsland != true)
+			{
+				for (int i = 0; i < islandsVector.size(); i++)
+				{
+
+					if (game->getPlayer()->GetCollider().CollisionMathTesting(islandsVector.at(i)->GetCollider()))
+					{
+
+						game->getPlayer()->GetPlayerStats()->TakeDamage(10);
+						hitIsland = true;
+						break;
+					}
+				}
+			}
+
+			if (hitIsland == true)
+			{
+				hitIslandTimer++;
+			}
+
+			if (hitIslandTimer > 200)
+			{
+				hitIsland = false;
+				hitIslandTimer = 0;
+			}
+
+
+			game->getPlayer()->setImage(playerImage[indexSelector]);
+			game->getPlayer()->setTexture(playerTexture[indexSelector]);
+
+			game->getPlayer()->Update(deltaTime);
+
+			ManageBullets();
+
+			for (int i = 0; i < enemySpawner->GetEnemyArr().size(); i++)
+			{
+
+				enemySpawner->GetEnemyArr().at(i)->SetTargetPlayer(*game->getPlayer());
+
+			}
+
+			enemySpawner->Update(deltaTime);
+
+			for (int i = 0; i < islandsVector.size(); i++)
+			{
+
+				islandsVector.at(i)->Update(deltaTime);
+
+				for (int j = 0; j < enemySpawner->GetEnemyArr().size(); j++)
+				{
+					if (enemySpawner->GetEnemyArr().at(j)->GetTargetIsland() == *islandsVector.at(i))
+					{
+						if (islandsVector.at(i)->IsDestroyed()) enemySpawner->GetEnemyArr().at(j)->targetIslandDestroyed = true;
+					}
+
 				}
 
 			}
-
 		}
 	}
 }
@@ -1151,4 +1184,29 @@ void Scene1::InitializeIslands()
 	islands5.clear();
 	islands6.clear();
 	
+}
+
+bool Scene1::checkIslandsHealths()
+{
+	bool isDead;
+
+	for (int i = 0; i < islandsVector.size(); i++)
+	{
+		if (islandsVector.at(i)->IsDestroyed()) isDead = true;
+		else
+		{
+
+			isDead = false;
+			break;
+
+		}
+
+
+
+	}
+
+	return isDead;
+
+
+
 }

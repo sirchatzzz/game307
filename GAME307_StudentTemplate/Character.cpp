@@ -69,8 +69,6 @@ void Character::OnDestroy()
 
 	bullets.clear();
 
-	delete currentNode;
-	delete targetNode;
 	delete enemyStats;
 	delete body;
 

@@ -114,7 +114,8 @@ private:
 	UIElement* twoRedUI = new UIElement("Second Gear Red UI", "Assets/UI Assets/GearSelector/2-red.png", Vec3(2.75, 0.8, 0), 0.5 / 10, 0);
 	UIElement* threeWhiteUI = new UIElement("Third Gear White UI", "Assets/UI Assets/GearSelector/3.png", Vec3(3.25, 0.8, 0), 0.5 / 10, 0);
 	UIElement* threeRedUI = new UIElement("Third Gear Red UI", "Assets/UI Assets/GearSelector/3-red.png", Vec3(3.25, 0.8, 0), 0.5 / 10, 0);
-
+	bool hitIsland = false;
+	float hitIslandTimer = 0;
 
 private:
 
@@ -144,6 +145,8 @@ public:
 	void UpdateAIPositionNodes();
 	
 	void InitializeIslands();
+
+	bool checkIslandsHealths();
 };
 
 #endif

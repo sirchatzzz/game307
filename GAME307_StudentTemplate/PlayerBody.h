@@ -96,6 +96,7 @@ public:
         , game{ game_ }
     {}
     
+
     //Base functions for each class
     bool OnCreate();
     void OnDestroy();
