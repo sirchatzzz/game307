@@ -40,7 +40,7 @@ bool PlayerBody::OnCreate()
     gearState = GearState::NEUTRAL;
 
     playerStats = new Stats(40, 50, 5);
-    playerAmmo = new ShipAmmo(100,65,14);
+    playerAmmo = new ShipAmmo(1000,1000,14);
 
     bullet = Projectile();
     bullet.SetGame(game);
@@ -98,7 +98,7 @@ void PlayerBody::Render(float scale)
     
     collider.SetColliderBounds(square.w, square.h);
     collider.SetColliderPosition(square.x, square.y);
-    collider.RenderCollider(renderer);
+
 
     for (int i = 0; i < bullets.size(); i++)
     {

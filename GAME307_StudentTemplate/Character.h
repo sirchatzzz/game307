@@ -75,8 +75,12 @@ private:
 	Node* currentNode = new Node(-1);
 	Node* targetNode = new Node(-1);
 
+	SDL_Surface* destroyedShipImage;
+	SDL_Texture* destroyedShipTexture;
+
 	float attackTime = 0;
 	float updatePlayerPathTime = 0;
+	float deathTimer = 0;
 
 public:
 

@@ -105,7 +105,8 @@ public:
     void Update( float deltaTime );
     void resetToOrigin();
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
-    
+    void SetAccel(Vec3 accel_) { accel = accel_; }
+    void SetVel(Vec3 vel_) { vel = vel_; }
     //Getter for collider
     Collider2D GetCollider();
 
@@ -114,6 +115,7 @@ public:
 
     //Getters for player stats and info
     GearState GetGearState() { return gearState; }
+    void SetGearState(GearState state_) { gearState = state_; }
     Stats* GetPlayerStats() { return playerStats; }
     ShipAmmo* GetPlayerAmmo() { return playerAmmo; }
 

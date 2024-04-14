@@ -125,7 +125,7 @@ void Island::render(float scale)
 	
 	collider.SetColliderBounds(square.w - 25, square.h - 25);
 	collider.SetColliderPosition(square.x + 12, square.y + 12);
-	collider.RenderCollider(renderer);
+
 
 }
 

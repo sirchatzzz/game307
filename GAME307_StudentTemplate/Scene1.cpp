@@ -354,6 +354,9 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setTexture(playerTexture[0]);
 	game->getPlayer()->SetMaxSpeed(15);
 	game->getPlayer()->setPos(Vec3(9,7,0));
+	game->getPlayer()->SetAccel(Vec3(0, 0, 0));
+	game->getPlayer()->SetVel(Vec3(0, 0, 0));
+	game->getPlayer()->SetGearState(GearState::NEUTRAL);
 	// Set up characters, choose good values for the constructor
 	// or use the defaults, like this
 
@@ -796,8 +799,7 @@ void Scene1::Render() {
 		break;
 	}
 	
-	// render the player
-	game->RenderPlayer(0.5f);
+
 	island1->render(0.75f);
 	island2->render(0.5f);
 	island3->render(0.75f);
@@ -805,6 +807,9 @@ void Scene1::Render() {
 	island5->render(0.5f);
 	island6->render(0.45f);
 	enemySpawner->render(0.5f);		
+
+	// render the player
+	game->RenderPlayer(0.5f);
 
 	//Gear Selection UI
 	switch(game->getPlayer()->GetGearState())
@@ -867,7 +872,7 @@ void Scene1::Render() {
 	}
 
 
-	for (int i = 0; i < tiles.size(); i++)
+	/*for (int i = 0; i < tiles.size(); i++)
 	{
 		for (int j = 0; j < tiles.at(i).size(); j++)
 		{
@@ -877,7 +882,7 @@ void Scene1::Render() {
 		}
 
 
-	}
+	}*/
 
 	SDL_RenderPresent(renderer);
 

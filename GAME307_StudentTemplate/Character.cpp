@@ -52,6 +52,7 @@ bool Character::OnCreate(Scene* scene_)
 	bullet2 = Projectile();
 	bullet2.SetGame(scene->game);
 
+	destroyedShipImage = IMG_Load("assets/boatDebris.png");
 
 	turret = new Turret();
 	turret->SetGame(scene->game);
@@ -96,84 +97,91 @@ bool Character::setImageWith(SDL_Surface** images_, int spriteIndex_)
 
 void Character::Update(float deltaTime)
 {
-
-	if (!calculateIsland)
+	if (enemyStats->GetHealth() == 0)
 	{
-		CalculateTargetIsland();
-		calculateIsland = true;
-	}
-	++animationCounter;
-	if (animationCounter > 60) animationCounter = 0;
-	int indexSelector = std::round(animationCounter / 20.0f);
-	setImageWith(spriteImages, indexSelector);
-
-	updatePlayerPathTime++;
-	if (updatePlayerPathTime == 60)
-	{
-		calculatePlayerPath = true;
-		updatePlayerPathTime = 0;
+		EnemyDeath();
+		GetCollider().SetColliderActive(false);
 	}
 
-	if (enemyStats->GetHealth() == 0) EnemyDeath();
-	if (targetIslandDestroyed) CalculateNextIsland();
+	if (enemyStats->GetHealth() != 0)
+	{
+		if (!calculateIsland)
+		{
+			CalculateTargetIsland();
+			calculateIsland = true;
+		}
+		++animationCounter;
+		if (animationCounter > 60) animationCounter = 0;
+		int indexSelector = std::round(animationCounter / 20.0f);
+		setImageWith(spriteImages, indexSelector);
 
-	//Create steering behaviour
-	SteeringOutput* steering;
-	steering = new SteeringOutput();
+		updatePlayerPathTime++;
+		if (updatePlayerPathTime == 60)
+		{
+			calculatePlayerPath = true;
+			updatePlayerPathTime = 0;
+		}
 
-	//Create the binded functions for each action and decision
-	auto goToIslandFunc = [this, &steering](Vec3) {
-		GoToIsland(targetIsland.getBody()->getPos(), *steering);
-	};
 
-	auto goToPlayerFunc = [this, &steering](Vec3) {
-		GoToPlayer(targetPlayer.getPos(), *steering);
-	};
+		if (targetIslandDestroyed) CalculateNextIsland();
 
-	auto attackIslandFunc = [this](Vec3) {
-		AttackTarget(targetIsland.getBody()->getPos());
-	};
+		//Create steering behaviour
+		SteeringOutput* steering;
+		steering = new SteeringOutput();
 
-	auto attackPlayerFunc = [this](Vec3) {
-		AttackTarget(targetPlayer.getPos());
-	};
-	
-	auto checkPlayerDistanceFunc = [this](Vec3) {
-		return CheckDistance(targetPlayer.getPos());
-	};
+		//Create the binded functions for each action and decision
+		auto goToIslandFunc = [this, &steering](Vec3) {
+			GoToIsland(targetIsland.getBody()->getPos(), *steering);
+			};
 
-	auto checkIslandDistanceFunc = [this](Vec3) {
-		return CheckDistance(targetIsland.getBody()->getPos());
-	};
+		auto goToPlayerFunc = [this, &steering](Vec3) {
+			GoToPlayer(targetPlayer.getPos(), *steering);
+			};
 
-	//Create the actions and decisions for the decision tree
-	Action goToIslandAction(goToIslandFunc);
-	Action goToPlayerAction(goToPlayerFunc);
-	Action attackPlayerAction(attackPlayerFunc);
-	Action attackIslandAction(attackIslandFunc);
+		auto attackIslandFunc = [this](Vec3) {
+			AttackTarget(targetIsland.getBody()->getPos());
+			};
 
-	FloatDecision islandAttackDecision(0.0, attackRadius, &attackIslandAction, &goToIslandAction, checkIslandDistanceFunc, "IslandAttack");
-	FloatDecision playerAttackDecision(0.0, attackRadius, &attackPlayerAction, &goToPlayerAction, checkPlayerDistanceFunc, "PlayerAttack");
+		auto attackPlayerFunc = [this](Vec3) {
+			AttackTarget(targetPlayer.getPos());
+			};
 
-	FloatDecision aggroDecision(0.0, aggroRadius, &playerAttackDecision, &islandAttackDecision, checkPlayerDistanceFunc, "AggroCheck");
+		auto checkPlayerDistanceFunc = [this](Vec3) {
+			return CheckDistance(targetPlayer.getPos());
+			};
 
-	//Start decision tree
-	aggroDecision.makeDecision();
+		auto checkIslandDistanceFunc = [this](Vec3) {
+			return CheckDistance(targetIsland.getBody()->getPos());
+			};
 
-	////Change Orientation of Character
-	Align align;
-	*steering += *(align.getSteering(target, this));
+		//Create the actions and decisions for the decision tree
+		Action goToIslandAction(goToIslandFunc);
+		Action goToPlayerAction(goToPlayerFunc);
+		Action attackPlayerAction(attackPlayerFunc);
+		Action attackIslandAction(attackIslandFunc);
 
-	//////Update AI
-	body->Update(deltaTime,steering);
+		FloatDecision islandAttackDecision(0.0, attackRadius, &attackIslandAction, &goToIslandAction, checkIslandDistanceFunc, "IslandAttack");
+		FloatDecision playerAttackDecision(0.0, attackRadius, &attackPlayerAction, &goToPlayerAction, checkPlayerDistanceFunc, "PlayerAttack");
 
-	//////Delete steering behaviour when finished
-	delete steering;
+		FloatDecision aggroDecision(0.0, aggroRadius, &playerAttackDecision, &islandAttackDecision, checkPlayerDistanceFunc, "AggroCheck");
 
-	//Update turret and bullets
-	UpdateTurret(deltaTime);
-	UpdateBullets(deltaTime);
+		//Start decision tree
+		aggroDecision.makeDecision();
 
+		////Change Orientation of Character
+		Align align;
+		*steering += *(align.getSteering(target, this));
+
+		//////Update AI
+		body->Update(deltaTime, steering);
+
+		//////Delete steering behaviour when finished
+		delete steering;
+
+		//Update turret and bullets
+		UpdateTurret(deltaTime);
+		UpdateBullets(deltaTime);
+	}
 }
 
 void Character::HandleEvents(const SDL_Event& event)
@@ -200,6 +208,10 @@ void Character::render(float scale)
 	Vec3 screenCoords;
 	int    w, h;
 
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, destroyedShipImage);
+
+	if (enemyStats->GetHealth() == 0) body->setTexture(texture);
+
 	// notice use of "body" in the following
 	SDL_QueryTexture(body->getTexture(), nullptr, nullptr, &w, &h);
 	w = static_cast<int>(w * scale);
@@ -218,7 +230,6 @@ void Character::render(float scale)
 
 	collider.SetColliderBounds(square.w, square.h);
 	collider.SetColliderPosition(square.x, square.y);
-	collider.RenderCollider(renderer);
 
 	turret->Render(1);
 
@@ -319,8 +330,12 @@ bool Character::IsCharacterAtPos(Vec3 pos_)
 
 void Character::EnemyDeath()
 {
-	std::cout << "Is Dead" << std::endl;
-	isDead = true;
+	deathTimer++;
+
+	//spriteImages[0] = destroyedShipImage;
+	//setImageWith(spriteImages, 0);
+
+	if (deathTimer > 400) isDead = true;
 
 }
 
