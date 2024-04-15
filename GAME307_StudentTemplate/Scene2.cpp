@@ -25,7 +25,7 @@ bool Scene2::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 	
-	background = IMG_Load("assets/water.png");
+	background = IMG_Load("assets/dead.png");
 
 	texture = SDL_CreateTextureFromSurface(renderer, background);
 
