@@ -872,7 +872,7 @@ void Scene1::Render() {
 	}
 
 
-	/*for (int i = 0; i < tiles.size(); i++)
+	for (int i = 0; i < tiles.size(); i++)
 	{
 		for (int j = 0; j < tiles.at(i).size(); j++)
 		{
@@ -882,7 +882,7 @@ void Scene1::Render() {
 		}
 
 
-	}*/
+	}
 
 	SDL_RenderPresent(renderer);
 

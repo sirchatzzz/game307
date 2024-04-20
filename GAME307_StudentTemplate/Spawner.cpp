@@ -15,12 +15,12 @@ Spawner::Spawner(Character* enemy_)
 bool Spawner::OnCreate(Scene* scene_)
 {
 	spawnLocation = Vec3(24, 1, 0);
-	enemyCap = 6;
+	enemyCap = 1;
 	scene = scene_;
-	enemy->getBody()->setPos(spawnLocation);
-	spawnLocations.push_back(spawnLocation);
+	//enemy->getBody()->setPos(spawnLocation);
+	//spawnLocations.push_back(spawnLocation);
 	enemyArr.reserve(25);
-	enemyArr.push_back(enemy);
+	//enemyArr.push_back(enemy);
 	return true;
 }
 

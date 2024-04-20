@@ -15,6 +15,6 @@ public:
 	AudioPlayer();
 	~AudioPlayer();
 
-	void playAudio(int ID);
+	void playAudio(int ID, int volume);
 };
 #endif

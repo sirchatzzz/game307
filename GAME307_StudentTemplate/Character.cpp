@@ -231,7 +231,7 @@ void Character::render(float scale)
 	collider.SetColliderBounds(square.w, square.h);
 	collider.SetColliderPosition(square.x, square.y);
 
-	turret->Render(1);
+	if (enemyStats->GetHealth() != 0) turret->Render(1);
 
 	for (int i = 0; i < bullets.size(); i++)
 	{
